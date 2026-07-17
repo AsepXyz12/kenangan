@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  background-color: #f6f1e4;
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(18, 56, 50, 0.08) 1px,
+    transparent 0
+  );
+  background-size: 22px 22px;
+}
+
+/* ---------- Polaroid / scrapbook photo card ---------- */
+
+.polaroid {
+  background: #fffdf8;
+  padding: 12px 12px 44px 12px;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.06),
+    0 12px 24px -12px rgba(18, 56, 50, 0.35);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  will-change: transform;
+}
+
+.polaroid:hover {
+  transform: translateY(-5px) rotate(0deg) !important;
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.08),
+    0 22px 38px -14px rgba(18, 56, 50, 0.4);
+}
+
+/* Washi tape — three variants so the wall doesn't look uniform.
+   Applied via data-tape="gold | clay | dusk" on .polaroid. */
+.stamp-tape {
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 60px;
+  height: 22px;
+  border: 1px solid rgba(184, 146, 63, 0.55);
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(184, 146, 63, 0.32),
+    rgba(184, 146, 63, 0.32) 4px,
+    rgba(184, 146, 63, 0.18) 4px,
+    rgba(184, 146, 63, 0.18) 8px
+  );
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+}
+
+.polaroid[data-tape="clay"] .stamp-tape {
+  border-color: rgba(168, 73, 46, 0.55);
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(168, 73, 46, 0.3),
+    rgba(168, 73, 46, 0.3) 4px,
+    rgba(168, 73, 46, 0.16) 4px,
+    rgba(168, 73, 46, 0.16) 8px
+  );
+}
+
+.polaroid[data-tape="dusk"] .stamp-tape {
+  border-color: rgba(47, 72, 88, 0.5);
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(47, 72, 88, 0.28),
+    rgba(47, 72, 88, 0.28) 4px,
+    rgba(47, 72, 88, 0.14) 4px,
+    rgba(47, 72, 88, 0.14) 8px
+  );
+}
+
+/* ---------- Stitched thread divider — the page's signature motif ---------- */
+
+.thread {
+  position: relative;
+  border: none;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    rgba(18, 56, 50, 0.35) 60%,
+    transparent 0%
+  );
+  background-position: bottom;
+  background-size: 10px 1px;
+  background-repeat: repeat-x;
+}
+
+/* ---------- Scroll reveal ---------- */
+
+.reveal {
+  animation: reveal-in 0.5s ease both;
+}
+
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .polaroid {
+    transition: none;
+  }
+  .reveal {
+    animation: none;
+  }
+}
+
+::selection {
+  background: #b8923f;
+  color: #fffdf8;
+}
+
+*:focus-visible {
+  outline: 2px solid #123832;
+  outline-offset: 2px;
+}
