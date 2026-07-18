@@ -1,10 +1,11 @@
 import { put, head, del } from "@vercel/blob";
 
-// Semua data foto & komentar disimpan sebagai satu file JSON di Vercel Blob.
-// Cukup untuk skala galeri sekolah, dan tidak butuh database terpisah.
+// Semua data foto & pengaturan galeri disimpan sebagai file JSON di Vercel
+// Blob. Cukup untuk skala galeri sekolah, dan tidak butuh database terpisah.
 // Project publik membaca file yang sama ini, jadi kedua project HARUS
 // terhubung ke Blob store yang sama (BLOB_READ_WRITE_TOKEN identik).
 const DATA_PATH = "data/photos.json";
+const SETTINGS_PATH = "data/settings.json";
 
 async function getDataUrl() {
   try {
@@ -74,21 +75,26 @@ export async function deletePhoto(id) {
   return true;
 }
 
-export async function addComment(id, comment) {
-  const photos = await readPhotos();
-  const photo = photos.find((p) => p.id === id);
-  if (!photo) return null;
-  if (!photo.comments) photo.comments = [];
-  photo.comments.push(comment);
-  await writePhotos(photos);
-  return photo;
+export async function readSettings() {
+  try {
+    const info = await head(SETTINGS_PATH);
+    const res = await fetch(info.url, { cache: "no-store" });
+    if (!res.ok) return {};
+    return res.json();
+  } catch (err) {
+    return {}; // belum pernah diset
+  }
 }
 
-export async function deleteComment(id, commentId) {
-  const photos = await readPhotos();
-  const photo = photos.find((p) => p.id === id);
-  if (!photo) return null;
-  photo.comments = (photo.comments || []).filter((c) => c.id !== commentId);
-  await writePhotos(photos);
-  return photo;
+export async function writeSettings(patch) {
+  const current = await readSettings();
+  const next = { ...current, ...patch };
+  await put(SETTINGS_PATH, JSON.stringify(next, null, 2), {
+    access: "public",
+    addRandomSuffix: false,
+    allowOverwrite: true,
+    contentType: "application/json",
+    cacheControlMaxAge: 0,
+  });
+  return next;
 }

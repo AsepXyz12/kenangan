@@ -4,7 +4,6 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import EditForm from "@/components/EditForm";
-import CommentModeration from "@/components/CommentModeration";
 
 export const dynamic = "force-dynamic";
 
@@ -23,8 +22,16 @@ export default async function EditPage({ params }) {
       <h1 className="text-2xl font-semibold mt-4">Edit foto</h1>
 
       <div className="mt-6 flex gap-4 items-start">
-        <div className="relative w-28 h-28 shrink-0 bg-line/30 overflow-hidden border border-line">
-          <Image src={photo.url} alt={photo.title} fill sizes="112px" className="object-cover" />
+        <div className="relative w-28 h-28 shrink-0 bg-line/30 overflow-hidden border border-line flex items-center justify-center">
+          {photo.mediaType === "video" ? (
+            <video src={photo.url} className="w-full h-full object-cover" controls muted />
+          ) : photo.mediaType === "audio" ? (
+            <span className="text-[10px] text-ink/40 mono">AUDIO</span>
+          ) : photo.mediaType === "file" ? (
+            <span className="text-[10px] text-ink/40 mono">FILE</span>
+          ) : (
+            <Image src={photo.url} alt={photo.title} fill sizes="112px" className="object-cover" />
+          )}
         </div>
         <div className="min-w-0">
           <p className="text-sm text-ink/60">
@@ -41,8 +48,6 @@ export default async function EditPage({ params }) {
       <div className="mt-6">
         <EditForm photo={photo} />
       </div>
-
-      <CommentModeration photoId={photo.id} initialComments={photo.comments || []} />
     </main>
   );
 }

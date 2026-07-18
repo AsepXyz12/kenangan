@@ -27,9 +27,18 @@ export async function POST(req) {
   const caption = (body.caption || "").toString().trim();
   const eventDate = (body.eventDate || "").toString().trim();
   const uploader = (body.uploader || "Admin").toString().trim();
+  const contentType = (body.contentType || "").toString().trim();
+  // "image" | "video" | "audio" | "file" — dipakai frontend buat pilih cara render.
+  const mediaType = contentType.startsWith("video/")
+    ? "video"
+    : contentType.startsWith("audio/")
+    ? "audio"
+    : contentType.startsWith("image/")
+    ? "image"
+    : "file";
 
   if (!url) {
-    return NextResponse.json({ error: "Foto wajib diunggah" }, { status: 400 });
+    return NextResponse.json({ error: "Media wajib diunggah" }, { status: 400 });
   }
   if (!title) {
     return NextResponse.json({ error: "Judul wajib diisi" }, { status: 400 });
@@ -41,12 +50,13 @@ export async function POST(req) {
   const photo = {
     id: crypto.randomUUID(),
     url,
+    mediaType,
+    contentType,
     title,
     caption,
     eventDate, // format YYYY-MM-DD
     uploader,
     uploadedAt: new Date().toISOString(),
-    comments: [],
   };
 
   await addPhoto(photo);

@@ -1,15 +1,17 @@
 import { isAdminAuthed } from "@/lib/auth";
-import { readPhotos } from "@/lib/store";
+import { readPhotos, readSettings } from "@/lib/store";
 import LoginForm from "@/components/LoginForm";
 import UploadForm from "@/components/UploadForm";
 import LogoutButton from "@/components/LogoutButton";
 import PhotoList from "@/components/PhotoList";
+import LogoSettings from "@/components/LogoSettings";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
   const authed = isAdminAuthed();
   const photos = authed ? await readPhotos() : [];
+  const settings = authed ? await readSettings() : {};
   if (authed) photos.sort((a, b) => (a.uploadedAt < b.uploadedAt ? 1 : -1));
 
   return (
@@ -35,14 +37,21 @@ export default async function AdminPage() {
         <>
           <section className="mt-8">
             <h2 className="text-xs uppercase tracking-wide text-ink/50 mono mb-2">
-              Unggah foto baru
+              Pengaturan situs
+            </h2>
+            <LogoSettings initialSettings={settings} />
+          </section>
+
+          <section className="mt-8">
+            <h2 className="text-xs uppercase tracking-wide text-ink/50 mono mb-2">
+              Unggah media baru
             </h2>
             <UploadForm />
           </section>
 
           <section className="mt-10">
             <h2 className="text-xs uppercase tracking-wide text-ink/50 mono mb-3">
-              Semua foto ({photos.length})
+              Semua media ({photos.length})
             </h2>
             <PhotoList photos={photos} />
           </section>

@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { upload } from "@vercel/blob/client";
 
-const MAX_SIZE_MB = 100; // samakan dengan maximumSizeInBytes di app/api/photos/upload-url
+const MAX_SIZE_MB = 500; // samakan dengan maximumSizeInBytes di app/api/photos/upload-url
 
 function formatSize(bytes) {
   if (!bytes) return "";
@@ -41,11 +41,11 @@ export default function UploadForm() {
     e.preventDefault();
     const file = fileRef.current?.files?.[0];
     if (!file) {
-      setError("Pilih file foto terlebih dahulu");
+      setError("Pilih file media terlebih dahulu");
       return;
     }
     if (file.size > MAX_SIZE_MB * 1024 * 1024) {
-      setError(`Ukuran foto terlalu besar (maks ${MAX_SIZE_MB}MB).`);
+      setError(`Ukuran file terlalu besar (maks ${MAX_SIZE_MB}MB).`);
       return;
     }
     setError("");
@@ -59,13 +59,14 @@ export default function UploadForm() {
         handleUploadUrl: "/api/photos/upload-url",
       });
 
-      // 2) Simpan metadata foto (judul, tanggal, dll) + URL blob ke server.
+      // 2) Simpan metadata (judul, tanggal, dll) + URL blob ke server.
       setStatus("saving");
       const res = await fetch("/api/photos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           url: blob.url,
+          contentType: file.type,
           title,
           caption,
           eventDate,
@@ -96,30 +97,30 @@ export default function UploadForm() {
     <form onSubmit={handleSubmit} className="mt-6 space-y-4 border border-line p-5">
       <div>
         <label className="block text-xs uppercase tracking-wide text-ink/60 mono mb-1">
-          Foto
+          Media
         </label>
         <label
           htmlFor="photo-file"
           className="flex flex-col items-center justify-center gap-1 border border-dashed border-line bg-white px-4 py-6 text-center cursor-pointer hover:border-accent/50 transition-colors"
         >
           <span className="text-xs uppercase tracking-wide mono">
-            {fileInfo ? "Ganti file" : "Pilih file foto"}
+            {fileInfo ? "Ganti file" : "Pilih foto atau video"}
           </span>
           <span className="text-xs text-ink/50">
-            {fileInfo || "Klik untuk memilih foto dari perangkat"}
+            {fileInfo || "Klik untuk memilih foto/video dari perangkat"}
           </span>
         </label>
         <input
           id="photo-file"
           ref={fileRef}
           type="file"
-          accept="image/*"
+          accept="image/*,video/*,audio/*"
           onChange={handleFileChange}
           className="sr-only"
           required
         />
         <p className="text-xs text-ink/40 mt-1.5">
-          Semua ukuran & orientasi foto didukung, maks {MAX_SIZE_MB}MB per foto.
+          Mendukung foto, video, dan audio — semua ukuran & orientasi, maks {MAX_SIZE_MB}MB per file.
         </p>
       </div>
 

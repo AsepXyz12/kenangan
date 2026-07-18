@@ -41,14 +41,21 @@ export default function PhotoList({ photos }) {
     <ul className="divide-y divide-line border border-line">
       {photos.map((p) => (
         <li key={p.id} className="p-3 flex items-center gap-3">
-          <div className="relative w-14 h-14 shrink-0 bg-line/30 overflow-hidden">
-            <Image src={p.url} alt={p.title} fill sizes="56px" className="object-cover" />
+          <div className="relative w-14 h-14 shrink-0 bg-line/30 overflow-hidden flex items-center justify-center">
+            {p.mediaType === "video" ? (
+              <video src={p.url} className="w-full h-full object-cover" muted />
+            ) : p.mediaType === "audio" ? (
+              <span className="text-[10px] text-ink/40 mono">AUDIO</span>
+            ) : p.mediaType === "file" ? (
+              <span className="text-[10px] text-ink/40 mono">FILE</span>
+            ) : (
+              <Image src={p.url} alt={p.title} fill sizes="56px" className="object-cover" />
+            )}
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-sm truncate">{p.title}</p>
             <p className="text-xs text-ink/40 mono">
               {formatShort(p.eventDate)} · {p.uploader || "Admin"}
-              {p.comments?.length > 0 && ` · ${p.comments.length} komentar`}
             </p>
           </div>
           <div className="flex items-center gap-3 shrink-0">

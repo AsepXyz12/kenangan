@@ -1,4 +1,5 @@
 import { Fraunces, Karla, Space_Mono } from "next/font/google";
+import { readSettings } from "@/lib/store";
 import "./globals.css";
 
 const display = Fraunces({
@@ -20,11 +21,16 @@ const stamp = Space_Mono({
   variable: "--font-stamp",
 });
 
-export const metadata = {
-  title: "Galeri Kenangan MA",
-  description:
-    "Album digital kenangan Madrasah Aliyah — kumpulan foto, cerita, dan jejak kebersamaan.",
-};
+export async function generateMetadata() {
+  const settings = await readSettings();
+  const siteName = settings.siteName || "Galeri Kenangan MA";
+  return {
+    title: siteName,
+    description:
+      "Album digital kenangan Madrasah Aliyah — kumpulan foto, video, cerita, dan jejak kebersamaan.",
+    icons: settings.logoUrl ? { icon: settings.logoUrl } : undefined,
+  };
+}
 
 export default function RootLayout({ children }) {
   return (

@@ -20,17 +20,13 @@ export async function POST(request) {
         }
         return {
           allowedContentTypes: [
-            "image/jpeg",
-            "image/png",
-            "image/webp",
-            "image/gif",
-            "image/heic",
-            "image/heif",
-            "image/avif",
             "image/*",
+            "video/*",
+            "audio/*",
+            "application/pdf",
           ],
           addRandomSuffix: true,
-          maximumSizeInBytes: 100 * 1024 * 1024, // 100 MB
+          maximumSizeInBytes: 500 * 1024 * 1024, // 500 MB, cukup buat video HP
           tokenPayload: JSON.stringify({}),
         };
       },

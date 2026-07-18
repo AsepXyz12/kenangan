@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -10,6 +10,7 @@ const BULAN_ID = [
   "Januari", "Februari", "Maret", "April", "Mei", "Juni",
   "Juli", "Agustus", "September", "Oktober", "November", "Desember",
 ];
+const POLL_INTERVAL_MS = 10000; // cek foto baru tiap 10 detik, tanpa reload
 
 function parseDateParts(dateStr) {
   if (!dateStr) return null;
@@ -21,6 +22,9 @@ function parseDateParts(dateStr) {
 function formatTime(iso) {
   if (!iso) return "";
   try {
+    // Komponen ini "use client", jadi Date & toLocaleTimeString jalan di
+    // browser masing-masing user — otomatis ikut timezone HP/device mereka,
+    // bukan timezone server.
     return new Date(iso).toLocaleTimeString("id-ID", {
       hour: "2-digit",
       minute: "2-digit",
@@ -30,9 +34,59 @@ function formatTime(iso) {
   }
 }
 
-export default function Gallery({ photos, years }) {
+export default function Gallery({ photos: initialPhotos, years: initialYears }) {
+  const [photos, setPhotos] = useState(initialPhotos);
+  const [years, setYears] = useState(initialYears);
+  const [hasNew, setHasNew] = useState(false);
   const [year, setYear] = useState("all");
   const [query, setQuery] = useState("");
+  const lastIdsRef = useRef(new Set(initialPhotos.map((p) => p.id)));
+
+  // Polling ringan ke endpoint publik: ambil data terbaru dari Blob secara
+  // berkala, tanpa perlu user reload halaman. Kalau ada foto baru sejak
+  // load terakhir, tampilkan notif kecil supaya galeri tidak "loncat"
+  // sendiri saat user lagi baca/scroll.
+  useEffect(() => {
+    let cancelled = false;
+
+    async function poll() {
+      try {
+        const res = await fetch("/api/photos", { cache: "no-store" });
+        if (!res.ok || cancelled) return;
+        const data = await res.json();
+        const fresh = Array.isArray(data.photos) ? data.photos : [];
+        fresh.sort((a, b) => (a.eventDate < b.eventDate ? 1 : -1));
+
+        const freshIds = new Set(fresh.map((p) => p.id));
+        const isDifferent =
+          freshIds.size !== lastIdsRef.current.size ||
+          [...freshIds].some((id) => !lastIdsRef.current.has(id));
+
+        if (isDifferent) {
+          const isNewPhoto = [...freshIds].some((id) => !lastIdsRef.current.has(id));
+          lastIdsRef.current = freshIds;
+          setPhotos(fresh);
+          setYears(
+            Array.from(new Set(fresh.map((p) => (p.eventDate || "").slice(0, 4)).filter(Boolean))).sort(
+              (a, b) => b - a
+            )
+          );
+          if (isNewPhoto) {
+            setHasNew(true);
+            setTimeout(() => setHasNew(false), 4000);
+          }
+        }
+      } catch {
+        // Diam saja kalau gagal — coba lagi di polling berikutnya.
+      }
+    }
+
+    const id = setInterval(poll, POLL_INTERVAL_MS);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, []);
 
   const filtered = useMemo(() => {
     return photos.filter((p) => {
@@ -67,6 +121,12 @@ export default function Gallery({ photos, years }) {
 
   return (
     <section className="max-w-5xl mx-auto px-6 pb-20">
+      {hasNew && (
+        <div className="mb-6 flex items-center gap-2 font-stamp text-xs uppercase tracking-wide text-emerald bg-gold/20 border border-gold/40 px-3 py-2 animate-pulse">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald" />
+          Ada kenangan baru ditambahkan
+        </div>
+      )}
       <div className="flex flex-wrap items-center gap-3 mb-10">
         <input
           type="search"
@@ -141,13 +201,36 @@ export default function Gallery({ photos, years }) {
                     >
                       <span className="stamp-tape" aria-hidden="true" />
                       <div className="relative aspect-[4/5] bg-emerald/5 overflow-hidden">
-                        <Image
-                          src={photo.url}
-                          alt={photo.title}
-                          fill
-                          sizes="(max-width: 640px) 33vw, 25vw"
-                          className="object-cover"
-                        />
+                        {photo.mediaType === "video" ? (
+                          <video
+                            src={photo.url}
+                            className="w-full h-full object-cover"
+                            muted
+                            playsInline
+                            preload="metadata"
+                          />
+                        ) : photo.mediaType === "audio" ? (
+                          <div className="w-full h-full flex items-center justify-center text-emerald/40 font-stamp text-xs uppercase">
+                            Audio
+                          </div>
+                        ) : photo.mediaType === "file" ? (
+                          <div className="w-full h-full flex items-center justify-center text-emerald/40 font-stamp text-xs uppercase">
+                            File
+                          </div>
+                        ) : (
+                          <Image
+                            src={photo.url}
+                            alt={photo.title}
+                            fill
+                            sizes="(max-width: 640px) 33vw, 25vw"
+                            className="object-cover"
+                          />
+                        )}
+                        {photo.mediaType === "video" && (
+                          <span className="absolute bottom-1.5 right-1.5 text-[9px] font-stamp uppercase bg-emerald/80 text-parchment px-1.5 py-0.5">
+                            Video
+                          </span>
+                        )}
                       </div>
                       <p className="font-stamp text-[10px] sm:text-[11px] text-emerald/70 mt-3">
                         {formatTime(photo.uploadedAt)}
@@ -164,12 +247,6 @@ export default function Gallery({ photos, years }) {
                         <span className="font-stamp">
                           {photo.uploader || "Admin"}
                         </span>
-                        {photo.comments?.length > 0 && (
-                          <>
-                            <span className="w-1 h-1 rounded-full bg-ink/20" />
-                            <span>{photo.comments.length} komentar</span>
-                          </>
-                        )}
                       </div>
                     </Link>
                   );
