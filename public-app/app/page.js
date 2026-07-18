@@ -47,6 +47,12 @@ export default async function HomePage() {
               </>
             )}
           </div>
+          <a
+            href="/kelas"
+            className="inline-block mt-5 font-stamp text-xs uppercase tracking-wide text-emerald underline"
+          >
+            Lihat Profil Kelas &amp; Wali Kelas &rarr;
+          </a>
           <hr className="thread mt-8" />
         </div>
       </header>

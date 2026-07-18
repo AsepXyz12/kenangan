@@ -25,6 +25,9 @@ export default async function AdminPage() {
         </div>
         {authed && (
           <div className="flex items-center gap-4">
+            <a href="/kelas" className="text-xs uppercase mono text-accent underline">
+              Profil Kelas
+            </a>
             <a href="/cetak" className="text-xs uppercase mono text-accent underline">
               Cetak / Unduh PDF
             </a>
