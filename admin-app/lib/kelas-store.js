@@ -100,7 +100,15 @@ async function getUrl() {
 
 export async function readKelas() {
   const url = await getUrl();
-  if (!url) return seedKelas();
+  if (!url) {
+    // Belum pernah ada file sama sekali — buat & simpan sekarang juga supaya
+    // ID guru/kelas/murid stabil di request-request berikutnya. Kalau seed
+    // ini cuma "dipinjemin" tanpa disimpan, ID-nya akan beda-beda tiap kali
+    // dibaca ulang dan operasi simpan/edit akan selalu gagal menemukan datanya.
+    const seeded = seedKelas();
+    await writeKelas(seeded);
+    return seeded;
+  }
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) return seedKelas();
   const data = await res.json();

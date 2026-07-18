@@ -70,9 +70,11 @@ function TeacherRow({ teacher, onChanged, onDeleted }) {
   const [subjects, setSubjects] = useState((teacher.subjects || []).join(", "));
   const [busy, setBusy] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState("");
 
   async function save() {
     setBusy(true);
+    setError("");
     try {
       const res = await fetch(`/api/kelas/teachers/${teacher.id}`, {
         method: "PUT",
@@ -82,7 +84,14 @@ function TeacherRow({ teacher, onChanged, onDeleted }) {
           subjects: subjects.split(",").map((s) => s.trim()).filter(Boolean),
         }),
       });
-      if (res.ok) onChanged(await res.json());
+      if (res.ok) {
+        onChanged(await res.json());
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Gagal menyimpan. Coba muat ulang halaman.");
+      }
+    } catch (err) {
+      setError("Gagal menyimpan (koneksi bermasalah).");
     } finally {
       setBusy(false);
     }
@@ -90,6 +99,7 @@ function TeacherRow({ teacher, onChanged, onDeleted }) {
 
   async function handlePhoto(file) {
     setUploading(true);
+    setError("");
     try {
       const photoUrl = await uploadPhoto(file);
       const res = await fetch(`/api/kelas/teachers/${teacher.id}`, {
@@ -97,7 +107,14 @@ function TeacherRow({ teacher, onChanged, onDeleted }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ photoUrl }),
       });
-      if (res.ok) onChanged(await res.json());
+      if (res.ok) {
+        onChanged(await res.json());
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Gagal upload foto. Coba muat ulang halaman.");
+      }
+    } catch (err) {
+      setError("Gagal upload foto (koneksi bermasalah).");
     } finally {
       setUploading(false);
     }
@@ -110,38 +127,41 @@ function TeacherRow({ teacher, onChanged, onDeleted }) {
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-3 border border-line p-3">
-      <Avatar name={teacher.name} photoUrl={teacher.photoUrl} size={48} />
-      <input
-        className="field flex-1 min-w-[140px]"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Nama guru"
-      />
-      <input
-        className="field flex-[2] min-w-[180px]"
-        value={subjects}
-        onChange={(e) => setSubjects(e.target.value)}
-        placeholder="Mapel, dipisah koma"
-      />
-      <div className="flex items-center gap-2">
-        <PhotoButton label="Foto" busy={uploading} onPicked={handlePhoto} />
-        <button
-          type="button"
-          disabled={busy}
-          onClick={save}
-          className="btn text-[11px] uppercase mono px-2 py-1"
-        >
-          Simpan
-        </button>
-        <button
-          type="button"
-          onClick={remove}
-          className="btn-danger text-[11px] uppercase mono px-2 py-1 border"
-        >
-          Hapus
-        </button>
+    <div className="border border-line p-3">
+      <div className="flex flex-wrap items-center gap-3">
+        <Avatar name={teacher.name} photoUrl={teacher.photoUrl} size={48} />
+        <input
+          className="field flex-1 min-w-[140px]"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Nama guru"
+        />
+        <input
+          className="field flex-[2] min-w-[180px]"
+          value={subjects}
+          onChange={(e) => setSubjects(e.target.value)}
+          placeholder="Mapel, dipisah koma"
+        />
+        <div className="flex items-center gap-2">
+          <PhotoButton label="Foto" busy={uploading} onPicked={handlePhoto} />
+          <button
+            type="button"
+            disabled={busy}
+            onClick={save}
+            className="btn text-[11px] uppercase mono px-2 py-1"
+          >
+            Simpan
+          </button>
+          <button
+            type="button"
+            onClick={remove}
+            className="btn-danger text-[11px] uppercase mono px-2 py-1 border"
+          >
+            Hapus
+          </button>
+        </div>
       </div>
+      {error && <p className="text-xs text-danger mono mt-2">{error}</p>}
     </div>
   );
 }
@@ -150,11 +170,13 @@ function AddTeacher({ onAdded }) {
   const [name, setName] = useState("");
   const [subjects, setSubjects] = useState("");
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
 
   async function submit(e) {
     e.preventDefault();
     if (!name.trim()) return;
     setBusy(true);
+    setError("");
     try {
       const res = await fetch("/api/kelas", {
         method: "POST",
@@ -168,29 +190,37 @@ function AddTeacher({ onAdded }) {
         onAdded(await res.json());
         setName("");
         setSubjects("");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Gagal menambah guru.");
       }
+    } catch (err) {
+      setError("Gagal menambah guru (koneksi bermasalah).");
     } finally {
       setBusy(false);
     }
   }
 
   return (
-    <form onSubmit={submit} className="flex flex-wrap gap-2 items-center">
-      <input
-        className="field flex-1 min-w-[140px]"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Nama guru baru"
-      />
-      <input
-        className="field flex-[2] min-w-[180px]"
-        value={subjects}
-        onChange={(e) => setSubjects(e.target.value)}
-        placeholder="Mapel, dipisah koma"
-      />
-      <button disabled={busy} className="btn text-[11px] uppercase mono px-3 py-1.5">
-        + Tambah guru
-      </button>
+    <form onSubmit={submit} className="space-y-2">
+      <div className="flex flex-wrap gap-2 items-center">
+        <input
+          className="field flex-1 min-w-[140px]"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Nama guru baru"
+        />
+        <input
+          className="field flex-[2] min-w-[180px]"
+          value={subjects}
+          onChange={(e) => setSubjects(e.target.value)}
+          placeholder="Mapel, dipisah koma"
+        />
+        <button disabled={busy} className="btn text-[11px] uppercase mono px-3 py-1.5">
+          + Tambah guru
+        </button>
+      </div>
+      {error && <p className="text-xs text-danger mono">{error}</p>}
     </form>
   );
 }
@@ -201,17 +231,26 @@ function StudentCard({ classId, student, onChanged, onDeleted }) {
   const [name, setName] = useState(student.name);
   const [uploading, setUploading] = useState(false);
   const [savingName, setSavingName] = useState(false);
+  const [error, setError] = useState("");
 
   async function saveName() {
     if (name === student.name) return;
     setSavingName(true);
+    setError("");
     try {
       const res = await fetch(`/api/kelas/classes/${classId}/students/${student.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name }),
       });
-      if (res.ok) onChanged(await res.json());
+      if (res.ok) {
+        onChanged(await res.json());
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Gagal menyimpan nama.");
+      }
+    } catch (err) {
+      setError("Gagal menyimpan (koneksi bermasalah).");
     } finally {
       setSavingName(false);
     }
@@ -219,6 +258,7 @@ function StudentCard({ classId, student, onChanged, onDeleted }) {
 
   async function handlePhoto(file) {
     setUploading(true);
+    setError("");
     try {
       const photoUrl = await uploadPhoto(file);
       const res = await fetch(`/api/kelas/classes/${classId}/students/${student.id}`, {
@@ -226,7 +266,14 @@ function StudentCard({ classId, student, onChanged, onDeleted }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ photoUrl }),
       });
-      if (res.ok) onChanged(await res.json());
+      if (res.ok) {
+        onChanged(await res.json());
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Gagal upload foto.");
+      }
+    } catch (err) {
+      setError("Gagal upload foto (koneksi bermasalah).");
     } finally {
       setUploading(false);
     }
@@ -262,6 +309,7 @@ function StudentCard({ classId, student, onChanged, onDeleted }) {
         </button>
       </div>
       {savingName && <span className="text-[10px] text-ink/40 mono">menyimpan...</span>}
+      {error && <p className="text-[10px] text-danger mono">{error}</p>}
     </div>
   );
 }
@@ -269,11 +317,13 @@ function StudentCard({ classId, student, onChanged, onDeleted }) {
 function AddStudent({ classId, onAdded }) {
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
 
   async function submit(e) {
     e.preventDefault();
     if (!name.trim()) return;
     setBusy(true);
+    setError("");
     try {
       const res = await fetch(`/api/kelas/classes/${classId}/students`, {
         method: "POST",
@@ -283,24 +333,32 @@ function AddStudent({ classId, onAdded }) {
       if (res.ok) {
         onAdded(await res.json());
         setName("");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Gagal menambah murid.");
       }
+    } catch (err) {
+      setError("Gagal menambah murid (koneksi bermasalah).");
     } finally {
       setBusy(false);
     }
   }
 
   return (
-    <form onSubmit={submit} className="flex items-center gap-2">
-      <input
-        className="field text-xs"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder="Nama murid baru"
-      />
-      <button disabled={busy} className="btn text-[11px] uppercase mono px-3 py-1.5 shrink-0">
-        + Tambah
-      </button>
-    </form>
+    <div>
+      <form onSubmit={submit} className="flex items-center gap-2">
+        <input
+          className="field text-xs"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Nama murid baru"
+        />
+        <button disabled={busy} className="btn text-[11px] uppercase mono px-3 py-1.5 shrink-0">
+          + Tambah
+        </button>
+      </form>
+      {error && <p className="text-xs text-danger mono mt-1">{error}</p>}
+    </div>
   );
 }
 
@@ -309,16 +367,25 @@ function AddStudent({ classId, onAdded }) {
 function ClassBlock({ kelas, teachers, onChanged, onDeleted }) {
   const [name, setName] = useState(kelas.name);
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
 
   async function patch(body) {
     setBusy(true);
+    setError("");
     try {
       const res = await fetch(`/api/kelas/classes/${kelas.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      if (res.ok) onChanged(await res.json());
+      if (res.ok) {
+        onChanged(await res.json());
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Gagal menyimpan perubahan kelas.");
+      }
+    } catch (err) {
+      setError("Gagal menyimpan (koneksi bermasalah).");
     } finally {
       setBusy(false);
     }
@@ -406,6 +473,7 @@ function ClassBlock({ kelas, teachers, onChanged, onDeleted }) {
             })}
           </div>
         </div>
+        {error && <p className="text-xs text-danger mono">{error}</p>}
       </div>
 
       <div className="p-4">
@@ -432,11 +500,13 @@ function ClassBlock({ kelas, teachers, onChanged, onDeleted }) {
 function AddClass({ onAdded }) {
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
 
   async function submit(e) {
     e.preventDefault();
     if (!name.trim()) return;
     setBusy(true);
+    setError("");
     try {
       const res = await fetch("/api/kelas", {
         method: "POST",
@@ -446,24 +516,32 @@ function AddClass({ onAdded }) {
       if (res.ok) {
         onAdded(await res.json());
         setName("");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Gagal menambah kelas.");
       }
+    } catch (err) {
+      setError("Gagal menambah kelas (koneksi bermasalah).");
     } finally {
       setBusy(false);
     }
   }
 
   return (
-    <form onSubmit={submit} className="flex items-center gap-2">
-      <input
-        className="field flex-1"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder='Contoh: "Kelas 1 (10/X)"'
-      />
-      <button disabled={busy} className="btn text-[11px] uppercase mono px-3 py-1.5 shrink-0">
-        + Tambah kelas
-      </button>
-    </form>
+    <div>
+      <form onSubmit={submit} className="flex items-center gap-2">
+        <input
+          className="field flex-1"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder='Contoh: "Kelas 1 (10/X)"'
+        />
+        <button disabled={busy} className="btn text-[11px] uppercase mono px-3 py-1.5 shrink-0">
+          + Tambah kelas
+        </button>
+      </form>
+      {error && <p className="text-xs text-danger mono mt-1">{error}</p>}
+    </div>
   );
 }
 
