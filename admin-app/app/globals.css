@@ -69,3 +69,16 @@ code,
 .field:focus {
   border-color: #123832;
 }
+
+/* ---------- Print / PDF (halaman /cetak) ---------- */
+@media print {
+  @page {
+    margin: 14mm 12mm;
+  }
+  body {
+    background: #fff !important;
+  }
+  a[href]::after {
+    content: none !important; /* jangan tampilkan URL link pas print */
+  }
+}

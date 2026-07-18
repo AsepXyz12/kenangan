@@ -196,34 +196,36 @@ export default function Gallery({ photos: initialPhotos, years: initialYears }) 
                   const baseRotation = ROTATIONS[idx % ROTATIONS.length];
 
                   return (
-                    <div key={photo.id} className="relative">
-                      {/* Kartu bayangan di belakang buat kesan "numpuk" kalau lebih dari 1 media */}
-                      {count > 1 && (
-                        <>
-                          <span
-                            aria-hidden="true"
-                            className="absolute inset-0 bg-paper border border-emerald/10"
-                            style={{ transform: `rotate(${baseRotation + 5}deg) translate(3px, 3px)` }}
-                          />
-                          {count > 2 && (
+                    <Link
+                      key={photo.id}
+                      href={`/photo/${photo.id}`}
+                      className="polaroid reveal relative block"
+                      data-tape={TAPES[idx % TAPES.length]}
+                      style={{
+                        transform: `rotate(${baseRotation}deg)`,
+                        animationDelay: `${Math.min(idx, 12) * 35}ms`,
+                      }}
+                    >
+                      <span className="stamp-tape" aria-hidden="true" />
+                      <div className="relative">
+                        {/* Kartu bayangan nempel di area foto aja (bukan judul/caption di
+                            bawahnya), biar keliatan jelas numpuknya kalau media > 1. */}
+                        {count > 1 && (
+                          <>
                             <span
                               aria-hidden="true"
-                              className="absolute inset-0 bg-paper border border-emerald/10"
-                              style={{ transform: `rotate(${baseRotation - 6}deg) translate(-3px, 4px)` }}
+                              className="absolute inset-0 aspect-[4/5] bg-parchment2 border border-emerald/20 -z-10"
+                              style={{ transform: "rotate(7deg) translate(6px, 5px)" }}
                             />
-                          )}
-                        </>
-                      )}
-                      <Link
-                        href={`/photo/${photo.id}`}
-                        className="polaroid reveal relative block"
-                        data-tape={TAPES[idx % TAPES.length]}
-                        style={{
-                          transform: `rotate(${baseRotation}deg)`,
-                          animationDelay: `${Math.min(idx, 12) * 35}ms`,
-                        }}
-                      >
-                        <span className="stamp-tape" aria-hidden="true" />
+                            {count > 2 && (
+                              <span
+                                aria-hidden="true"
+                                className="absolute inset-0 aspect-[4/5] bg-parchment2 border border-emerald/20 -z-20"
+                                style={{ transform: "rotate(-8deg) translate(-6px, 6px)" }}
+                              />
+                            )}
+                          </>
+                        )}
                         <div className="relative aspect-[4/5] bg-emerald/5 overflow-hidden">
                           {cover.mediaType === "video" ? (
                             <video
@@ -261,24 +263,24 @@ export default function Gallery({ photos: initialPhotos, years: initialYears }) 
                             </span>
                           )}
                         </div>
-                        <p className="font-stamp text-[10px] sm:text-[11px] text-emerald/70 mt-3">
-                          {formatTime(photo.uploadedAt)}
+                      </div>
+                      <p className="font-stamp text-[10px] sm:text-[11px] text-emerald/70 mt-3">
+                        {formatTime(photo.uploadedAt)}
+                      </p>
+                      <p className="font-display text-xs sm:text-sm mt-0.5 text-ink line-clamp-2">
+                        {photo.title}
+                      </p>
+                      {photo.caption && (
+                        <p className="font-body text-[11px] text-ink/50 mt-1 line-clamp-2">
+                          {photo.caption}
                         </p>
-                        <p className="font-display text-xs sm:text-sm mt-0.5 text-ink line-clamp-2">
-                          {photo.title}
-                        </p>
-                        {photo.caption && (
-                          <p className="font-body text-[11px] text-ink/50 mt-1 line-clamp-2">
-                            {photo.caption}
-                          </p>
-                        )}
-                        <div className="mt-1.5 flex items-center gap-2 text-[10px] text-ink/40">
-                          <span className="font-stamp">
-                            {photo.uploader || "Admin"}
-                          </span>
-                        </div>
-                      </Link>
-                    </div>
+                      )}
+                      <div className="mt-1.5 flex items-center gap-2 text-[10px] text-ink/40">
+                        <span className="font-stamp">
+                          {photo.uploader || "Admin"}
+                        </span>
+                      </div>
+                    </Link>
                   );
                 })}
               </div>

@@ -23,7 +23,14 @@ export default async function AdminPage() {
           </p>
           <h1 className="text-2xl font-semibold mt-1">Panel Admin</h1>
         </div>
-        {authed && <LogoutButton />}
+        {authed && (
+          <div className="flex items-center gap-4">
+            <a href="/cetak" className="text-xs uppercase mono text-accent underline">
+              Cetak / Unduh PDF
+            </a>
+            <LogoutButton />
+          </div>
+        )}
       </div>
 
       {!authed ? (

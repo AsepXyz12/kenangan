@@ -40,21 +40,15 @@ export default async function PhotoPage({ params }) {
         </div>
       </div>
 
-      {/* Feed media: satu kolom rapi, scroll di dalam area ini sendiri kalau
-          medianya banyak, dengan snap per item supaya berhenti pas di tengah
-          tiap foto/video — terasa halus & tidak "loncat-loncat". */}
-      <div
-        className={
-          items.length > 1
-            ? "mt-8 max-h-[78vh] overflow-y-auto snap-y snap-mandatory rounded-sm space-y-10 pr-1 pb-4"
-            : "mt-8"
-        }
-      >
+      {/* Feed media: satu kolom rapi, dengan jarak antar item yang lega supaya
+          scroll halaman biasa terasa seperti "gulir" per foto. Sengaja TIDAK
+          dibikin area scroll sendiri (overflow-y-auto + vh) karena itu bikin
+          bug di HP: address bar browser naik-turun bikin satuan vh salah
+          hitung, jadinya scroll suka mentok sebelum sampai bawah. Scroll
+          halaman biasa (bawaan browser) tidak kena masalah itu. */}
+      <div className={items.length > 1 ? "mt-8 space-y-10" : "mt-8"}>
         {items.map((item, i) => (
-          <div
-            key={`${item.url}-${i}`}
-            className={items.length > 1 ? "snap-start scroll-mt-4" : ""}
-          >
+          <div key={`${item.url}-${i}`}>
             <div
               className="polaroid"
               data-tape={TAPES[i % TAPES.length]}
