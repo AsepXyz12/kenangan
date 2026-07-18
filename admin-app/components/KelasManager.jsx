@@ -545,9 +545,159 @@ function AddClass({ onAdded }) {
   );
 }
 
+// ---------- Kenaikan kelas otomatis ----------
+
+const BULAN = [
+  "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+  "Juli", "Agustus", "September", "Oktober", "November", "Desember",
+];
+
+function formatTanggal(iso) {
+  if (!iso) return "Belum pernah";
+  const d = new Date(iso);
+  return d.toLocaleString("id-ID", {
+    day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit",
+  });
+}
+
+function PromotionPanel({ initialPromotion }) {
+  const [promo, setPromo] = useState(initialPromotion);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const [info, setInfo] = useState("");
+
+  async function save(patch) {
+    setBusy(true);
+    setError("");
+    setInfo("");
+    try {
+      const res = await fetch("/api/kelas/promotion", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(patch),
+      });
+      if (res.ok) {
+        setPromo(await res.json());
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Gagal menyimpan pengaturan.");
+      }
+    } catch (err) {
+      setError("Gagal menyimpan (koneksi bermasalah).");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function runNow() {
+    if (
+      !confirm(
+        "Ini akan langsung menjalankan kenaikan kelas sekarang juga: kelas " +
+          "tertinggi jadi alumni, semua kelas lain naik satu tingkat, dan " +
+          "kelas paling bawah dikosongkan. Yakin mau jalankan sekarang?"
+      )
+    )
+      return;
+    setBusy(true);
+    setError("");
+    setInfo("");
+    try {
+      const res = await fetch("/api/kelas/promotion", { method: "POST" });
+      if (res.ok) {
+        const data = await res.json();
+        setPromo(data);
+        setInfo(
+          data.ran
+            ? "Selesai — kenaikan kelas sudah dijalankan. Muat ulang halaman untuk lihat perubahan kelas & murid."
+            : "Tidak ada perubahan (mungkin belum ada kelas aktif)."
+        );
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Gagal menjalankan kenaikan kelas.");
+      }
+    } catch (err) {
+      setError("Gagal menjalankan (koneksi bermasalah).");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  if (!promo) return null;
+
+  return (
+    <div className="border border-line p-4 space-y-3">
+      <label className="flex items-center gap-2 text-sm">
+        <input
+          type="checkbox"
+          checked={!!promo.enabled}
+          disabled={busy}
+          onChange={(e) => save({ enabled: e.target.checked })}
+        />
+        Aktifkan kenaikan kelas otomatis
+      </label>
+
+      <div className="flex flex-wrap items-center gap-3 text-xs mono">
+        <label className="flex items-center gap-1.5">
+          Bulan kelulusan:
+          <select
+            className="field py-1"
+            value={promo.graduationMonth}
+            disabled={busy}
+            onChange={(e) => save({ graduationMonth: Number(e.target.value) })}
+          >
+            {BULAN.map((b, i) => (
+              <option key={b} value={i + 1}>
+                {b}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="flex items-center gap-1.5">
+          Tahun kelulusan kelas tertinggi saat ini:
+          <input
+            type="number"
+            className="field py-1 w-24"
+            value={promo.graduationYear}
+            disabled={busy}
+            onChange={(e) => setPromo({ ...promo, graduationYear: Number(e.target.value) })}
+            onBlur={() => save({ graduationYear: promo.graduationYear })}
+          />
+        </label>
+      </div>
+
+      <p className="text-xs text-ink/60 leading-relaxed">
+        Begitu tanggal 1 {BULAN[(promo.graduationMonth || 7) - 1]}{" "}
+        {promo.graduationYear} tercapai, sistem otomatis akan menjadikan{" "}
+        {promo.nextGraduatingClassNames?.length
+          ? promo.nextGraduatingClassNames.join(", ")
+          : "kelas tertinggi"}{" "}
+        sebagai alumni, semua kelas lain naik satu tingkat, dan kelas paling
+        bawah dikosongkan untuk murid baru. Tidak perlu klik apa pun — ini
+        jalan sendiri saat ada yang membuka halaman ini setelah tanggal
+        tersebut.
+      </p>
+      <p className="text-xs text-ink/40">
+        Terakhir kenaikan kelas jalan: {formatTanggal(promo.lastRunAt)}
+      </p>
+
+      <button
+        type="button"
+        disabled={busy}
+        onClick={runNow}
+        className="btn-outline border border-line text-[11px] uppercase mono px-2 py-1 disabled:opacity-50"
+      >
+        Jalankan sekarang (testing)
+      </button>
+
+      {error && <p className="text-xs text-danger mono">{error}</p>}
+      {info && <p className="text-xs text-emerald mono">{info}</p>}
+    </div>
+  );
+}
+
 // ---------- Root ----------
 
-export default function KelasManager({ initialTeachers, initialClasses }) {
+export default function KelasManager({ initialTeachers, initialClasses, initialPromotion }) {
   const [teachers, setTeachers] = useState(initialTeachers);
   const [classes, setClasses] = useState(
     [...initialClasses].sort((a, b) => (a.order || 0) - (b.order || 0))
@@ -555,6 +705,13 @@ export default function KelasManager({ initialTeachers, initialClasses }) {
 
   return (
     <div className="space-y-10">
+      <section>
+        <h2 className="text-xs uppercase tracking-wide text-ink/50 mono mb-3">
+          Kenaikan kelas otomatis
+        </h2>
+        <PromotionPanel initialPromotion={initialPromotion} />
+      </section>
+
       <section>
         <h2 className="text-xs uppercase tracking-wide text-ink/50 mono mb-3">
           Guru & mata pelajaran ({teachers.length})

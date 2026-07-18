@@ -1,5 +1,5 @@
 import { isAdminAuthed } from "@/lib/auth";
-import { readKelas } from "@/lib/kelas-store";
+import { readKelas, getPromotionPreview } from "@/lib/kelas-store";
 import LoginForm from "@/components/LoginForm";
 import LogoutButton from "@/components/LogoutButton";
 import KelasManager from "@/components/KelasManager";
@@ -9,6 +9,7 @@ export const dynamic = "force-dynamic";
 export default async function KelasPage() {
   const authed = isAdminAuthed();
   const data = authed ? await readKelas() : { teachers: [], classes: [] };
+  const promotion = authed ? getPromotionPreview(data) : null;
 
   return (
     <main className="max-w-5xl mx-auto px-6 py-10">
@@ -41,7 +42,11 @@ export default async function KelasPage() {
             fotonya. Klik &quot;Upload foto&quot; di kartu murid untuk unggah
             satu per satu — tidak perlu semuanya sekaligus.
           </p>
-          <KelasManager initialTeachers={data.teachers} initialClasses={data.classes} />
+          <KelasManager
+            initialTeachers={data.teachers}
+            initialClasses={data.classes}
+            initialPromotion={promotion}
+          />
         </div>
       )}
     </main>

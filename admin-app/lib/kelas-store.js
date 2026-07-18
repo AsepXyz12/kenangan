@@ -89,6 +89,158 @@ function seedKelas() {
   return { teachers: Object.values(t), classes };
 }
 
+// ---------- Kenaikan kelas otomatis ----------
+//
+// Cara kerja singkat (biar gampang dipahami pas dibaca lagi nanti):
+// - Tiap kelas aktif (isAlumni: false) punya `order` = tingkat kelas (1, 2, 3, ...).
+//   Anggap ini "wadah" tetap: Kelas 1, Kelas 2, Kelas 3 — nama, wali kelas, dan
+//   urutan wadah ini TIDAK berubah selamanya.
+// - Yang naik/pindah cuma ISI-nya (daftar murid). Saat kenaikan kelas terjadi:
+//     1. Murid di wadah dengan `order` tertinggi (kelas paling akhir, misal
+//        Kelas 3) di-copy jadi satu catatan baru bertanda isAlumni: true —
+//        ini yang otomatis muncul di halaman "Alumni".
+//     2. Murid di Kelas 2 pindah mengisi wadah Kelas 3 (menggantikan yang baru
+//        lulus). Murid di Kelas 1 pindah mengisi wadah Kelas 2. Dan seterusnya
+//        kalau ada lebih dari 3 tingkat.
+//     3. Wadah Kelas 1 dikosongkan lagi — siap diisi murid baru oleh guru/admin.
+// - Wali kelas TIDAK ikut pindah bareng murid (tetap jadi wali di wadah/tingkat
+//   yang sama tiap tahun). Kalau wali kelas mau ikut naik bareng muridnya,
+//   tinggal diatur manual lewat tombol wali kelas seperti biasa.
+// - Semua ini dicek otomatis setiap kali data kelas dibaca (readKelas), jadi
+//   tidak perlu ada yang mengklik apa pun. Supaya tidak dobel jalan, setelah
+//   sebuah kenaikan terjadi, `graduationYear` langsung ditambah 1 (menunjuk ke
+//   siklus kelulusan berikutnya), sehingga pengecekan berikutnya otomatis
+//   "belum waktunya" sampai setahun ke depan.
+
+function defaultPromotion() {
+  return {
+    enabled: false,
+    // Bulan kelulusan (1-12). Rata-rata sekolah di Indonesia meluluskan
+    // sekitar Mei-Juli; default dipasang Juli, bisa diubah lewat UI.
+    graduationMonth: 7,
+    // Tahun kelulusan untuk kelas TERTINGGI yang aktif sekarang. Diisi/di-
+    // konfirmasi sekali oleh admin, sesudah itu nambah sendiri +1 tiap kali
+    // kenaikan kelas otomatis benar-benar jalan.
+    graduationYear: new Date().getFullYear(),
+    lastRunAt: null,
+  };
+}
+
+// Mengecek apakah sudah waktunya naik kelas, dan kalau iya, langsung
+// menjalankan pemindahan murid + pembuatan arsip alumni. Fungsi ini MENGUBAH
+// `data` secara langsung (in place). Mengembalikan true kalau ada perubahan
+// yang perlu disimpan.
+function runAutoPromotionIfDue(data) {
+  if (!data.promotion) data.promotion = defaultPromotion();
+  const p = data.promotion;
+  if (!p.enabled) return false;
+
+  const month = Math.min(Math.max(p.graduationMonth || 7, 1), 12);
+  const target = new Date(p.graduationYear, month - 1, 1);
+  const now = new Date();
+  if (now < target) return false;
+
+  const active = data.classes
+    .filter((c) => !c.isAlumni)
+    .sort((a, b) => (a.order || 0) - (b.order || 0));
+  if (active.length === 0) {
+    // Tidak ada kelas aktif sama sekali — tidak ada yang bisa dinaikkan.
+    // Majukan saja penanda tahunnya supaya tidak terus-menerus dicek tiap saat.
+    p.graduationYear += 1;
+    p.lastRunAt = new Date().toISOString();
+    return true;
+  }
+
+  const maxOrder = active[active.length - 1].order || 0;
+  const graduating = active.filter((c) => (c.order || 0) === maxOrder);
+
+  // 1) Arsipkan isi kelas tertinggi jadi alumni (catatan baru, terpisah dari
+  //    wadah aslinya supaya wadahnya bisa dipakai lagi tahun depan).
+  graduating.forEach((slot) => {
+    data.classes.push({
+      id: randomUUID(),
+      name: `${slot.name} — Lulus ${p.graduationYear}`,
+      order: slot.order,
+      isAlumni: true,
+      graduatedYear: p.graduationYear,
+      waliKelasIds: [...(slot.waliKelasIds || [])],
+      students: slot.students.map((s) => ({ ...s })),
+    });
+  });
+
+  // 2) Geser murid naik satu tingkat: dari yang kedua tertinggi turun sampai
+  //    yang paling bawah. Wadahnya (nama, wali kelas, order) tetap, cuma
+  //    daftar muridnya yang pindah.
+  for (let i = active.length - 2; i >= 0; i--) {
+    active[i + 1].students = active[i].students;
+  }
+
+  // 3) Kosongkan wadah kelas paling bawah (Kelas 1) — siap diisi anak baru.
+  active[0].students = [];
+
+  // 4) Catat & majukan siklus supaya tidak dobel jalan.
+  p.graduationYear += 1;
+  p.lastRunAt = new Date().toISOString();
+  return true;
+}
+
+// Info ringkas buat ditampilkan di UI (tanggal kenaikan berikutnya, dst),
+// tanpa perlu menjalankan apa pun.
+export function getPromotionPreview(data) {
+  const p = data.promotion || defaultPromotion();
+  const active = data.classes
+    .filter((c) => !c.isAlumni)
+    .sort((a, b) => (a.order || 0) - (b.order || 0));
+  const maxOrder = active.length ? active[active.length - 1].order || 0 : null;
+  const nextGraduating = active.filter((c) => (c.order || 0) === maxOrder);
+  return {
+    ...p,
+    nextGraduatingClassNames: nextGraduating.map((c) => c.name),
+  };
+}
+
+export async function updatePromotionSettings(patch) {
+  const data = await readKelasRaw();
+  const p = data.promotion || defaultPromotion();
+  if (typeof patch.enabled === "boolean") p.enabled = patch.enabled;
+  if (Number.isInteger(patch.graduationMonth)) {
+    p.graduationMonth = Math.min(Math.max(patch.graduationMonth, 1), 12);
+  }
+  if (Number.isInteger(patch.graduationYear)) p.graduationYear = patch.graduationYear;
+  data.promotion = p;
+  await writeKelas(data);
+  return data;
+}
+
+// Dipakai tombol "Jalankan sekarang" (buat testing) DAN oleh cron harian —
+// beda dengan pengecekan otomatis di readKelas, ini memaksa jalan meski
+// tanggalnya belum sampai target (dipakai admin buat coba dulu sebelum yakin).
+export async function forceRunPromotionNow() {
+  const data = await readKelasRaw();
+  if (!data.promotion) data.promotion = defaultPromotion();
+  const enabledBefore = data.promotion.enabled;
+  const monthBefore = data.promotion.graduationMonth;
+
+  // Paksa syarat tanggal terpenuhi (mundurkan target 1 hari dari hari ini),
+  // lalu jalankan logika yang sama persis dengan yang otomatis supaya
+  // hasilnya konsisten dengan kenaikan kelas beneran.
+  const target = new Date();
+  target.setDate(target.getDate() - 1);
+  data.promotion.enabled = true;
+  data.promotion.graduationYear = target.getFullYear();
+  data.promotion.graduationMonth = target.getMonth() + 1;
+
+  const ran = runAutoPromotionIfDue(data);
+
+  // Kembalikan setelan enabled/bulan sesuai pilihan admin sebelumnya — cuma
+  // tahun siklusnya yang memang harus lanjut maju (sudah ditambah +1 di
+  // dalam runAutoPromotionIfDue kalau ran === true).
+  data.promotion.enabled = enabledBefore;
+  data.promotion.graduationMonth = monthBefore;
+  await writeKelas(data);
+  return { ran, data };
+}
+
 async function getUrl() {
   try {
     const info = await head(KELAS_PATH);
@@ -98,7 +250,11 @@ async function getUrl() {
   }
 }
 
-export async function readKelas() {
+// Baca data apa adanya dari Blob, TANPA menjalankan pengecekan kenaikan
+// kelas otomatis. Dipakai oleh fungsi pengaturan kenaikan kelas sendiri
+// (updatePromotionSettings, forceRunPromotionNow) supaya tidak dobel jalan
+// dalam satu request yang sama.
+async function readKelasRaw() {
   const url = await getUrl();
   if (!url) {
     // Belum pernah ada file sama sekali — buat & simpan sekarang juga supaya
@@ -115,6 +271,16 @@ export async function readKelas() {
   if (!data || !Array.isArray(data.teachers) || !Array.isArray(data.classes)) {
     return seedKelas();
   }
+  return data;
+}
+
+// Baca data kelas — dipakai di mana-mana. Setiap kali dipanggil, otomatis
+// mengecek "sudah waktunya naik kelas belum?" dan langsung menjalankannya
+// kalau iya, sehingga tidak perlu ada tombol yang perlu diklik siapa pun.
+export async function readKelas() {
+  const data = await readKelasRaw();
+  const changed = runAutoPromotionIfDue(data);
+  if (changed) await writeKelas(data);
   return data;
 }
 
