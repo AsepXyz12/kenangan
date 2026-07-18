@@ -70,13 +70,86 @@ code,
   border-color: #123832;
 }
 
-/* ---------- Print / PDF (halaman /cetak) ---------- */
+/* ---------- Halaman /cetak — samain gaya sama situs publik ---------- */
+
+.cetak-page {
+  background-color: #f6f1e4;
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(18, 56, 50, 0.08) 1px,
+    transparent 0
+  );
+  background-size: 22px 22px;
+}
+
+/* Washi tape kecil di atas tiap kartu foto, biar berasa "ditempel" */
+.cetak-tape {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 46px;
+  height: 18px;
+  border: 1px solid rgba(184, 146, 63, 0.55);
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(184, 146, 63, 0.32),
+    rgba(184, 146, 63, 0.32) 4px,
+    rgba(184, 146, 63, 0.18) 4px,
+    rgba(184, 146, 63, 0.18) 8px
+  );
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+}
+
+.cetak-tape[data-tape="clay"] {
+  border-color: rgba(168, 73, 46, 0.55);
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(168, 73, 46, 0.3),
+    rgba(168, 73, 46, 0.3) 4px,
+    rgba(168, 73, 46, 0.16) 4px,
+    rgba(168, 73, 46, 0.16) 8px
+  );
+}
+
+.cetak-tape[data-tape="dusk"] {
+  border-color: rgba(47, 72, 88, 0.5);
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(47, 72, 88, 0.28),
+    rgba(47, 72, 88, 0.28) 4px,
+    rgba(47, 72, 88, 0.14) 4px,
+    rgba(47, 72, 88, 0.14) 8px
+  );
+}
+
+/* Garis jahitan putus-putus — motif pemisah khas situs publik */
+.cetak-thread {
+  border: none;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    rgba(18, 56, 50, 0.35) 60%,
+    transparent 0%
+  );
+  background-position: bottom;
+  background-size: 10px 1px;
+  background-repeat: repeat-x;
+}
+
 @media print {
   @page {
     margin: 14mm 12mm;
   }
+  html,
   body {
-    background: #fff !important;
+    background: #f6f1e4 !important;
+  }
+  /* Chromium butuh ini biar warna & gambar background ikut tercetak/masuk PDF,
+     bukan cuma putih polos kayak sebelumnya. */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
   a[href]::after {
     content: none !important; /* jangan tampilkan URL link pas print */
