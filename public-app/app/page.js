@@ -59,7 +59,10 @@ export default async function HomePage() {
           {siteName} · Madrasah Aliyah
         </p>
         <p className="font-stamp text-[10px] uppercase tracking-wide text-ink/30 mt-2">
-          Dibangun dengan JavaScript (Next.js &amp; React), Tailwind CSS · disimpan di Vercel Blob
+          Dikembangkan oleh Ramzz dengan JavaScript (Next.js &amp; React), Tailwind CSS · disimpan di Vercel Blob
+        </p>
+        <p className="font-stamp text-[10px] text-ink/30 mt-1">
+          copyright by Ramzz / asep xyz
         </p>
       </footer>
     </main>
