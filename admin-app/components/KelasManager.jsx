@@ -238,11 +238,56 @@ const CODE_LANGS = [
   { value: "python", label: "Python" },
   { value: "cpp", label: "C++" },
   { value: "php", label: "PHP" },
-  { value: "sql", label: "SQL / MySQL" },
+  { value: "sql", label: "MySQL" },
+];
+
+// Nama-nama penanda bahasa yang dikenali saat parsing paste multi-bahasa —
+// bisa lebih dari satu alias per bahasa (mis. "SQL" dan "MySQL" dua-duanya
+// mengarah ke value "sql"), beda dari daftar dropdown di atas yang cuma satu
+// label per bahasa.
+const SPLIT_ALIASES = [
+  { names: ["HTML"], value: "html", label: "HTML" },
+  { names: ["CSS"], value: "css", label: "CSS" },
+  { names: ["JavaScript", "JS"], value: "javascript", label: "JavaScript" },
+  { names: ["TypeScript", "TS"], value: "typescript", label: "TypeScript" },
+  { names: ["Python", "Py"], value: "python", label: "Python" },
+  { names: ["C\\+\\+", "Cpp"], value: "cpp", label: "C++" },
+  { names: ["PHP"], value: "php", label: "PHP" },
+  { names: ["MySQL", "SQL"], value: "sql", label: "MySQL" },
 ];
 
 function isCodeSkill(skill) {
   return skill && typeof skill === "object" && typeof skill.code === "string";
+}
+
+// Kalau murid nge-paste banyak bahasa sekaligus dalam satu blok (format
+// "Nama: kode..." berulang, kayak yang biasa ditulis orang pas nunjukkin
+// beberapa cuplikan kode berbeda bahasa), pisahkan otomatis jadi beberapa
+// entri skill kode terpisah — masing-masing dapat bahasa & warnanya sendiri.
+// Kalau cuma ketemu 0-1 penanda bahasa, dianggap satu snippet biasa saja.
+function splitMultiLangBlob(text) {
+  const allNames = SPLIT_ALIASES.flatMap((l) => l.names);
+  const re = new RegExp(`(?:^|\\n)\\s*(${allNames.join("|")})\\s*:\\s*`, "gi");
+  const matches = [...text.matchAll(re)];
+  if (matches.length < 2) return null;
+
+  const parts = [];
+  for (let i = 0; i < matches.length; i++) {
+    const rawName = matches[i][1];
+    const start = matches[i].index + matches[i][0].length;
+    const end = i + 1 < matches.length ? matches[i + 1].index : text.length;
+    const code = text.slice(start, end).trim();
+    if (!code) continue;
+    const found = SPLIT_ALIASES.find((l) =>
+      l.names.some((n) => n.replace(/\\/g, "").toLowerCase() === rawName.toLowerCase())
+    );
+    parts.push({
+      label: found ? found.label : rawName,
+      lang: found ? found.value : "plaintext",
+      code,
+    });
+  }
+  return parts.length >= 2 ? parts : null;
 }
 
 function SkillsInput({ classId, student, onChanged }) {
@@ -253,6 +298,7 @@ function SkillsInput({ classId, student, onChanged }) {
   const [codeDraft, setCodeDraft] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [info, setInfo] = useState("");
 
   async function save(nextSkills) {
     setBusy(true);
@@ -290,13 +336,20 @@ function SkillsInput({ classId, student, onChanged }) {
 
   function addCodeSkill(e) {
     e.preventDefault();
-    const code = codeDraft.trim();
-    if (!code) return;
+    setInfo("");
+    const raw = codeDraft.trim();
+    if (!raw) return;
     const existing = student.skills || [];
-    save([
-      ...existing,
-      { label: codeLabel.trim() || "Cuplikan kode", lang: codeLang, code },
-    ]);
+    const multi = splitMultiLangBlob(raw);
+    if (multi) {
+      save([...existing, ...multi]);
+      setInfo(`Kepisah otomatis jadi ${multi.length} cuplikan (${multi.map((p) => p.label).join(", ")}).`);
+    } else {
+      save([
+        ...existing,
+        { label: codeLabel.trim() || "Cuplikan kode", lang: codeLang, code: raw },
+      ]);
+    }
     setCodeLabel("");
     setCodeDraft("");
     setShowCodeForm(false);
@@ -365,10 +418,17 @@ function SkillsInput({ classId, student, onChanged }) {
 
       {showCodeForm && (
         <form onSubmit={addCodeSkill} className="mt-2 space-y-1 border border-line p-2 text-left">
+          <p className="text-[9px] text-ink/40 leading-relaxed">
+            Mau 1 bahasa aja? Isi judul + pilih bahasa di bawah, lalu tempel
+            kode di kotak besar. Mau beberapa bahasa sekaligus (kayak
+            "HTML: ... CSS: ... JavaScript: ...")? Tempel semuanya langsung
+            di kotak besar — nanti otomatis kepisah & diwarnain per bahasa,
+            judul & pilihan bahasa di atas boleh dikosongin.
+          </p>
           <div className="flex gap-1">
             <input
               className="field text-[10px] py-1 flex-1"
-              placeholder="Judul (mis. Fungsi memo)"
+              placeholder="Judul (mis. Fungsi memo) — opsional kalau paste banyak bahasa"
               value={codeLabel}
               disabled={busy}
               onChange={(e) => setCodeLabel(e.target.value)}
@@ -388,8 +448,8 @@ function SkillsInput({ classId, student, onChanged }) {
           </div>
           <textarea
             className="field text-[10px] py-1 font-mono w-full"
-            rows={5}
-            placeholder="Tempel kodenya di sini..."
+            rows={8}
+            placeholder={"Tempel kodenya di sini...\n\nBisa 1 bahasa saja, atau paste semua bahasa sekaligus format:\nHTML: <kode>\nCSS: <kode>\nJavaScript: <kode>\n..."}
             value={codeDraft}
             disabled={busy}
             onChange={(e) => setCodeDraft(e.target.value)}
@@ -400,6 +460,7 @@ function SkillsInput({ classId, student, onChanged }) {
           >
             Simpan kode
           </button>
+          {info && <p className="text-[9px] text-accent mono">{info}</p>}
         </form>
       )}
 
