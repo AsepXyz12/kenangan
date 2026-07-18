@@ -157,8 +157,9 @@ export default async function MuridPage({ params }) {
                             {LANG_LABEL[skill.lang] || skill.lang || "code"}
                           </span>
                         </div>
-                        <pre className="hljs !m-0 overflow-x-auto text-[12px] leading-relaxed px-4 py-3">
+                        <pre className="hljs !m-0 overflow-x-auto whitespace-pre-wrap break-words text-[12px] leading-relaxed px-4 py-3">
                           <code
+                            className="whitespace-pre-wrap break-words"
                             dangerouslySetInnerHTML={{
                               __html: highlightCode(skill.code, skill.lang),
                             }}
