@@ -359,8 +359,25 @@ function SkillsInput({ classId, student, onChanged }) {
     save((student.skills || []).filter((_, i) => i !== index));
   }
 
+  function clearAllSkills() {
+    if (!confirm(`Hapus SEMUA skill "${student.name}"? Ini mengosongkan semua tag & cuplikan kode yang ada sekarang.`)) return;
+    save([]);
+  }
+
   return (
     <div className="w-full">
+      {(student.skills || []).length > 0 && (
+        <div className="flex justify-center mb-1">
+          <button
+            type="button"
+            onClick={clearAllSkills}
+            disabled={busy}
+            className="text-[9px] mono uppercase text-danger/70 hover:text-danger underline underline-offset-2"
+          >
+            Hapus semua skill ({student.skills.length})
+          </button>
+        </div>
+      )}
       <div className="flex flex-wrap gap-1 justify-center mb-1">
         {(student.skills || []).map((s, i) =>
           isCodeSkill(s) ? (
@@ -477,10 +494,7 @@ function StudentCard({ classId, student, onChanged, onDeleted }) {
   const [justSaved, setJustSaved] = useState(false);
   const [error, setError] = useState("");
 
-  const isDirty = name !== student.name || hobby !== (student.hobby || "");
-
   async function save() {
-    if (!isDirty) return;
     setSaving(true);
     setError("");
     setJustSaved(false);
@@ -552,15 +566,10 @@ function StudentCard({ classId, student, onChanged, onDeleted }) {
       <button
         type="button"
         onClick={save}
-        disabled={!isDirty || saving}
-        className={
-          "w-full text-[11px] uppercase mono px-2 py-1.5 border transition-colors " +
-          (isDirty
-            ? "btn border-accent"
-            : "border-line text-ink/30 cursor-default")
-        }
+        disabled={saving}
+        className="w-full text-[11px] uppercase mono px-2 py-1.5 border border-accent btn transition-colors disabled:opacity-60"
       >
-        {saving ? "Menyimpan..." : justSaved ? "Tersimpan ✓" : isDirty ? "💾 Simpan" : "Tersimpan"}
+        {saving ? "Menyimpan..." : justSaved ? "Tersimpan ✓" : "💾 Simpan"}
       </button>
       <div className="flex items-center gap-1.5">
         <PhotoButton
