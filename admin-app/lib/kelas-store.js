@@ -115,6 +115,8 @@ function seedKelas() {
 function defaultPromotion() {
   return {
     enabled: false,
+    // Tanggal kelulusan (1-31). Default tanggal 1, bisa diubah lewat UI.
+    graduationDay: 1,
     // Bulan kelulusan (1-12). Rata-rata sekolah di Indonesia meluluskan
     // sekitar Mei-Juli; default dipasang Juli, bisa diubah lewat UI.
     graduationMonth: 7,
@@ -124,6 +126,14 @@ function defaultPromotion() {
     graduationYear: new Date().getFullYear(),
     lastRunAt: null,
   };
+}
+
+// Tanggal yang aman dipakai buat suatu bulan/tahun (misal tanggal 31 di bulan
+// Februari otomatis dipotong jadi tanggal terakhir Februari beneran, bukan
+// "lompat" ke bulan berikutnya seperti perilaku default objek Date).
+function clampDayInMonth(year, month1to12, day) {
+  const lastDay = new Date(year, month1to12, 0).getDate();
+  return Math.min(Math.max(day || 1, 1), lastDay);
 }
 
 // Mengecek apakah sudah waktunya naik kelas, dan kalau iya, langsung
@@ -136,7 +146,8 @@ function runAutoPromotionIfDue(data) {
   if (!p.enabled) return false;
 
   const month = Math.min(Math.max(p.graduationMonth || 7, 1), 12);
-  const target = new Date(p.graduationYear, month - 1, 1);
+  const day = clampDayInMonth(p.graduationYear, month, p.graduationDay);
+  const target = new Date(p.graduationYear, month - 1, day);
   const now = new Date();
   if (now < target) return false;
 
@@ -206,6 +217,9 @@ export async function updatePromotionSettings(patch) {
   if (Number.isInteger(patch.graduationMonth)) {
     p.graduationMonth = Math.min(Math.max(patch.graduationMonth, 1), 12);
   }
+  if (Number.isInteger(patch.graduationDay)) {
+    p.graduationDay = Math.min(Math.max(patch.graduationDay, 1), 31);
+  }
   if (Number.isInteger(patch.graduationYear)) p.graduationYear = patch.graduationYear;
   data.promotion = p;
   await writeKelas(data);
@@ -220,6 +234,7 @@ export async function forceRunPromotionNow() {
   if (!data.promotion) data.promotion = defaultPromotion();
   const enabledBefore = data.promotion.enabled;
   const monthBefore = data.promotion.graduationMonth;
+  const dayBefore = data.promotion.graduationDay;
 
   // Paksa syarat tanggal terpenuhi (mundurkan target 1 hari dari hari ini),
   // lalu jalankan logika yang sama persis dengan yang otomatis supaya
@@ -229,14 +244,16 @@ export async function forceRunPromotionNow() {
   data.promotion.enabled = true;
   data.promotion.graduationYear = target.getFullYear();
   data.promotion.graduationMonth = target.getMonth() + 1;
+  data.promotion.graduationDay = target.getDate();
 
   const ran = runAutoPromotionIfDue(data);
 
-  // Kembalikan setelan enabled/bulan sesuai pilihan admin sebelumnya — cuma
-  // tahun siklusnya yang memang harus lanjut maju (sudah ditambah +1 di
-  // dalam runAutoPromotionIfDue kalau ran === true).
+  // Kembalikan setelan enabled/bulan/tanggal sesuai pilihan admin sebelumnya
+  // — cuma tahun siklusnya yang memang harus lanjut maju (sudah ditambah +1
+  // di dalam runAutoPromotionIfDue kalau ran === true).
   data.promotion.enabled = enabledBefore;
   data.promotion.graduationMonth = monthBefore;
+  data.promotion.graduationDay = dayBefore;
   await writeKelas(data);
   return { ran, data };
 }

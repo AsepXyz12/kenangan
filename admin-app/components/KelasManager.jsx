@@ -625,22 +625,48 @@ function PromotionPanel({ initialPromotion }) {
   if (!promo) return null;
 
   return (
-    <div className="border border-line p-4 space-y-3">
-      <label className="flex items-center gap-2 text-sm">
-        <input
-          type="checkbox"
-          checked={!!promo.enabled}
-          disabled={busy}
-          onChange={(e) => save({ enabled: e.target.checked })}
-        />
-        Aktifkan kenaikan kelas otomatis
-      </label>
+    <div className="border border-line border-l-4 border-l-accent bg-accent/[0.03] p-4 space-y-3">
+      <div className="flex items-center justify-between gap-3">
+        <label className="flex items-center gap-2 text-sm font-medium text-ink">
+          <input
+            type="checkbox"
+            className="accent-accent w-4 h-4"
+            checked={!!promo.enabled}
+            disabled={busy}
+            onChange={(e) => save({ enabled: e.target.checked })}
+          />
+          Aktifkan kenaikan kelas otomatis
+        </label>
+        <span
+          className={
+            "text-[10px] uppercase mono px-2 py-0.5 border " +
+            (promo.enabled
+              ? "border-accent text-accent bg-accent/10"
+              : "border-line text-ink/40")
+          }
+        >
+          {promo.enabled ? "Aktif" : "Nonaktif"}
+        </span>
+      </div>
 
       <div className="flex flex-wrap items-center gap-3 text-xs mono">
         <label className="flex items-center gap-1.5">
+          Tanggal:
+          <input
+            type="number"
+            className="field py-1 w-16 focus:border-accent"
+            min={1}
+            max={31}
+            value={promo.graduationDay ?? 1}
+            disabled={busy}
+            onChange={(e) => setPromo({ ...promo, graduationDay: Number(e.target.value) })}
+            onBlur={() => save({ graduationDay: promo.graduationDay })}
+          />
+        </label>
+        <label className="flex items-center gap-1.5">
           Bulan kelulusan:
           <select
-            className="field py-1"
+            className="field py-1 focus:border-accent"
             value={promo.graduationMonth}
             disabled={busy}
             onChange={(e) => save({ graduationMonth: Number(e.target.value) })}
@@ -656,7 +682,7 @@ function PromotionPanel({ initialPromotion }) {
           Tahun kelulusan kelas tertinggi saat ini:
           <input
             type="number"
-            className="field py-1 w-24"
+            className="field py-1 w-24 focus:border-accent"
             value={promo.graduationYear}
             disabled={busy}
             onChange={(e) => setPromo({ ...promo, graduationYear: Number(e.target.value) })}
@@ -666,17 +692,29 @@ function PromotionPanel({ initialPromotion }) {
       </div>
 
       <p className="text-xs text-ink/60 leading-relaxed">
-        Begitu tanggal 1 {BULAN[(promo.graduationMonth || 7) - 1]}{" "}
-        {promo.graduationYear} tercapai, sistem otomatis akan menjadikan{" "}
-        {promo.nextGraduatingClassNames?.length
-          ? promo.nextGraduatingClassNames.join(", ")
-          : "kelas tertinggi"}{" "}
+        Begitu tanggal{" "}
+        <span className="text-cetakGold font-semibold">
+          {promo.graduationDay || 1} {BULAN[(promo.graduationMonth || 7) - 1]}{" "}
+          {promo.graduationYear}
+        </span>{" "}
+        tercapai, sistem otomatis akan menjadikan{" "}
+        <span className="text-accent font-medium">
+          {promo.nextGraduatingClassNames?.length
+            ? promo.nextGraduatingClassNames.join(", ")
+            : "kelas tertinggi"}
+        </span>{" "}
         sebagai alumni, semua kelas lain naik satu tingkat, dan kelas paling
         bawah dikosongkan untuk murid baru. Tidak perlu klik apa pun — ini
         jalan sendiri saat ada yang membuka halaman ini setelah tanggal
         tersebut.
       </p>
-      <p className="text-xs text-ink/40">
+      <p className="text-xs text-ink/40 flex items-center gap-1.5">
+        <span
+          className={
+            "inline-block w-1.5 h-1.5 rounded-full " +
+            (promo.lastRunAt ? "bg-accent" : "bg-line")
+          }
+        />
         Terakhir kenaikan kelas jalan: {formatTanggal(promo.lastRunAt)}
       </p>
 
@@ -684,13 +722,13 @@ function PromotionPanel({ initialPromotion }) {
         type="button"
         disabled={busy}
         onClick={runNow}
-        className="btn-outline border border-line text-[11px] uppercase mono px-2 py-1 disabled:opacity-50"
+        className="btn-outline border border-cetakClay text-cetakClay text-[11px] uppercase mono px-2 py-1 disabled:opacity-50 hover:bg-cetakClay hover:text-paper transition-colors"
       >
         Jalankan sekarang (testing)
       </button>
 
       {error && <p className="text-xs text-danger mono">{error}</p>}
-      {info && <p className="text-xs text-emerald mono">{info}</p>}
+      {info && <p className="text-xs text-accent mono">{info}</p>}
     </div>
   );
 }
@@ -706,7 +744,7 @@ export default function KelasManager({ initialTeachers, initialClasses, initialP
   return (
     <div className="space-y-10">
       <section>
-        <h2 className="text-xs uppercase tracking-wide text-ink/50 mono mb-3">
+        <h2 className="text-xs uppercase tracking-wide text-accent mono mb-3 font-semibold">
           Kenaikan kelas otomatis
         </h2>
         <PromotionPanel initialPromotion={initialPromotion} />

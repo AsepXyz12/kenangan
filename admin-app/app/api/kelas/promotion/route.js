@@ -25,6 +25,9 @@ export async function PUT(request) {
   const body = await request.json();
   const data = await updatePromotionSettings({
     enabled: typeof body.enabled === "boolean" ? body.enabled : undefined,
+    graduationDay: Number.isInteger(body.graduationDay)
+      ? body.graduationDay
+      : undefined,
     graduationMonth: Number.isInteger(body.graduationMonth)
       ? body.graduationMonth
       : undefined,
