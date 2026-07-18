@@ -1,9 +1,46 @@
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import hljs from "highlight.js";
 import { getStudentDetail } from "@/lib/kelas-store";
 
 export const dynamic = "force-dynamic";
+
+const LANG_LABEL = {
+  html: "HTML",
+  xml: "HTML",
+  css: "CSS",
+  javascript: "JavaScript",
+  typescript: "TypeScript",
+  python: "Python",
+  cpp: "C++",
+  php: "PHP",
+  sql: "MySQL",
+};
+
+// Skill lama disimpan sebagai string biasa (mis. "React"). Skill baru bisa
+// berupa objek kode { label, lang, code } — dua bentuk ini dibedakan di sini
+// supaya skill lama tetap tampil seperti biasa (badge), sedangkan yang baru
+// tampil sebagai blok kode berwarna sesuai bahasanya.
+function isCodeSkill(skill) {
+  return skill && typeof skill === "object" && typeof skill.code === "string" && skill.code.trim();
+}
+
+function highlightCode(code, lang) {
+  try {
+    if (lang && hljs.getLanguage(lang)) {
+      return hljs.highlight(code, { language: lang }).value;
+    }
+    return hljs.highlightAuto(code).value;
+  } catch (err) {
+    // Kalau ada apa pun yang gagal saat highlight, tampilkan kode apa adanya
+    // (di-escape) daripada bikin halaman error.
+    return code
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+}
 
 function initials(name) {
   return (
@@ -78,23 +115,63 @@ export default async function MuridPage({ params }) {
           <p className="text-sm text-ink/40">Hobi belum diisi.</p>
         )}
 
-        {student.skills && student.skills.length > 0 && (
-          <div className="w-full mt-8">
-            <p className="font-stamp text-[11px] uppercase tracking-[0.2em] text-gold">
-              Skill yang dikuasai
-            </p>
-            <div className="mt-3 flex flex-wrap justify-center gap-2">
-              {student.skills.map((skill) => (
-                <span
-                  key={skill}
-                  className="font-stamp text-xs uppercase tracking-wide bg-emerald/10 text-emerald border border-emerald/30 px-3 py-1.5"
-                >
-                  {skill}
-                </span>
-              ))}
+        {student.skills && student.skills.length > 0 && (() => {
+          const tagSkills = student.skills.filter((s) => !isCodeSkill(s));
+          const codeSkills = student.skills.filter(isCodeSkill);
+          return (
+            <div className="w-full mt-8 space-y-6">
+              {tagSkills.length > 0 && (
+                <div>
+                  <p className="font-stamp text-[11px] uppercase tracking-[0.2em] text-gold">
+                    Skill yang dikuasai
+                  </p>
+                  <div className="mt-3 flex flex-wrap justify-center gap-2">
+                    {tagSkills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="font-stamp text-xs uppercase tracking-wide bg-emerald/10 text-emerald border border-emerald/30 px-3 py-1.5"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {codeSkills.length > 0 && (
+                <div className="text-left">
+                  <p className="font-stamp text-[11px] uppercase tracking-[0.2em] text-gold text-center">
+                    Cuplikan kode
+                  </p>
+                  <div className="mt-3 space-y-4">
+                    {codeSkills.map((skill, i) => (
+                      <div
+                        key={i}
+                        className="overflow-hidden rounded-md border border-emerald/20 shadow-sm"
+                      >
+                        <div className="flex items-center justify-between bg-[#282c34] px-4 py-2">
+                          <span className="font-stamp text-[11px] text-white/70 truncate">
+                            {skill.label || "snippet"}
+                          </span>
+                          <span className="font-stamp text-[10px] uppercase tracking-wide text-gold/80">
+                            {LANG_LABEL[skill.lang] || skill.lang || "code"}
+                          </span>
+                        </div>
+                        <pre className="hljs !m-0 overflow-x-auto text-[12px] leading-relaxed px-4 py-3">
+                          <code
+                            dangerouslySetInnerHTML={{
+                              __html: highlightCode(skill.code, skill.lang),
+                            }}
+                          />
+                        </pre>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
-        )}
+          );
+        })()}
       </div>
     </main>
   );

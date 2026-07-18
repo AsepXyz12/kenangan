@@ -1,6 +1,7 @@
 import { Fraunces, Karla, Space_Mono } from "next/font/google";
 import { readSettings } from "@/lib/store";
 import "./globals.css";
+import "highlight.js/styles/atom-one-dark.css";
 
 const display = Fraunces({
   subsets: ["latin"],

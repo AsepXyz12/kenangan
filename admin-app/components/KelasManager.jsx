@@ -227,19 +227,49 @@ function AddTeacher({ onAdded }) {
 
 // ---------- Murid ----------
 
+// Bahasa yang didukung buat skill berupa cuplikan kode. `value` di sini harus
+// cocok dengan nama bahasa yang dikenali highlight.js di sisi public-app,
+// supaya kodenya kewarnain otomatis pas ditampilkan di halaman murid.
+const CODE_LANGS = [
+  { value: "html", label: "HTML" },
+  { value: "css", label: "CSS" },
+  { value: "javascript", label: "JavaScript" },
+  { value: "typescript", label: "TypeScript" },
+  { value: "python", label: "Python" },
+  { value: "cpp", label: "C++" },
+  { value: "php", label: "PHP" },
+  { value: "sql", label: "SQL / MySQL" },
+];
+
+function isCodeSkill(skill) {
+  return skill && typeof skill === "object" && typeof skill.code === "string";
+}
+
 function SkillsInput({ classId, student, onChanged }) {
   const [draft, setDraft] = useState("");
+  const [showCodeForm, setShowCodeForm] = useState(false);
+  const [codeLabel, setCodeLabel] = useState("");
+  const [codeLang, setCodeLang] = useState("javascript");
+  const [codeDraft, setCodeDraft] = useState("");
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
 
   async function save(nextSkills) {
     setBusy(true);
+    setError("");
     try {
       const res = await fetch(`/api/kelas/classes/${classId}/students/${student.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ skills: nextSkills }),
       });
-      if (res.ok) onChanged(await res.json());
+      if (res.ok) {
+        onChanged(await res.json());
+      } else {
+        setError("Gagal menyimpan skill.");
+      }
+    } catch (err) {
+      setError("Gagal menyimpan (koneksi bermasalah).");
     } finally {
       setBusy(false);
     }
@@ -258,30 +288,63 @@ function SkillsInput({ classId, student, onChanged }) {
     setDraft("");
   }
 
-  function removeSkill(value) {
-    save((student.skills || []).filter((s) => s !== value));
+  function addCodeSkill(e) {
+    e.preventDefault();
+    const code = codeDraft.trim();
+    if (!code) return;
+    const existing = student.skills || [];
+    save([
+      ...existing,
+      { label: codeLabel.trim() || "Cuplikan kode", lang: codeLang, code },
+    ]);
+    setCodeLabel("");
+    setCodeDraft("");
+    setShowCodeForm(false);
+  }
+
+  function removeSkillAt(index) {
+    save((student.skills || []).filter((_, i) => i !== index));
   }
 
   return (
     <div className="w-full">
       <div className="flex flex-wrap gap-1 justify-center mb-1">
-        {(student.skills || []).map((s) => (
-          <span
-            key={s}
-            className="inline-flex items-center gap-1 text-[9px] mono uppercase bg-accent/10 text-accent border border-accent/30 px-1.5 py-0.5"
-          >
-            {s}
-            <button
-              type="button"
-              onClick={() => removeSkill(s)}
-              className="text-accent/60 hover:text-danger"
-              aria-label={`Hapus skill ${s}`}
+        {(student.skills || []).map((s, i) =>
+          isCodeSkill(s) ? (
+            <span
+              key={i}
+              className="inline-flex items-center gap-1 text-[9px] mono uppercase bg-ink/5 text-ink/70 border border-ink/20 px-1.5 py-0.5"
+              title={s.code}
             >
-              ×
-            </button>
-          </span>
-        ))}
+              {"</>"} {s.label} · {s.lang}
+              <button
+                type="button"
+                onClick={() => removeSkillAt(i)}
+                className="text-ink/40 hover:text-danger"
+                aria-label={`Hapus kode ${s.label}`}
+              >
+                ×
+              </button>
+            </span>
+          ) : (
+            <span
+              key={i}
+              className="inline-flex items-center gap-1 text-[9px] mono uppercase bg-accent/10 text-accent border border-accent/30 px-1.5 py-0.5"
+            >
+              {s}
+              <button
+                type="button"
+                onClick={() => removeSkillAt(i)}
+                className="text-accent/60 hover:text-danger"
+                aria-label={`Hapus skill ${s}`}
+              >
+                ×
+              </button>
+            </span>
+          )
+        )}
       </div>
+
       <form onSubmit={addSkill} className="flex gap-1">
         <input
           className="field text-center text-[10px] py-1"
@@ -291,6 +354,56 @@ function SkillsInput({ classId, student, onChanged }) {
           onChange={(e) => setDraft(e.target.value)}
         />
       </form>
+
+      <button
+        type="button"
+        onClick={() => setShowCodeForm((v) => !v)}
+        className="mt-1 text-[9px] mono uppercase text-ink/40 hover:text-accent underline underline-offset-2"
+      >
+        {showCodeForm ? "Batal tambah kode" : "+ Tambah cuplikan kode"}
+      </button>
+
+      {showCodeForm && (
+        <form onSubmit={addCodeSkill} className="mt-2 space-y-1 border border-line p-2 text-left">
+          <div className="flex gap-1">
+            <input
+              className="field text-[10px] py-1 flex-1"
+              placeholder="Judul (mis. Fungsi memo)"
+              value={codeLabel}
+              disabled={busy}
+              onChange={(e) => setCodeLabel(e.target.value)}
+            />
+            <select
+              className="field text-[10px] py-1"
+              value={codeLang}
+              disabled={busy}
+              onChange={(e) => setCodeLang(e.target.value)}
+            >
+              {CODE_LANGS.map((l) => (
+                <option key={l.value} value={l.value}>
+                  {l.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <textarea
+            className="field text-[10px] py-1 font-mono w-full"
+            rows={5}
+            placeholder="Tempel kodenya di sini..."
+            value={codeDraft}
+            disabled={busy}
+            onChange={(e) => setCodeDraft(e.target.value)}
+          />
+          <button
+            disabled={busy || !codeDraft.trim()}
+            className="btn text-[10px] uppercase mono px-2 py-1 disabled:opacity-50"
+          >
+            Simpan kode
+          </button>
+        </form>
+      )}
+
+      {error && <p className="text-[9px] text-danger mono mt-1">{error}</p>}
     </div>
   );
 }
@@ -299,53 +412,35 @@ function StudentCard({ classId, student, onChanged, onDeleted }) {
   const [name, setName] = useState(student.name);
   const [hobby, setHobby] = useState(student.hobby || "");
   const [uploading, setUploading] = useState(false);
-  const [savingName, setSavingName] = useState(false);
-  const [savingHobby, setSavingHobby] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [justSaved, setJustSaved] = useState(false);
   const [error, setError] = useState("");
 
-  async function saveName() {
-    if (name === student.name) return;
-    setSavingName(true);
-    setError("");
-    try {
-      const res = await fetch(`/api/kelas/classes/${classId}/students/${student.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name }),
-      });
-      if (res.ok) {
-        onChanged(await res.json());
-      } else {
-        const data = await res.json().catch(() => ({}));
-        setError(data.error || "Gagal menyimpan nama.");
-      }
-    } catch (err) {
-      setError("Gagal menyimpan (koneksi bermasalah).");
-    } finally {
-      setSavingName(false);
-    }
-  }
+  const isDirty = name !== student.name || hobby !== (student.hobby || "");
 
-  async function saveHobby() {
-    if (hobby === (student.hobby || "")) return;
-    setSavingHobby(true);
+  async function save() {
+    if (!isDirty) return;
+    setSaving(true);
     setError("");
+    setJustSaved(false);
     try {
       const res = await fetch(`/api/kelas/classes/${classId}/students/${student.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ hobby }),
+        body: JSON.stringify({ name, hobby }),
       });
       if (res.ok) {
         onChanged(await res.json());
+        setJustSaved(true);
+        setTimeout(() => setJustSaved(false), 1500);
       } else {
         const data = await res.json().catch(() => ({}));
-        setError(data.error || "Gagal menyimpan hobi.");
+        setError(data.error || "Gagal menyimpan.");
       }
     } catch (err) {
       setError("Gagal menyimpan (koneksi bermasalah).");
     } finally {
-      setSavingHobby(false);
+      setSaving(false);
     }
   }
 
@@ -385,16 +480,27 @@ function StudentCard({ classId, student, onChanged, onDeleted }) {
         className="field text-center text-xs"
         value={name}
         onChange={(e) => setName(e.target.value)}
-        onBlur={saveName}
       />
       <input
         className="field text-center text-[10px] py-1 focus:border-cetakGold"
         placeholder="Hobi (mis. coding)"
         value={hobby}
         onChange={(e) => setHobby(e.target.value)}
-        onBlur={saveHobby}
       />
       <SkillsInput classId={classId} student={student} onChanged={onChanged} />
+      <button
+        type="button"
+        onClick={save}
+        disabled={!isDirty || saving}
+        className={
+          "w-full text-[11px] uppercase mono px-2 py-1.5 border transition-colors " +
+          (isDirty
+            ? "btn border-accent"
+            : "border-line text-ink/30 cursor-default")
+        }
+      >
+        {saving ? "Menyimpan..." : justSaved ? "Tersimpan ✓" : isDirty ? "💾 Simpan" : "Tersimpan"}
+      </button>
       <div className="flex items-center gap-1.5">
         <PhotoButton
           label={student.photoUrl ? "Ganti foto" : "Upload foto"}
@@ -409,9 +515,6 @@ function StudentCard({ classId, student, onChanged, onDeleted }) {
           Hapus
         </button>
       </div>
-      {(savingName || savingHobby) && (
-        <span className="text-[10px] text-ink/40 mono">menyimpan...</span>
-      )}
       {error && <p className="text-[10px] text-danger mono">{error}</p>}
     </div>
   );
