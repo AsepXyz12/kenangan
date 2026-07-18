@@ -19,3 +19,19 @@ export async function readKelas() {
     return { teachers: [], classes: [] }; // belum pernah dibuat oleh admin
   }
 }
+
+// Cari satu murid (buat halaman detail /murid/[id]) beserta kelas & wali
+// kelasnya. Mengembalikan null kalau tidak ketemu.
+export async function getStudentDetail(studentId) {
+  const { teachers, classes } = await readKelas();
+  for (const kelas of classes) {
+    const student = (kelas.students || []).find((s) => s.id === studentId);
+    if (student) {
+      const wali = (kelas.waliKelasIds || [])
+        .map((id) => teachers.find((t) => t.id === id))
+        .filter(Boolean);
+      return { student, kelas, wali };
+    }
+  }
+  return null;
+}

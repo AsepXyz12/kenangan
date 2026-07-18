@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { readKelas } from "@/lib/kelas-store";
 import { readSettings } from "@/lib/store";
 
@@ -18,9 +19,10 @@ function initials(name) {
 
 function StudentCard({ student, tape }) {
   return (
-    <div
+    <Link
+      href={`/murid/${student.id}`}
       data-tape={tape}
-      className="polaroid relative w-full max-w-[150px] mx-auto rotate-[var(--r)]"
+      className="polaroid relative block w-full max-w-[150px] mx-auto rotate-[var(--r)]"
       style={{ "--r": `${((student.name?.length || 0) % 5) - 2}deg` }}
     >
       <span className="stamp-tape" />
@@ -41,7 +43,12 @@ function StudentCard({ student, tape }) {
       <p className="mt-2 text-center font-stamp text-xs uppercase tracking-wide text-ink/70 truncate">
         {student.name}
       </p>
-    </div>
+      {student.hobby && (
+        <p className="text-center text-[9px] text-gold uppercase tracking-wide mt-0.5 truncate">
+          {student.hobby}
+        </p>
+      )}
+    </Link>
   );
 }
 

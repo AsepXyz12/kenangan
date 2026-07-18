@@ -227,10 +227,80 @@ function AddTeacher({ onAdded }) {
 
 // ---------- Murid ----------
 
+function SkillsInput({ classId, student, onChanged }) {
+  const [draft, setDraft] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  async function save(nextSkills) {
+    setBusy(true);
+    try {
+      const res = await fetch(`/api/kelas/classes/${classId}/students/${student.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ skills: nextSkills }),
+      });
+      if (res.ok) onChanged(await res.json());
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function addSkill(e) {
+    e.preventDefault();
+    const value = draft.trim();
+    if (!value) return;
+    const existing = student.skills || [];
+    if (existing.includes(value)) {
+      setDraft("");
+      return;
+    }
+    save([...existing, value]);
+    setDraft("");
+  }
+
+  function removeSkill(value) {
+    save((student.skills || []).filter((s) => s !== value));
+  }
+
+  return (
+    <div className="w-full">
+      <div className="flex flex-wrap gap-1 justify-center mb-1">
+        {(student.skills || []).map((s) => (
+          <span
+            key={s}
+            className="inline-flex items-center gap-1 text-[9px] mono uppercase bg-accent/10 text-accent border border-accent/30 px-1.5 py-0.5"
+          >
+            {s}
+            <button
+              type="button"
+              onClick={() => removeSkill(s)}
+              className="text-accent/60 hover:text-danger"
+              aria-label={`Hapus skill ${s}`}
+            >
+              ×
+            </button>
+          </span>
+        ))}
+      </div>
+      <form onSubmit={addSkill} className="flex gap-1">
+        <input
+          className="field text-center text-[10px] py-1"
+          placeholder="Tambah skill..."
+          value={draft}
+          disabled={busy}
+          onChange={(e) => setDraft(e.target.value)}
+        />
+      </form>
+    </div>
+  );
+}
+
 function StudentCard({ classId, student, onChanged, onDeleted }) {
   const [name, setName] = useState(student.name);
+  const [hobby, setHobby] = useState(student.hobby || "");
   const [uploading, setUploading] = useState(false);
   const [savingName, setSavingName] = useState(false);
+  const [savingHobby, setSavingHobby] = useState(false);
   const [error, setError] = useState("");
 
   async function saveName() {
@@ -253,6 +323,29 @@ function StudentCard({ classId, student, onChanged, onDeleted }) {
       setError("Gagal menyimpan (koneksi bermasalah).");
     } finally {
       setSavingName(false);
+    }
+  }
+
+  async function saveHobby() {
+    if (hobby === (student.hobby || "")) return;
+    setSavingHobby(true);
+    setError("");
+    try {
+      const res = await fetch(`/api/kelas/classes/${classId}/students/${student.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ hobby }),
+      });
+      if (res.ok) {
+        onChanged(await res.json());
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Gagal menyimpan hobi.");
+      }
+    } catch (err) {
+      setError("Gagal menyimpan (koneksi bermasalah).");
+    } finally {
+      setSavingHobby(false);
     }
   }
 
@@ -294,6 +387,14 @@ function StudentCard({ classId, student, onChanged, onDeleted }) {
         onChange={(e) => setName(e.target.value)}
         onBlur={saveName}
       />
+      <input
+        className="field text-center text-[10px] py-1 focus:border-cetakGold"
+        placeholder="Hobi (mis. coding)"
+        value={hobby}
+        onChange={(e) => setHobby(e.target.value)}
+        onBlur={saveHobby}
+      />
+      <SkillsInput classId={classId} student={student} onChanged={onChanged} />
       <div className="flex items-center gap-1.5">
         <PhotoButton
           label={student.photoUrl ? "Ganti foto" : "Upload foto"}
@@ -308,7 +409,9 @@ function StudentCard({ classId, student, onChanged, onDeleted }) {
           Hapus
         </button>
       </div>
-      {savingName && <span className="text-[10px] text-ink/40 mono">menyimpan...</span>}
+      {(savingName || savingHobby) && (
+        <span className="text-[10px] text-ink/40 mono">menyimpan...</span>
+      )}
       {error && <p className="text-[10px] text-danger mono">{error}</p>}
     </div>
   );

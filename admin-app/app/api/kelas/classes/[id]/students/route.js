@@ -10,6 +10,8 @@ export async function POST(request, { params }) {
   const student = await addStudent(params.id, {
     name: body.name,
     photoUrl: body.photoUrl,
+    hobby: body.hobby,
+    skills: body.skills,
   });
   if (!student) {
     return NextResponse.json({ error: "Kelas tidak ditemukan" }, { status: 404 });
