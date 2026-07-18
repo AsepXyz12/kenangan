@@ -6,9 +6,16 @@ import PhotoDate from "@/components/PhotoDate";
 
 export const dynamic = "force-dynamic";
 
+const TAPES = ["gold", "clay", "dusk"];
+const SUBTLE_ROTATIONS = [-1, 0.8, -0.6, 1.2, -0.9, 0.5];
+
 export default async function PhotoPage({ params }) {
   const photo = await getPhoto(params.id);
   if (!photo) notFound();
+
+  const items = Array.isArray(photo.items) && photo.items.length > 0
+    ? photo.items
+    : [{ url: photo.url, mediaType: photo.mediaType }];
 
   return (
     <main className="max-w-3xl mx-auto px-6 py-10">
@@ -16,51 +23,85 @@ export default async function PhotoPage({ params }) {
         ← Kembali ke album
       </Link>
 
-      <div className="mt-6 polaroid" data-tape="gold" style={{ transform: "rotate(-0.5deg)" }}>
-        <span className="stamp-tape" aria-hidden="true" />
-        <div className="relative w-full max-h-[80vh] min-h-[240px] bg-emerald/5 overflow-hidden flex items-center justify-center">
-          {photo.mediaType === "video" ? (
-            <video
-              src={photo.url}
-              className="w-full max-h-[80vh] object-contain"
-              controls
-              playsInline
-            />
-          ) : photo.mediaType === "audio" ? (
-            <div className="w-full py-16 px-6">
-              <audio src={photo.url} className="w-full" controls />
-            </div>
-          ) : photo.mediaType === "file" ? (
-            <a
-              href={photo.url}
-              target="_blank"
-              rel="noreferrer"
-              className="font-stamp text-sm text-emerald underline py-16 px-6"
+      <div className="mt-6">
+        <PhotoDate dateStr={photo.eventDate} />
+        <h1 className="font-display italic text-3xl mt-1 text-emerald">{photo.title}</h1>
+        {photo.caption && (
+          <p className="mt-2 text-ink/70 leading-relaxed">{photo.caption}</p>
+        )}
+        <div className="mt-3 flex items-center gap-2 font-stamp text-[11px] text-ink/40">
+          <span>Diunggah oleh {photo.uploader || "Admin"}</span>
+          {items.length > 1 && (
+            <>
+              <span className="w-1 h-1 rounded-full bg-ink/20" />
+              <span>{items.length} media</span>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Feed media: satu kolom rapi, scroll di dalam area ini sendiri kalau
+          medianya banyak, dengan snap per item supaya berhenti pas di tengah
+          tiap foto/video — terasa halus & tidak "loncat-loncat". */}
+      <div
+        className={
+          items.length > 1
+            ? "mt-8 max-h-[78vh] overflow-y-auto snap-y snap-mandatory rounded-sm space-y-10 pr-1 pb-4"
+            : "mt-8"
+        }
+      >
+        {items.map((item, i) => (
+          <div
+            key={`${item.url}-${i}`}
+            className={items.length > 1 ? "snap-start scroll-mt-4" : ""}
+          >
+            <div
+              className="polaroid"
+              data-tape={TAPES[i % TAPES.length]}
+              style={{ transform: `rotate(${SUBTLE_ROTATIONS[i % SUBTLE_ROTATIONS.length]}deg)` }}
             >
-              Buka file
-            </a>
-          ) : (
-            <Image
-              src={photo.url}
-              alt={photo.title}
-              width={1600}
-              height={1600}
-              sizes="768px"
-              className="w-full h-auto max-h-[80vh] object-contain"
-              priority
-            />
-          )}
-        </div>
-        <div className="pt-3">
-          <PhotoDate dateStr={photo.eventDate} />
-          <h1 className="font-display italic text-3xl mt-1 text-emerald">{photo.title}</h1>
-          {photo.caption && (
-            <p className="mt-2 text-ink/70 leading-relaxed">{photo.caption}</p>
-          )}
-          <p className="mt-3 font-stamp text-[11px] text-ink/40">
-            Diunggah oleh {photo.uploader || "Admin"}
-          </p>
-        </div>
+              <span className="stamp-tape" aria-hidden="true" />
+              <div className="relative w-full max-h-[70vh] min-h-[240px] bg-emerald/5 overflow-hidden flex items-center justify-center">
+                {item.mediaType === "video" ? (
+                  <video
+                    src={item.url}
+                    className="w-full max-h-[70vh] object-contain"
+                    controls
+                    playsInline
+                  />
+                ) : item.mediaType === "audio" ? (
+                  <div className="w-full py-16 px-6">
+                    <audio src={item.url} className="w-full" controls />
+                  </div>
+                ) : item.mediaType === "file" ? (
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-stamp text-sm text-emerald underline py-16 px-6"
+                  >
+                    Buka file
+                  </a>
+                ) : (
+                  <Image
+                    src={item.url}
+                    alt={photo.title}
+                    width={1600}
+                    height={1600}
+                    sizes="768px"
+                    className="w-full h-auto max-h-[70vh] object-contain"
+                    priority={i === 0}
+                  />
+                )}
+              </div>
+              {items.length > 1 && (
+                <p className="pt-2.5 font-stamp text-[10px] text-emerald/50 uppercase tracking-wide text-center">
+                  {i + 1} dari {items.length}
+                </p>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
     </main>
   );

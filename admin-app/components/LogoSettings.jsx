@@ -3,7 +3,6 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { upload } from "@vercel/blob/client";
-import Image from "next/image";
 
 export default function LogoSettings({ initialSettings }) {
   const router = useRouter();
@@ -64,32 +63,37 @@ export default function LogoSettings({ initialSettings }) {
         <label className="block text-xs uppercase tracking-wide text-ink/60 mono mb-2">
           Logo situs
         </label>
-        <div className="flex items-center gap-4">
-          <div className="relative w-16 h-16 shrink-0 bg-line/20 border border-line overflow-hidden flex items-center justify-center">
+        <div className="flex items-center gap-5">
+          <div className="w-32 h-32 shrink-0 bg-line/10 border border-line overflow-hidden flex items-center justify-center p-3">
             {logoUrl ? (
-              <Image src={logoUrl} alt="Logo" fill sizes="64px" className="object-contain" />
+              /* eslint-disable-next-line @next/next/no-img-element -- preview logo
+                 bebas rasio, <img> biasa supaya tidak kepotong seperti next/image fill */
+              <img src={logoUrl} alt="Logo" className="max-w-full max-h-full object-contain" />
             ) : (
-              <span className="text-[10px] text-ink/30 mono">Belum ada</span>
+              <span className="text-[10px] text-ink/30 mono text-center">Belum ada logo</span>
             )}
           </div>
-          <label
-            htmlFor="logo-file"
-            className="text-xs uppercase mono text-accent cursor-pointer underline"
-          >
-            {logoUrl ? "Ganti logo" : "Unggah logo"}
-          </label>
-          <input
-            id="logo-file"
-            ref={fileRef}
-            type="file"
-            accept="image/*"
-            onChange={handleLogoChange}
-            className="sr-only"
-          />
+          <div>
+            <label
+              htmlFor="logo-file"
+              className="text-xs uppercase mono text-accent cursor-pointer underline"
+            >
+              {logoUrl ? "Ganti logo" : "Unggah logo"}
+            </label>
+            <input
+              id="logo-file"
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              onChange={handleLogoChange}
+              className="sr-only"
+            />
+            <p className="text-xs text-ink/40 mt-1.5 max-w-xs">
+              Tampil besar di halaman publik. PNG transparan paling bagus, rasio
+              apa saja aman (tidak akan kepotong/gepeng).
+            </p>
+          </div>
         </div>
-        <p className="text-xs text-ink/40 mt-1.5">
-          Logo ini akan tampil di halaman publik. Format gambar apa saja (PNG transparan disarankan).
-        </p>
       </div>
 
       <form onSubmit={handleNameSubmit} className="pt-1 border-t border-line/60">

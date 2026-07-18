@@ -188,67 +188,97 @@ export default function Gallery({ photos: initialPhotos, years: initialYears }) 
               <div className="grid grid-cols-3 gap-x-3 gap-y-8 sm:gap-x-6 sm:gap-y-12">
                 {group.items.map((photo) => {
                   const idx = globalIndex++;
+                  const items = Array.isArray(photo.items) && photo.items.length > 0
+                    ? photo.items
+                    : [{ url: photo.url, mediaType: photo.mediaType }];
+                  const cover = items[0];
+                  const count = items.length;
+                  const baseRotation = ROTATIONS[idx % ROTATIONS.length];
+
                   return (
-                    <Link
-                      key={photo.id}
-                      href={`/photo/${photo.id}`}
-                      className="polaroid reveal relative block"
-                      data-tape={TAPES[idx % TAPES.length]}
-                      style={{
-                        transform: `rotate(${ROTATIONS[idx % ROTATIONS.length]}deg)`,
-                        animationDelay: `${Math.min(idx, 12) * 35}ms`,
-                      }}
-                    >
-                      <span className="stamp-tape" aria-hidden="true" />
-                      <div className="relative aspect-[4/5] bg-emerald/5 overflow-hidden">
-                        {photo.mediaType === "video" ? (
-                          <video
-                            src={photo.url}
-                            className="w-full h-full object-cover"
-                            muted
-                            playsInline
-                            preload="metadata"
+                    <div key={photo.id} className="relative">
+                      {/* Kartu bayangan di belakang buat kesan "numpuk" kalau lebih dari 1 media */}
+                      {count > 1 && (
+                        <>
+                          <span
+                            aria-hidden="true"
+                            className="absolute inset-0 bg-paper border border-emerald/10"
+                            style={{ transform: `rotate(${baseRotation + 5}deg) translate(3px, 3px)` }}
                           />
-                        ) : photo.mediaType === "audio" ? (
-                          <div className="w-full h-full flex items-center justify-center text-emerald/40 font-stamp text-xs uppercase">
-                            Audio
-                          </div>
-                        ) : photo.mediaType === "file" ? (
-                          <div className="w-full h-full flex items-center justify-center text-emerald/40 font-stamp text-xs uppercase">
-                            File
-                          </div>
-                        ) : (
-                          <Image
-                            src={photo.url}
-                            alt={photo.title}
-                            fill
-                            sizes="(max-width: 640px) 33vw, 25vw"
-                            className="object-cover"
-                          />
-                        )}
-                        {photo.mediaType === "video" && (
-                          <span className="absolute bottom-1.5 right-1.5 text-[9px] font-stamp uppercase bg-emerald/80 text-parchment px-1.5 py-0.5">
-                            Video
-                          </span>
-                        )}
-                      </div>
-                      <p className="font-stamp text-[10px] sm:text-[11px] text-emerald/70 mt-3">
-                        {formatTime(photo.uploadedAt)}
-                      </p>
-                      <p className="font-display text-xs sm:text-sm mt-0.5 text-ink line-clamp-2">
-                        {photo.title}
-                      </p>
-                      {photo.caption && (
-                        <p className="font-body text-[11px] text-ink/50 mt-1 line-clamp-2">
-                          {photo.caption}
-                        </p>
+                          {count > 2 && (
+                            <span
+                              aria-hidden="true"
+                              className="absolute inset-0 bg-paper border border-emerald/10"
+                              style={{ transform: `rotate(${baseRotation - 6}deg) translate(-3px, 4px)` }}
+                            />
+                          )}
+                        </>
                       )}
-                      <div className="mt-1.5 flex items-center gap-2 text-[10px] text-ink/40">
-                        <span className="font-stamp">
-                          {photo.uploader || "Admin"}
-                        </span>
-                      </div>
-                    </Link>
+                      <Link
+                        href={`/photo/${photo.id}`}
+                        className="polaroid reveal relative block"
+                        data-tape={TAPES[idx % TAPES.length]}
+                        style={{
+                          transform: `rotate(${baseRotation}deg)`,
+                          animationDelay: `${Math.min(idx, 12) * 35}ms`,
+                        }}
+                      >
+                        <span className="stamp-tape" aria-hidden="true" />
+                        <div className="relative aspect-[4/5] bg-emerald/5 overflow-hidden">
+                          {cover.mediaType === "video" ? (
+                            <video
+                              src={cover.url}
+                              className="w-full h-full object-cover"
+                              muted
+                              playsInline
+                              preload="metadata"
+                            />
+                          ) : cover.mediaType === "audio" ? (
+                            <div className="w-full h-full flex items-center justify-center text-emerald/40 font-stamp text-xs uppercase">
+                              Audio
+                            </div>
+                          ) : cover.mediaType === "file" ? (
+                            <div className="w-full h-full flex items-center justify-center text-emerald/40 font-stamp text-xs uppercase">
+                              File
+                            </div>
+                          ) : (
+                            <Image
+                              src={cover.url}
+                              alt={photo.title}
+                              fill
+                              sizes="(max-width: 640px) 33vw, 25vw"
+                              className="object-cover"
+                            />
+                          )}
+                          {cover.mediaType === "video" && (
+                            <span className="absolute bottom-1.5 right-1.5 text-[9px] font-stamp uppercase bg-emerald/80 text-parchment px-1.5 py-0.5">
+                              Video
+                            </span>
+                          )}
+                          {count > 1 && (
+                            <span className="absolute top-1.5 right-1.5 text-[9px] font-stamp uppercase bg-emerald/85 text-parchment px-1.5 py-0.5 flex items-center gap-1">
+                              <span aria-hidden="true">▤</span> {count}
+                            </span>
+                          )}
+                        </div>
+                        <p className="font-stamp text-[10px] sm:text-[11px] text-emerald/70 mt-3">
+                          {formatTime(photo.uploadedAt)}
+                        </p>
+                        <p className="font-display text-xs sm:text-sm mt-0.5 text-ink line-clamp-2">
+                          {photo.title}
+                        </p>
+                        {photo.caption && (
+                          <p className="font-body text-[11px] text-ink/50 mt-1 line-clamp-2">
+                            {photo.caption}
+                          </p>
+                        )}
+                        <div className="mt-1.5 flex items-center gap-2 text-[10px] text-ink/40">
+                          <span className="font-stamp">
+                            {photo.uploader || "Admin"}
+                          </span>
+                        </div>
+                      </Link>
+                    </div>
                   );
                 })}
               </div>

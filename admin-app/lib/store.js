@@ -16,13 +16,22 @@ async function getDataUrl() {
   }
 }
 
+function normalizePhoto(photo) {
+  if (Array.isArray(photo.items) && photo.items.length > 0) return photo;
+  if (!photo.url) return { ...photo, items: [] };
+  return {
+    ...photo,
+    items: [{ url: photo.url, contentType: photo.contentType, mediaType: photo.mediaType }],
+  };
+}
+
 export async function readPhotos() {
   const url = await getDataUrl();
   if (!url) return [];
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) return [];
   const data = await res.json();
-  return Array.isArray(data) ? data : [];
+  return Array.isArray(data) ? data.map(normalizePhoto) : [];
 }
 
 export async function writePhotos(photos) {
@@ -65,14 +74,49 @@ export async function deletePhoto(id) {
   if (!photo) return false;
   const remaining = photos.filter((p) => p.id !== id);
   await writePhotos(remaining);
-  // Hapus juga file gambarnya dari Blob storage supaya tidak menumpuk.
-  try {
-    await del(photo.url);
-  } catch (err) {
-    // Kalau gagal hapus file blob-nya, data metadata tetap sudah terhapus;
-    // tidak perlu menggagalkan seluruh operasi karena ini.
+  // Hapus juga semua file media grup ini dari Blob storage supaya tidak menumpuk.
+  const urls = Array.isArray(photo.items) && photo.items.length > 0
+    ? photo.items.map((it) => it.url)
+    : [photo.url].filter(Boolean);
+  for (const url of urls) {
+    try {
+      await del(url);
+    } catch (err) {
+      // Kalau gagal hapus salah satu file blob-nya, lanjut ke yang lain;
+      // metadata sudah terhapus jadi tidak perlu menggagalkan operasi ini.
+    }
   }
   return true;
+}
+
+export async function removeMediaItem(id, index) {
+  const photos = await readPhotos();
+  const photo = photos.find((p) => p.id === id);
+  if (!photo) return null;
+  const items = Array.isArray(photo.items) ? photo.items : [];
+  const removed = items[index];
+  if (!removed) return photo;
+
+  photo.items = items.filter((_, i) => i !== index);
+  // Jaga field url/mediaType/contentType (dipakai kode lama) tetap mengarah
+  // ke item pertama yang tersisa.
+  if (photo.items[0]) {
+    photo.url = photo.items[0].url;
+    photo.mediaType = photo.items[0].mediaType;
+    photo.contentType = photo.items[0].contentType;
+  } else {
+    photo.url = "";
+    photo.mediaType = "";
+    photo.contentType = "";
+  }
+
+  await writePhotos(photos);
+  try {
+    await del(removed.url);
+  } catch (err) {
+    // File blob gagal dihapus, tapi metadata sudah terupdate — tidak fatal.
+  }
+  return photo;
 }
 
 export async function readSettings() {

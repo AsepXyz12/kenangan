@@ -51,11 +51,17 @@ export default function PhotoList({ photos }) {
             ) : (
               <Image src={p.url} alt={p.title} fill sizes="56px" className="object-cover" />
             )}
+            {p.items?.length > 1 && (
+              <span className="absolute bottom-0 right-0 text-[9px] mono bg-accent text-paper px-1">
+                ×{p.items.length}
+              </span>
+            )}
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-sm truncate">{p.title}</p>
             <p className="text-xs text-ink/40 mono">
               {formatShort(p.eventDate)} · {p.uploader || "Admin"}
+              {p.items?.length > 1 && ` · ${p.items.length} media`}
             </p>
           </div>
           <div className="flex items-center gap-3 shrink-0">

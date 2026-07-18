@@ -1,6 +1,5 @@
 import { readPhotos, readSettings } from "@/lib/store";
 import Gallery from "@/components/Gallery";
-import Image from "next/image";
 
 export const dynamic = "force-dynamic";
 
@@ -21,15 +20,13 @@ export default async function HomePage() {
       <header className="relative overflow-hidden border-b border-emerald/10">
         <div className="max-w-5xl mx-auto px-6 pt-14 pb-16">
           {settings.logoUrl && (
-            <div className="relative w-14 h-14 mb-5">
-              <Image
-                src={settings.logoUrl}
-                alt={siteName}
-                fill
-                sizes="56px"
-                className="object-contain"
-              />
-            </div>
+            /* eslint-disable-next-line @next/next/no-img-element -- logo diunggah admin,
+               ukuran & rasio bebas, jadi <img> biasa lebih aman daripada next/image fill */
+            <img
+              src={settings.logoUrl}
+              alt={siteName}
+              className="h-20 sm:h-24 w-auto max-w-[240px] object-contain mb-5"
+            />
           )}
           <p className="font-stamp text-xs tracking-[0.25em] uppercase text-emerald-light">
             Madrasah Aliyah — Arsip Bersama

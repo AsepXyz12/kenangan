@@ -15,13 +15,22 @@ async function getUrl(path) {
   }
 }
 
+function normalizePhoto(photo) {
+  if (Array.isArray(photo.items) && photo.items.length > 0) return photo;
+  if (!photo.url) return { ...photo, items: [] };
+  return {
+    ...photo,
+    items: [{ url: photo.url, contentType: photo.contentType, mediaType: photo.mediaType }],
+  };
+}
+
 export async function readPhotos() {
   const url = await getUrl(DATA_PATH);
   if (!url) return [];
   const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) return [];
   const data = await res.json();
-  return Array.isArray(data) ? data : [];
+  return Array.isArray(data) ? data.map(normalizePhoto) : [];
 }
 
 export async function getPhoto(id) {
