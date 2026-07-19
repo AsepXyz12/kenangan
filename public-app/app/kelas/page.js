@@ -47,9 +47,17 @@ function StudentCard({ student, tape }) {
         {student.name}
       </p>
       {student.hobby && (
-        <p className="text-center text-[8px] uppercase tracking-[0.15em] text-gold/80 mt-1 truncate">
-          Hobi: {student.hobby}
-        </p>
+        <div className="mt-1 text-center px-1">
+          <p className="text-[7px] uppercase tracking-[0.2em] text-gold/70">
+            Hobi
+          </p>
+          {/* line-clamp-2 (bukan truncate 1 baris) supaya hobi yang agak
+              panjang (mis. "Renang Bersama") tetap kebaca 2 baris, baru
+              dipotong "..." kalau memang kepanjangan banget */}
+          <p className="text-[9px] leading-tight text-ink/70 line-clamp-2">
+            {student.hobby}
+          </p>
+        </div>
       )}
     </Link>
   );
