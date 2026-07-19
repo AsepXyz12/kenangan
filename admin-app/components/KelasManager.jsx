@@ -569,7 +569,7 @@ function StudentCard({ classId, student, onChanged, onDeleted }) {
         disabled={saving}
         className="w-full text-[11px] uppercase mono px-2 py-1.5 border border-accent btn transition-colors disabled:opacity-60"
       >
-        {saving ? "Menyimpan..." : justSaved ? "Tersimpan ✓" : "💾 Simpan"}
+        {saving ? "Menyimpan..." : justSaved ? "Tersimpan ✓" : "Simpan"}
       </button>
       <div className="flex items-center gap-1.5">
         <PhotoButton
@@ -838,6 +838,9 @@ function formatTanggal(iso) {
 
 function PromotionPanel({ initialPromotion }) {
   const [promo, setPromo] = useState(initialPromotion);
+  const [draftDay, setDraftDay] = useState(initialPromotion?.graduationDay ?? 1);
+  const [draftMonth, setDraftMonth] = useState(initialPromotion?.graduationMonth ?? 7);
+  const [draftYear, setDraftYear] = useState(initialPromotion?.graduationYear ?? new Date().getFullYear());
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
@@ -853,7 +856,11 @@ function PromotionPanel({ initialPromotion }) {
         body: JSON.stringify(patch),
       });
       if (res.ok) {
-        setPromo(await res.json());
+        const data = await res.json();
+        setPromo(data);
+        setDraftDay(data.graduationDay);
+        setDraftMonth(data.graduationMonth);
+        setDraftYear(data.graduationYear);
       } else {
         const data = await res.json().catch(() => ({}));
         setError(data.error || "Gagal menyimpan pengaturan.");
@@ -863,6 +870,19 @@ function PromotionPanel({ initialPromotion }) {
     } finally {
       setBusy(false);
     }
+  }
+
+  // Tanggal, bulan, dan tahun disimpan SEKALIGUS dalam satu request lewat
+  // tombol ini — bukan tersebar di beberapa event (onBlur per kolom) yang
+  // gampang gagal ke-trigger di HP dan bisa bikin salah satu nilai gagal
+  // tersimpan tanpa ketahuan.
+  async function saveDate() {
+    await save({
+      graduationDay: Number(draftDay) || 1,
+      graduationMonth: Number(draftMonth) || 7,
+      graduationYear: Number(draftYear) || new Date().getFullYear(),
+    });
+    setInfo("Tanggal kenaikan kelas tersimpan.");
   }
 
   async function runNow() {
@@ -878,7 +898,11 @@ function PromotionPanel({ initialPromotion }) {
     setError("");
     setInfo("");
     try {
-      const res = await fetch("/api/kelas/promotion", { method: "POST" });
+      const res = await fetch("/api/kelas/promotion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "run" }),
+      });
       if (res.ok) {
         const data = await res.json();
         setPromo(data);
@@ -893,6 +917,48 @@ function PromotionPanel({ initialPromotion }) {
       }
     } catch (err) {
       setError("Gagal menjalankan (koneksi bermasalah).");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function undoLast() {
+    if (
+      !confirm(
+        "Ini akan membalikkan kenaikan kelas TERAKHIR ke kondisi sebelumnya " +
+          "(murid & arsip alumni yang baru dibuat dari kenaikan itu akan " +
+          "hilang lagi). Kenaikan otomatis juga akan dimatikan sementara " +
+          "supaya tidak langsung jalan lagi — aktifkan lagi setelah tanggal " +
+          "sudah benar. Yakin mau undo?"
+      )
+    )
+      return;
+    setBusy(true);
+    setError("");
+    setInfo("");
+    try {
+      const res = await fetch("/api/kelas/promotion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "undo" }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setPromo(data);
+        setDraftDay(data.graduationDay);
+        setDraftMonth(data.graduationMonth);
+        setDraftYear(data.graduationYear);
+        setInfo(
+          data.undone
+            ? "Kenaikan terakhir sudah dibalikin. Kenaikan otomatis dimatikan sementara — cek & benerin tanggalnya dulu sebelum diaktifkan lagi. Muat ulang halaman untuk lihat perubahan."
+            : "Tidak ada kenaikan yang bisa dibalikin."
+        );
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Gagal membalikkan kenaikan kelas.");
+      }
+    } catch (err) {
+      setError("Gagal membalikkan (koneksi bermasalah).");
     } finally {
       setBusy(false);
     }
@@ -925,7 +991,7 @@ function PromotionPanel({ initialPromotion }) {
         </span>
       </div>
 
-      <div className="flex flex-wrap items-center gap-3 text-xs mono">
+      <div className="flex flex-wrap items-end gap-3 text-xs mono">
         <label className="flex items-center gap-1.5">
           Tanggal:
           <input
@@ -933,19 +999,18 @@ function PromotionPanel({ initialPromotion }) {
             className="field py-1 w-16 focus:border-accent"
             min={1}
             max={31}
-            value={promo.graduationDay ?? 1}
+            value={draftDay}
             disabled={busy}
-            onChange={(e) => setPromo({ ...promo, graduationDay: Number(e.target.value) })}
-            onBlur={() => save({ graduationDay: promo.graduationDay })}
+            onChange={(e) => setDraftDay(e.target.value)}
           />
         </label>
         <label className="flex items-center gap-1.5">
           Bulan kelulusan:
           <select
             className="field py-1 focus:border-accent"
-            value={promo.graduationMonth}
+            value={draftMonth}
             disabled={busy}
-            onChange={(e) => save({ graduationMonth: Number(e.target.value) })}
+            onChange={(e) => setDraftMonth(e.target.value)}
           >
             {BULAN.map((b, i) => (
               <option key={b} value={i + 1}>
@@ -959,12 +1024,19 @@ function PromotionPanel({ initialPromotion }) {
           <input
             type="number"
             className="field py-1 w-24 focus:border-accent"
-            value={promo.graduationYear}
+            value={draftYear}
             disabled={busy}
-            onChange={(e) => setPromo({ ...promo, graduationYear: Number(e.target.value) })}
-            onBlur={() => save({ graduationYear: promo.graduationYear })}
+            onChange={(e) => setDraftYear(e.target.value)}
           />
         </label>
+        <button
+          type="button"
+          onClick={saveDate}
+          disabled={busy}
+          className="btn text-[11px] uppercase mono px-3 py-1.5 disabled:opacity-60"
+        >
+          Simpan tanggal
+        </button>
       </div>
 
       <p className="text-xs text-ink/60 leading-relaxed">
@@ -982,7 +1054,8 @@ function PromotionPanel({ initialPromotion }) {
         sebagai alumni, semua kelas lain naik satu tingkat, dan kelas paling
         bawah dikosongkan untuk murid baru. Tidak perlu klik apa pun — ini
         jalan sendiri saat ada yang membuka halaman ini setelah tanggal
-        tersebut.
+        tersebut. Perubahan di atas baru berlaku setelah tombol "Simpan
+        tanggal" di atas diklik.
       </p>
       <p className="text-xs text-ink/40 flex items-center gap-1.5">
         <span
@@ -994,14 +1067,26 @@ function PromotionPanel({ initialPromotion }) {
         Terakhir kenaikan kelas jalan: {formatTanggal(promo.lastRunAt)}
       </p>
 
-      <button
-        type="button"
-        disabled={busy}
-        onClick={runNow}
-        className="btn-outline border border-cetakClay text-cetakClay text-[11px] uppercase mono px-2 py-1 disabled:opacity-50 hover:bg-cetakClay hover:text-paper transition-colors"
-      >
-        Jalankan sekarang (testing)
-      </button>
+      <div className="flex flex-wrap gap-2">
+        <button
+          type="button"
+          disabled={busy}
+          onClick={runNow}
+          className="btn-outline border border-cetakClay text-cetakClay text-[11px] uppercase mono px-2 py-1 disabled:opacity-50 hover:bg-cetakClay hover:text-paper transition-colors"
+        >
+          Jalankan sekarang (permanen, bukan cuma preview)
+        </button>
+        {promo.hasUndo && (
+          <button
+            type="button"
+            disabled={busy}
+            onClick={undoLast}
+            className="border border-danger text-danger text-[11px] uppercase mono px-2 py-1 disabled:opacity-50 hover:bg-danger hover:text-paper transition-colors"
+          >
+            Undo kenaikan terakhir
+          </button>
+        )}
+      </div>
 
       {error && <p className="text-xs text-danger mono">{error}</p>}
       {info && <p className="text-xs text-accent mono">{info}</p>}

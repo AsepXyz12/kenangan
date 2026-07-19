@@ -5,6 +5,7 @@ import {
   getPromotionPreview,
   updatePromotionSettings,
   forceRunPromotionNow,
+  undoLastPromotion,
 } from "@/lib/kelas-store";
 
 // GET: lihat status & pengaturan kenaikan kelas otomatis
@@ -39,11 +40,25 @@ export async function PUT(request) {
 }
 
 // POST: jalankan kenaikan kelas sekarang juga (buat testing / kalau admin
-// mau majukan manual tanpa menunggu tanggalnya)
-export async function POST() {
+// mau majukan manual tanpa menunggu tanggalnya), ATAU kalau body-nya berisi
+// { action: "undo" }, membalikkan kenaikan terakhir yang sempat jalan.
+export async function POST(request) {
   if (!isAdminAuthed()) {
     return NextResponse.json({ error: "Tidak diizinkan" }, { status: 401 });
   }
+  let action = "run";
+  try {
+    const body = await request.json();
+    if (body && body.action === "undo") action = "undo";
+  } catch (err) {
+    // Body kosong (request lama tanpa body) — anggap saja "run" seperti biasa.
+  }
+
+  if (action === "undo") {
+    const { undone, data } = await undoLastPromotion();
+    return NextResponse.json({ undone, ...getPromotionPreview(data) });
+  }
+
   const { ran, data } = await forceRunPromotionNow();
   return NextResponse.json({ ran, ...getPromotionPreview(data) });
 }

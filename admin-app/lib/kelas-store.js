@@ -125,6 +125,11 @@ function defaultPromotion() {
     // kenaikan kelas otomatis benar-benar jalan.
     graduationYear: new Date().getFullYear(),
     lastRunAt: null,
+    // Cadangan kondisi kelas SEBELUM kenaikan terakhir dijalankan — dipakai
+    // tombol "Undo" kalau kenaikan itu ternyata tidak diinginkan (misal
+    // kepencet tidak sengaja, atau tanggalnya keliru ke-set ke masa lalu).
+    // Cuma menyimpan satu langkah undo (yang paling baru).
+    lastSnapshot: null,
   };
 }
 
@@ -140,72 +145,110 @@ function clampDayInMonth(year, month1to12, day) {
 // menjalankan pemindahan murid + pembuatan arsip alumni. Fungsi ini MENGUBAH
 // `data` secara langsung (in place). Mengembalikan true kalau ada perubahan
 // yang perlu disimpan.
+//
+// PENTING: dulu fungsi ini cuma mengecek & menjalankan SATU siklus per
+// panggilan. Masalahnya, readKelas() dipanggil setiap kali admin membuka
+// halaman apa pun — jadi kalau pengaturan tanggalnya kebetulan sudah lewat
+// (misal gara-gara tanggal/tahun gagal tersimpan), maka SETIAP kali admin
+// membuka dashboard, kelas naik SATU tingkat lagi, membuat siswa "meloncat"
+// beberapa tingkat sekaligus hanya dalam beberapa kali buka halaman, dan
+// arsip alumni menumpuk terus tanpa henti. Sekarang fungsi ini "mengejar"
+// semua siklus yang kelewat dalam SATU kali panggilan saja, supaya sekali
+// caught-up, tidak akan jalan lagi sampai tanggal berikutnya benar-benar
+// tercapai.
 function runAutoPromotionIfDue(data) {
   if (!data.promotion) data.promotion = defaultPromotion();
   const p = data.promotion;
   if (!p.enabled) return false;
 
-  const month = Math.min(Math.max(p.graduationMonth || 7, 1), 12);
-  const day = clampDayInMonth(p.graduationYear, month, p.graduationDay);
-  const target = new Date(p.graduationYear, month - 1, day);
-  const now = new Date();
-  if (now < target) return false;
+  let ranAny = false;
+  let snapshotTaken = false;
+  let safety = 0;
 
-  const active = data.classes
-    .filter((c) => !c.isAlumni)
-    .sort((a, b) => (a.order || 0) - (b.order || 0));
-  if (active.length === 0) {
-    // Tidak ada kelas aktif sama sekali — tidak ada yang bisa dinaikkan.
-    // Majukan saja penanda tahunnya supaya tidak terus-menerus dicek tiap saat.
+  while (safety++ < 50) {
+    const month = Math.min(Math.max(p.graduationMonth || 7, 1), 12);
+    const day = clampDayInMonth(p.graduationYear, month, p.graduationDay);
+    const target = new Date(p.graduationYear, month - 1, day);
+    const now = new Date();
+    if (now < target) break;
+
+    // Ambil snapshot HANYA sekali, sebelum siklus pertama dalam panggilan
+    // ini — supaya "Undo" bisa balikin ke kondisi sebelum semua kenaikan
+    // yang baru saja dikejar sekaligus ini, bukan cuma langkah terakhir.
+    if (!snapshotTaken) {
+      p.lastSnapshot = {
+        classes: JSON.parse(JSON.stringify(data.classes)),
+        graduationYear: p.graduationYear,
+        savedAt: new Date().toISOString(),
+      };
+      snapshotTaken = true;
+    }
+
+    const active = data.classes
+      .filter((c) => !c.isAlumni)
+      .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+    if (active.length === 0) {
+      // Tidak ada kelas aktif sama sekali — tidak ada yang bisa dinaikkan.
+      // Majukan saja penanda tahunnya supaya tidak terus-menerus dicek.
+      p.graduationYear += 1;
+      p.lastRunAt = new Date().toISOString();
+      ranAny = true;
+      continue;
+    }
+
+    const maxOrder = active[active.length - 1].order || 0;
+    const graduating = active.filter((c) => (c.order || 0) === maxOrder);
+
+    // 1) Arsipkan isi kelas tertinggi jadi alumni (catatan baru, terpisah
+    //    dari wadah aslinya supaya wadahnya bisa dipakai lagi tahun depan).
+    graduating.forEach((slot) => {
+      data.classes.push({
+        id: randomUUID(),
+        name: `${slot.name} — Lulus ${p.graduationYear}`,
+        order: slot.order,
+        isAlumni: true,
+        graduatedYear: p.graduationYear,
+        waliKelasIds: [...(slot.waliKelasIds || [])],
+        students: slot.students.map((s) => ({ ...s })),
+      });
+    });
+
+    // 2) Geser murid naik satu tingkat: dari yang kedua tertinggi turun
+    //    sampai yang paling bawah. Wadahnya (nama, wali kelas, order) tetap,
+    //    cuma daftar muridnya yang pindah.
+    for (let i = active.length - 2; i >= 0; i--) {
+      active[i + 1].students = active[i].students;
+    }
+
+    // 3) Kosongkan wadah kelas paling bawah (Kelas 1) — siap diisi anak baru.
+    active[0].students = [];
+
+    // 4) Catat & majukan siklus. Loop akan cek lagi di iterasi berikutnya —
+    //    kalau tanggal target yang baru masih di masa lalu (backlog lebih
+    //    dari 1 tahun), siklus berikutnya langsung dikejar juga sekarang,
+    //    bukan menunggu kunjungan halaman berikutnya.
     p.graduationYear += 1;
     p.lastRunAt = new Date().toISOString();
-    return true;
+    ranAny = true;
   }
 
-  const maxOrder = active[active.length - 1].order || 0;
-  const graduating = active.filter((c) => (c.order || 0) === maxOrder);
-
-  // 1) Arsipkan isi kelas tertinggi jadi alumni (catatan baru, terpisah dari
-  //    wadah aslinya supaya wadahnya bisa dipakai lagi tahun depan).
-  graduating.forEach((slot) => {
-    data.classes.push({
-      id: randomUUID(),
-      name: `${slot.name} — Lulus ${p.graduationYear}`,
-      order: slot.order,
-      isAlumni: true,
-      graduatedYear: p.graduationYear,
-      waliKelasIds: [...(slot.waliKelasIds || [])],
-      students: slot.students.map((s) => ({ ...s })),
-    });
-  });
-
-  // 2) Geser murid naik satu tingkat: dari yang kedua tertinggi turun sampai
-  //    yang paling bawah. Wadahnya (nama, wali kelas, order) tetap, cuma
-  //    daftar muridnya yang pindah.
-  for (let i = active.length - 2; i >= 0; i--) {
-    active[i + 1].students = active[i].students;
-  }
-
-  // 3) Kosongkan wadah kelas paling bawah (Kelas 1) — siap diisi anak baru.
-  active[0].students = [];
-
-  // 4) Catat & majukan siklus supaya tidak dobel jalan.
-  p.graduationYear += 1;
-  p.lastRunAt = new Date().toISOString();
-  return true;
+  return ranAny;
 }
 
 // Info ringkas buat ditampilkan di UI (tanggal kenaikan berikutnya, dst),
 // tanpa perlu menjalankan apa pun.
 export function getPromotionPreview(data) {
   const p = data.promotion || defaultPromotion();
+  const { lastSnapshot, ...rest } = p;
   const active = data.classes
     .filter((c) => !c.isAlumni)
     .sort((a, b) => (a.order || 0) - (b.order || 0));
   const maxOrder = active.length ? active[active.length - 1].order || 0 : null;
   const nextGraduating = active.filter((c) => (c.order || 0) === maxOrder);
   return {
-    ...p,
+    ...rest,
+    hasUndo: !!lastSnapshot,
     nextGraduatingClassNames: nextGraduating.map((c) => c.name),
   };
 }
@@ -256,6 +299,27 @@ export async function forceRunPromotionNow() {
   data.promotion.graduationDay = dayBefore;
   await writeKelas(data);
   return { ran, data };
+}
+
+// Membalikkan kenaikan kelas terakhir yang sempat jalan (baik otomatis
+// maupun lewat "Jalankan sekarang"), pakai snapshot yang disimpan sebelum
+// kenaikan itu terjadi. Auto-jalan otomatis DIMATIKAN setelah undo, supaya
+// kalau tanggalnya masih ke-set ke masa lalu, kenaikan yang sama tidak
+// langsung jalan lagi begitu ada yang membuka halaman admin. Admin perlu
+// mengecek & memperbaiki tanggalnya dulu, baru mengaktifkan lagi manual.
+export async function undoLastPromotion() {
+  const data = await readKelasRaw();
+  const p = data.promotion;
+  if (!p || !p.lastSnapshot) {
+    return { undone: false, data };
+  }
+  data.classes = p.lastSnapshot.classes;
+  p.graduationYear = p.lastSnapshot.graduationYear;
+  p.lastSnapshot = null;
+  p.lastRunAt = null;
+  p.enabled = false;
+  await writeKelas(data);
+  return { undone: true, data };
 }
 
 async function getUrl() {
