@@ -41,12 +41,20 @@ export default function PhotoCropModal({ file, onCancel, onConfirm }) {
   const dispW = imgEl ? imgEl.naturalWidth * scale : 0;
   const dispH = imgEl ? imgEl.naturalHeight * scale : 0;
 
+  function clampAxis(pos, dispSize) {
+    if (dispSize <= VIEWPORT) {
+      // Fotonya lebih kecil dari kotak crop (lagi di-zoom out) — taruh di
+      // tengah aja, gak perlu (dan gak bisa) di-drag.
+      return (VIEWPORT - dispSize) / 2;
+    }
+    const min = VIEWPORT - dispSize;
+    return Math.min(0, Math.max(min, pos));
+  }
+
   function clampOffset(next, w = dispW, h = dispH) {
-    const minX = VIEWPORT - w;
-    const minY = VIEWPORT - h;
     return {
-      x: Math.min(0, Math.max(minX, next.x)),
-      y: Math.min(0, Math.max(minY, next.y)),
+      x: clampAxis(next.x, w),
+      y: clampAxis(next.y, h),
     };
   }
 
@@ -115,6 +123,12 @@ export default function PhotoCropModal({ file, onCancel, onConfirm }) {
       canvas.height = OUTPUT;
       const ctx = canvas.getContext("2d");
       const ratio = OUTPUT / VIEWPORT;
+      // Kalau lagi di-zoom out (foto lebih kecil dari kotak crop), bagian
+      // kosong di pinggir foto diisi warna krem (samain sama background
+      // galeri publik) dulu — soalnya JPEG gak bisa transparan, defaultnya
+      // bakal item kalau gak diisi.
+      ctx.fillStyle = "#EFE7D2";
+      ctx.fillRect(0, 0, OUTPUT, OUTPUT);
       ctx.drawImage(
         imgEl,
         offset.x * ratio,
@@ -177,7 +191,7 @@ export default function PhotoCropModal({ file, onCancel, onConfirm }) {
           <span className="mono text-[10px] text-ink/50">Zoom</span>
           <input
             type="range"
-            min={1}
+            min={0.3}
             max={3}
             step={0.01}
             value={zoom}
