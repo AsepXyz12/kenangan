@@ -20,6 +20,28 @@ function initials(name) {
     .join("") || "?";
 }
 
+// Ambil pesan error paling informatif dari response gagal. Kalau body-nya
+// JSON dengan field `error`, pakai itu. Kalau bukan JSON sama sekali (mis.
+// halaman timeout/gateway error dari platform hosting), JANGAN diam-diam
+// jatuh ke teks generik — tetap kasih tau status code & sedikit isi mentah
+// biar ketauan ini masalah apa, bukan cuma "gagal" tanpa penjelasan.
+async function describeErrorResponse(res, fallbackLabel) {
+  let raw = "";
+  try {
+    raw = await res.text();
+  } catch (err) {
+    return `${fallbackLabel} (status ${res.status}, respons tidak terbaca)`;
+  }
+  try {
+    const data = JSON.parse(raw);
+    if (data?.error) return data.error;
+  } catch (err) {
+    // bukan JSON — lanjut ke fallback di bawah
+  }
+  const snippet = raw ? raw.replace(/\s+/g, " ").trim().slice(0, 120) : "";
+  return `${fallbackLabel} (status ${res.status}${snippet ? `: ${snippet}` : ""})`;
+}
+
 function Avatar({ name, photoUrl, size = 64 }) {
   return (
     <div
@@ -570,8 +592,7 @@ function StudentCard({ classId, student, otherClasses, onChanged, onDeleted, onM
         onMoved(moveTarget);
         setMoveTarget("");
       } else {
-        const data = await res.json().catch(() => ({}));
-        setError(data.error || "Gagal memindahkan murid.");
+        setError(await describeErrorResponse(res, "Gagal memindahkan murid"));
       }
     } catch (err) {
       setError("Gagal memindahkan (koneksi bermasalah).");
@@ -751,8 +772,7 @@ function ClassBlock({ kelas, teachers, allClasses, onChanged, onDeleted, onStude
         onAllStudentsMoved(kelas.id, moveAllTarget, kelas.students);
         setMoveAllTarget("");
       } else {
-        const data = await res.json().catch(() => ({}));
-        setError(data.error || "Gagal memindahkan semua murid.");
+        setError(await describeErrorResponse(res, "Gagal memindahkan semua murid"));
       }
     } catch (err) {
       setError("Gagal memindahkan (koneksi bermasalah).");
