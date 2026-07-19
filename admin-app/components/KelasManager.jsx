@@ -1535,6 +1535,12 @@ export default function KelasManager({
   const [classes, setClasses] = useState(
     [...initialClasses].sort((a, b) => (a.order || 0) - (b.order || 0))
   );
+  // Filter tampilan kelas aktif di dashboard ini — sama polanya kayak
+  // filter tahun di dashboard kenangan publik. Berguna kalau kelasnya udah
+  // banyak: abis upload foto/simpen sesuatu & halaman lompat ke atas,
+  // gak perlu scroll ngelewatin semua kelas buat balik ke kelas yang
+  // lagi dikerjain — tinggal pilih tab kelasnya lagi.
+  const [classFilter, setClassFilter] = useState("all");
   // Dipakai buat jeda polling sesaat pas ada aksi lokal (pindah/tambah/hapus)
   // lagi jalan, supaya hasil optimistic-update di layar gak "ketimpa" balik
   // sama data server yang belum sempat konsisten (lihat catatan di
@@ -1635,9 +1641,39 @@ export default function KelasManager({
             Kelola alumni &rarr;
           </a>
         </div>
+        <div className="flex flex-wrap gap-1.5 mb-4">
+          <button
+            type="button"
+            onClick={() => setClassFilter("all")}
+            className={`text-[11px] uppercase mono px-2.5 py-1 border transition-colors ${
+              classFilter === "all"
+                ? "bg-accent text-paper border-accent"
+                : "border-line text-ink/60 hover:border-accent/50"
+            }`}
+          >
+            Semua
+          </button>
+          {classes
+            .filter((c) => !c.isAlumni)
+            .map((c) => (
+              <button
+                key={c.id}
+                type="button"
+                onClick={() => setClassFilter(c.id)}
+                className={`text-[11px] uppercase mono px-2.5 py-1 border transition-colors ${
+                  classFilter === c.id
+                    ? "bg-accent text-paper border-accent"
+                    : "border-line text-ink/60 hover:border-accent/50"
+                }`}
+              >
+                {c.name}
+              </button>
+            ))}
+        </div>
         <div className="space-y-6">
           {classes
             .filter((c) => !c.isAlumni)
+            .filter((c) => classFilter === "all" || c.id === classFilter)
             .map((c) => (
             <ClassBlock
               key={c.id}

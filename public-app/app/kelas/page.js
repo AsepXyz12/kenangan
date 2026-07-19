@@ -1,6 +1,7 @@
 import { readKelas } from "@/lib/kelas-store";
 import { readSettings } from "@/lib/store";
-import { ClassSection, TAPES, initials } from "@/components/KelasCards";
+import { TAPES, initials } from "@/components/KelasCards";
+import KelasFilter from "@/components/KelasFilter";
 
 export const dynamic = "force-dynamic";
 
@@ -58,9 +59,7 @@ export default async function KelasPage() {
           </p>
         )}
 
-        {active.map((kelas) => (
-          <ClassSection key={kelas.id} kelas={kelas} teachers={teachers} />
-        ))}
+        {active.length > 0 && <KelasFilter classes={active} teachers={teachers} />}
 
         {teachers.length > 0 && (
           <section className="mb-16">
