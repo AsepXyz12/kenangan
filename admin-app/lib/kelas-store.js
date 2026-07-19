@@ -335,6 +335,16 @@ async function getUrl() {
 // kelas otomatis. Dipakai oleh fungsi pengaturan kenaikan kelas sendiri
 // (updatePromotionSettings, forceRunPromotionNow) supaya tidak dobel jalan
 // dalam satu request yang sama.
+async function fetchWithRetry(url, options, retries = 1) {
+  try {
+    return await fetch(url, options);
+  } catch (err) {
+    if (retries <= 0) throw err;
+    await new Promise((r) => setTimeout(r, 300));
+    return fetchWithRetry(url, options, retries - 1);
+  }
+}
+
 async function readKelasRaw() {
   const url = await getUrl();
   if (!url) {
@@ -354,15 +364,29 @@ async function readKelasRaw() {
   // gagal beneran, cuma baca versi lama). Tambahin cache-buster + header
   // no-cache eksplisit di SETIAP baca, bukan cuma andalin fetch cache Next.js.
   const bustedUrl = `${url}${url.includes("?") ? "&" : "?"}_=${Date.now()}`;
-  const res = await fetch(bustedUrl, {
-    cache: "no-store",
-    next: { revalidate: 0 },
-    headers: { "Cache-Control": "no-cache, no-store, must-revalidate", Pragma: "no-cache" },
-  });
-  if (!res.ok) return seedKelas();
+  let res;
+  try {
+    res = await fetchWithRetry(bustedUrl, {
+      cache: "no-store",
+      next: { revalidate: 0 },
+      headers: { "Cache-Control": "no-cache, no-store, must-revalidate", Pragma: "no-cache" },
+    });
+  } catch (err) {
+    // Gagal konek sama sekali (bukan cuma status non-2xx) walau sudah
+    // dicoba ulang — JANGAN diam-diam balik ke seedKelas() di sini, karena
+    // itu data contoh bawaan dengan ID acak baru; kalau ini kepanggil dari
+    // readKelas() yang bisa lanjut nulis balik, data ASLI sekolah bisa
+    // ketiban ganti sama data contoh gara-gara gangguan jaringan sesaat.
+    // Lempar error-nya biar route API yang manggil bisa laporin jelas ke
+    // admin (bukan diam-diam ganti data), daripada nyembunyiin masalahnya.
+    throw new Error(`Gagal konek ke penyimpanan data kelas: ${err?.message || err}`);
+  }
+  if (!res.ok) {
+    throw new Error(`Gagal membaca data kelas dari penyimpanan (status ${res.status})`);
+  }
   const data = await res.json();
   if (!data || !Array.isArray(data.teachers) || !Array.isArray(data.classes)) {
-    return seedKelas();
+    throw new Error("Data kelas yang tersimpan rusak/tidak terbaca (format tidak sesuai)");
   }
   return data;
 }
