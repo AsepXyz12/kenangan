@@ -975,6 +975,8 @@ function ClassBlock({
   const [error, setError] = useState("");
   const [moveAllTarget, setMoveAllTarget] = useState("");
   const [movingAll, setMovingAll] = useState(false);
+  const [uploadingCover, setUploadingCover] = useState(false);
+  const [coverCropFile, setCoverCropFile] = useState(null);
 
   async function patch(body) {
     setBusy(true);
@@ -1027,6 +1029,24 @@ function ClassBlock({
     } finally {
       setMovingAll(false);
     }
+  }
+
+  async function handleCoverPhoto(file) {
+    setUploadingCover(true);
+    setError("");
+    try {
+      const groupPhotoUrl = await uploadPhoto(file);
+      await patch({ groupPhotoUrl });
+    } catch (err) {
+      setError("Gagal upload foto bersama (koneksi bermasalah).");
+    } finally {
+      setUploadingCover(false);
+    }
+  }
+
+  function removeCoverPhoto() {
+    if (!confirm("Hapus foto bersama (cover folder) kelas ini?")) return;
+    patch({ groupPhotoUrl: null });
   }
 
   function toggleWali(teacherId) {
@@ -1145,6 +1165,52 @@ function ClassBlock({
             </button>
           </div>
         )}
+
+        <div>
+          <p className="text-xs uppercase tracking-wide text-ink/50 mono mb-1.5">
+            Foto bersama (cover folder di halaman publik)
+          </p>
+          <div className="flex items-center gap-3">
+            <div className="w-16 h-16 shrink-0 overflow-hidden bg-line/30 flex items-center justify-center">
+              {kelas.groupPhotoUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={kelas.groupPhotoUrl}
+                  alt={kelas.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-[10px] text-ink/40 mono text-center px-1">
+                  Belum ada
+                </span>
+              )}
+            </div>
+            <PhotoButton
+              label={kelas.groupPhotoUrl ? "Ganti foto" : "Unggah foto"}
+              busy={uploadingCover}
+              onPicked={setCoverCropFile}
+            />
+            {coverCropFile && (
+              <PhotoCropModal
+                file={coverCropFile}
+                onCancel={() => setCoverCropFile(null)}
+                onConfirm={(croppedFile) => {
+                  setCoverCropFile(null);
+                  handleCoverPhoto(croppedFile);
+                }}
+              />
+            )}
+            {kelas.groupPhotoUrl && (
+              <button
+                type="button"
+                onClick={removeCoverPhoto}
+                className="btn-danger text-[11px] uppercase mono px-2 py-1 border"
+              >
+                Hapus
+              </button>
+            )}
+          </div>
+        </div>
 
         <div>
           <p className="text-xs uppercase tracking-wide text-ink/50 mono mb-1.5">

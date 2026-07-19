@@ -552,6 +552,11 @@ export async function updateClass(id, patch) {
   if (patch.entryYear === null || Number.isInteger(patch.entryYear)) {
     kelas.entryYear = patch.entryYear;
   }
+  if (typeof patch.groupPhotoUrl === "string" || patch.groupPhotoUrl === null) {
+    // Foto bersama kelas, dipakai sebagai cover "folder" di halaman publik
+    // /kelas — beda dari photoUrl per-murid.
+    kelas.groupPhotoUrl = patch.groupPhotoUrl;
+  }
   await writeKelas(data);
   return kelas;
 }
