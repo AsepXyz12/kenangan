@@ -67,22 +67,22 @@ export default async function KelasPage() {
               Guru & Mata Pelajaran
             </h2>
             <hr className="thread mt-5 mb-7" />
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-x-4 gap-y-8">
+            <div className="space-y-10">
               {teachers.map((t, i) => (
-                <div key={t.id} data-tape={TAPES[i % TAPES.length]} className="polaroid relative w-full max-w-[150px] mx-auto">
+                <div key={t.id} data-tape={TAPES[i % TAPES.length]} className="polaroid relative w-full max-w-sm mx-auto">
                   <span className="stamp-tape" />
-                  <div className="aspect-square w-full bg-parchment2 flex items-center justify-center overflow-hidden">
+                  <div className="aspect-[9/16] w-full bg-parchment2 flex items-center justify-center overflow-hidden">
                     {t.photoUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={t.photoUrl} alt={t.name} className="w-full h-full object-cover object-top" />
                     ) : (
-                      <span className="font-stamp text-2xl text-emerald/30">{initials(t.name)}</span>
+                      <span className="font-stamp text-5xl text-emerald/30">{initials(t.name)}</span>
                     )}
                   </div>
-                  <p className="mt-2 text-center font-stamp text-xs uppercase tracking-wide text-ink/70">
+                  <p className="mt-3 text-center font-stamp text-sm uppercase tracking-wide text-ink/70">
                     {t.name}
                   </p>
-                  <p className="text-center text-[10px] text-ink/40 mt-0.5 leading-tight">
+                  <p className="text-center text-xs text-ink/40 mt-1 leading-tight">
                     {(t.subjects || []).join(", ")}
                   </p>
                 </div>
