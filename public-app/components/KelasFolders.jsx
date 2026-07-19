@@ -42,7 +42,9 @@ export default function KelasFolders({ classes, teachers }) {
                 <img
                   src={kelas.groupPhotoUrl}
                   alt={kelas.name}
-                  className="w-full h-full object-cover"
+                  className={`w-full h-full ${
+                    kelas.groupPhotoFit === "contain" ? "object-contain" : "object-cover"
+                  }`}
                 />
               ) : (
                 <span className="font-stamp text-3xl text-emerald/30">

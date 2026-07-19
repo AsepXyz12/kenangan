@@ -1031,6 +1031,8 @@ function ClassBlock({
     }
   }
 
+  const coverFit = kelas.groupPhotoFit === "contain" ? "contain" : "cover";
+
   async function handleCoverPhoto(file) {
     setUploadingCover(true);
     setError("");
@@ -1041,6 +1043,16 @@ function ClassBlock({
       setError("Gagal upload foto bersama (koneksi bermasalah).");
     } finally {
       setUploadingCover(false);
+    }
+  }
+
+  // Kalau mode "utuh" (contain), gak usah dipotong persegi dulu — upload
+  // fotonya apa adanya, biar semua orang di foto bersama tetap kelihatan.
+  function pickCoverPhoto(file) {
+    if (coverFit === "contain") {
+      handleCoverPhoto(file);
+    } else {
+      setCoverCropFile(file);
     }
   }
 
@@ -1170,14 +1182,20 @@ function ClassBlock({
           <p className="text-xs uppercase tracking-wide text-ink/50 mono mb-1.5">
             Foto bersama (cover folder di halaman publik)
           </p>
-          <div className="flex items-center gap-3">
-            <div className="w-16 h-16 shrink-0 overflow-hidden bg-line/30 flex items-center justify-center">
+          <div className="flex flex-wrap items-center gap-3">
+            <div
+              className={`w-16 h-16 shrink-0 overflow-hidden bg-line/30 flex items-center justify-center ${
+                coverFit === "contain" ? "bg-line/10" : ""
+              }`}
+            >
               {kelas.groupPhotoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={kelas.groupPhotoUrl}
                   alt={kelas.name}
-                  className="w-full h-full object-cover"
+                  className={`w-full h-full ${
+                    coverFit === "contain" ? "object-contain" : "object-cover"
+                  }`}
                 />
               ) : (
                 <span className="text-[10px] text-ink/40 mono text-center px-1">
@@ -1188,7 +1206,7 @@ function ClassBlock({
             <PhotoButton
               label={kelas.groupPhotoUrl ? "Ganti foto" : "Unggah foto"}
               busy={uploadingCover}
-              onPicked={setCoverCropFile}
+              onPicked={pickCoverPhoto}
             />
             {coverCropFile && (
               <PhotoCropModal
@@ -1210,6 +1228,36 @@ function ClassBlock({
               </button>
             )}
           </div>
+          <div className="flex items-center gap-1.5 mt-2">
+            <span className="text-[11px] mono text-ink/50">Mode:</span>
+            <button
+              type="button"
+              onClick={() => patch({ groupPhotoFit: "cover" })}
+              className={`text-[11px] mono px-2 py-1 border ${
+                coverFit === "cover"
+                  ? "bg-accent text-paper border-accent"
+                  : "border-line text-ink/60"
+              }`}
+            >
+              Dipotong (persegi)
+            </button>
+            <button
+              type="button"
+              onClick={() => patch({ groupPhotoFit: "contain" })}
+              className={`text-[11px] mono px-2 py-1 border ${
+                coverFit === "contain"
+                  ? "bg-accent text-paper border-accent"
+                  : "border-line text-ink/60"
+              }`}
+            >
+              Utuh (tanpa potong)
+            </button>
+          </div>
+          <p className="text-[11px] text-ink/40 mt-1">
+            {coverFit === "cover"
+              ? "Foto dipotong pas kotak — bagian pinggir bisa terpotong, tapi rapi & selalu penuh."
+              : "Foto ditampilkan utuh, tidak dipotong — semua orang di foto tetap kelihatan, tapi bisa ada sedikit ruang kosong di kotaknya."}
+          </p>
         </div>
 
         <div>

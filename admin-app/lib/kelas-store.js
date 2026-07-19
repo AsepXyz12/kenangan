@@ -557,6 +557,11 @@ export async function updateClass(id, patch) {
     // /kelas — beda dari photoUrl per-murid.
     kelas.groupPhotoUrl = patch.groupPhotoUrl;
   }
+  if (patch.groupPhotoFit === "cover" || patch.groupPhotoFit === "contain") {
+    // "cover" = dipotong pas kotak (persegi), "contain" = ditampilkan utuh
+    // tanpa dipotong. Defaultnya "cover" kalau field ini belum pernah diisi.
+    kelas.groupPhotoFit = patch.groupPhotoFit;
+  }
   await writeKelas(data);
   return kelas;
 }

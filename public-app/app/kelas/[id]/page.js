@@ -56,7 +56,9 @@ export default async function KelasDetailPage({ params }) {
               <img
                 src={kelas.groupPhotoUrl}
                 alt={kelas.name}
-                className="w-full h-full object-cover"
+                className={`w-full h-full ${
+                  kelas.groupPhotoFit === "contain" ? "object-contain" : "object-cover"
+                }`}
               />
             </div>
             <p className="mt-2 text-center font-stamp text-xs uppercase tracking-wide text-ink/50">
