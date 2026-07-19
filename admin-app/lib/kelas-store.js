@@ -488,3 +488,20 @@ export async function deleteStudent(classId, studentId) {
   await writeKelas(data);
   return true;
 }
+
+// Pindahin satu murid dari satu wadah kelas ke wadah kelas lain, sambil
+// mempertahankan semua data yang sudah diisi (foto, hobi, skill/cuplikan
+// kode) — dipakai buat benerin manual kalau susunan kelas kacau (misal
+// gara-gara kenaikan kelas otomatis yang salah tanggal).
+export async function moveStudent(fromClassId, studentId, toClassId) {
+  const data = await readKelas();
+  const fromKelas = data.classes.find((c) => c.id === fromClassId);
+  const toKelas = data.classes.find((c) => c.id === toClassId);
+  if (!fromKelas || !toKelas) return null;
+  const idx = fromKelas.students.findIndex((s) => s.id === studentId);
+  if (idx === -1) return null;
+  const [student] = fromKelas.students.splice(idx, 1);
+  toKelas.students.push(student);
+  await writeKelas(data);
+  return student;
+}

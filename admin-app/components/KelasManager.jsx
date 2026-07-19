@@ -486,13 +486,15 @@ function SkillsInput({ classId, student, onChanged }) {
   );
 }
 
-function StudentCard({ classId, student, onChanged, onDeleted }) {
+function StudentCard({ classId, student, otherClasses, onChanged, onDeleted, onMoved }) {
   const [name, setName] = useState(student.name);
   const [hobby, setHobby] = useState(student.hobby || "");
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [justSaved, setJustSaved] = useState(false);
   const [error, setError] = useState("");
+  const [moveTarget, setMoveTarget] = useState("");
+  const [moving, setMoving] = useState(false);
 
   async function save() {
     setSaving(true);
@@ -548,6 +550,36 @@ function StudentCard({ classId, student, onChanged, onDeleted }) {
     onDeleted(student.id);
   }
 
+  async function moveToClass() {
+    if (!moveTarget) return;
+    const target = (otherClasses || []).find((c) => c.id === moveTarget);
+    if (!target) return;
+    if (!confirm(`Pindahkan "${student.name}" ke "${target.name}"?`)) return;
+    setMoving(true);
+    setError("");
+    try {
+      const res = await fetch(
+        `/api/kelas/classes/${classId}/students/${student.id}/move`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ toClassId: moveTarget }),
+        }
+      );
+      if (res.ok) {
+        onMoved(moveTarget);
+        setMoveTarget("");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Gagal memindahkan murid.");
+      }
+    } catch (err) {
+      setError("Gagal memindahkan (koneksi bermasalah).");
+    } finally {
+      setMoving(false);
+    }
+  }
+
   return (
     <div className="flex flex-col items-center gap-2 border border-line p-3 text-center">
       <Avatar name={student.name} photoUrl={student.photoUrl} size={72} />
@@ -571,6 +603,34 @@ function StudentCard({ classId, student, onChanged, onDeleted }) {
       >
         {saving ? "Menyimpan..." : justSaved ? "Tersimpan ✓" : "Simpan"}
       </button>
+
+      {otherClasses && otherClasses.length > 0 && (
+        <div className="w-full flex gap-1">
+          <select
+            className="field text-[9px] py-1 flex-1"
+            value={moveTarget}
+            disabled={moving}
+            onChange={(e) => setMoveTarget(e.target.value)}
+          >
+            <option value="">Pindah ke kelas...</option>
+            {otherClasses.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+                {c.isAlumni ? " (alumni)" : ""}
+              </option>
+            ))}
+          </select>
+          <button
+            type="button"
+            onClick={moveToClass}
+            disabled={moving || !moveTarget}
+            className="text-[9px] mono uppercase border border-line px-2 disabled:opacity-40"
+          >
+            {moving ? "..." : "Pindah"}
+          </button>
+        </div>
+      )}
+
       <div className="flex items-center gap-1.5">
         <PhotoButton
           label={student.photoUrl ? "Ganti foto" : "Upload foto"}
@@ -640,7 +700,7 @@ function AddStudent({ classId, onAdded }) {
 
 // ---------- Kelas ----------
 
-function ClassBlock({ kelas, teachers, onChanged, onDeleted }) {
+function ClassBlock({ kelas, teachers, allClasses, onChanged, onDeleted, onStudentMoved }) {
   const [name, setName] = useState(kelas.name);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -762,8 +822,10 @@ function ClassBlock({ kelas, teachers, onChanged, onDeleted }) {
               key={s.id}
               classId={kelas.id}
               student={s}
+              otherClasses={(allClasses || []).filter((c) => c.id !== kelas.id)}
               onChanged={updateStudentInPlace}
               onDeleted={removeStudentInPlace}
+              onMoved={(toClassId) => onStudentMoved(kelas.id, toClassId, s)}
             />
           ))}
         </div>
@@ -1142,10 +1204,24 @@ export default function KelasManager({ initialTeachers, initialClasses, initialP
               key={c.id}
               kelas={c}
               teachers={teachers}
+              allClasses={classes}
               onChanged={(updated) =>
                 setClasses((prev) => prev.map((x) => (x.id === updated.id ? updated : x)))
               }
               onDeleted={(id) => setClasses((prev) => prev.filter((x) => x.id !== id))}
+              onStudentMoved={(fromClassId, toClassId, student) =>
+                setClasses((prev) =>
+                  prev.map((x) => {
+                    if (x.id === fromClassId) {
+                      return { ...x, students: x.students.filter((s) => s.id !== student.id) };
+                    }
+                    if (x.id === toClassId) {
+                      return { ...x, students: [...x.students, student] };
+                    }
+                    return x;
+                  })
+                )
+              }
             />
           ))}
         </div>
