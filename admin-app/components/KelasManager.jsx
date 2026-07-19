@@ -354,6 +354,11 @@ function splitMultiLangBlob(text) {
 }
 
 function SkillsInput({ classId, student, onChanged }) {
+  // Sama seperti RolesInput: pakai state lokal sebagai sumber kebenaran +
+  // antrian penyimpanan berurutan, supaya nambah beberapa skill/cuplikan
+  // kode secara cepat gak saling menimpa (lihat catatan panjang di
+  // RolesInput di atas untuk detail race condition-nya).
+  const [skills, setSkills] = useState(student.skills || []);
   const [draft, setDraft] = useState("");
   const [showCodeForm, setShowCodeForm] = useState(false);
   const [codeLabel, setCodeLabel] = useState("");
@@ -362,38 +367,47 @@ function SkillsInput({ classId, student, onChanged }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
+  const queueRef = useRef(Promise.resolve());
 
-  async function save(nextSkills) {
-    setBusy(true);
-    setError("");
-    try {
-      const res = await fetch(`/api/kelas/classes/${classId}/students/${student.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ skills: nextSkills }),
-      });
-      if (res.ok) {
-        onChanged(await res.json());
-      } else {
-        setError("Gagal menyimpan skill.");
+  useEffect(() => {
+    if (!busy) setSkills(student.skills || []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [student.skills]);
+
+  function queueSave(nextSkills) {
+    setSkills(nextSkills);
+    queueRef.current = queueRef.current.then(async () => {
+      setBusy(true);
+      setError("");
+      try {
+        const res = await fetch(`/api/kelas/classes/${classId}/students/${student.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ skills: nextSkills }),
+        });
+        if (res.ok) {
+          const updated = await res.json();
+          onChanged(updated);
+        } else {
+          setError("Gagal menyimpan skill.");
+        }
+      } catch (err) {
+        setError("Gagal menyimpan (koneksi bermasalah).");
+      } finally {
+        setBusy(false);
       }
-    } catch (err) {
-      setError("Gagal menyimpan (koneksi bermasalah).");
-    } finally {
-      setBusy(false);
-    }
+    });
   }
 
   function addSkill(e) {
     e.preventDefault();
     const value = draft.trim();
     if (!value) return;
-    const existing = student.skills || [];
-    if (existing.includes(value)) {
+    if (skills.includes(value)) {
       setDraft("");
       return;
     }
-    save([...existing, value]);
+    queueSave([...skills, value]);
     setDraft("");
   }
 
@@ -402,14 +416,13 @@ function SkillsInput({ classId, student, onChanged }) {
     setInfo("");
     const raw = codeDraft.trim();
     if (!raw) return;
-    const existing = student.skills || [];
     const multi = splitMultiLangBlob(raw);
     if (multi) {
-      save([...existing, ...multi]);
+      queueSave([...skills, ...multi]);
       setInfo(`Kepisah otomatis jadi ${multi.length} cuplikan (${multi.map((p) => p.label).join(", ")}).`);
     } else {
-      save([
-        ...existing,
+      queueSave([
+        ...skills,
         { label: codeLabel.trim() || "Cuplikan kode", lang: codeLang, code: raw },
       ]);
     }
@@ -419,17 +432,17 @@ function SkillsInput({ classId, student, onChanged }) {
   }
 
   function removeSkillAt(index) {
-    save((student.skills || []).filter((_, i) => i !== index));
+    queueSave(skills.filter((_, i) => i !== index));
   }
 
   function clearAllSkills() {
     if (!confirm(`Hapus SEMUA skill "${student.name}"? Ini mengosongkan semua tag & cuplikan kode yang ada sekarang.`)) return;
-    save([]);
+    queueSave([]);
   }
 
   return (
     <div className="w-full">
-      {(student.skills || []).length > 0 && (
+      {skills.length > 0 && (
         <div className="flex justify-center mb-1">
           <button
             type="button"
@@ -437,12 +450,12 @@ function SkillsInput({ classId, student, onChanged }) {
             disabled={busy}
             className="text-[9px] mono uppercase text-danger/70 hover:text-danger underline underline-offset-2"
           >
-            Hapus semua skill ({student.skills.length})
+            Hapus semua skill ({skills.length})
           </button>
         </div>
       )}
       <div className="flex flex-wrap gap-1 justify-center mb-1">
-        {(student.skills || []).map((s, i) =>
+        {skills.map((s, i) =>
           isCodeSkill(s) ? (
             <span
               key={i}
@@ -557,53 +570,81 @@ function SkillsInput({ classId, student, onChanged }) {
 // dibikin sederhana (tag chip biasa), beda dari SkillsInput yang lebih rumit
 // karena SkillsInput juga harus nanganin cuplikan kode.
 function RolesInput({ classId, student, onChanged }) {
+  // BUG LAMA: komponen ini sebelumnya baca `student.roles` langsung dari
+  // props tiap kali nambah/hapus jabatan. Props itu cuma keupdate SETELAH
+  // request PUT sebelumnya selesai & bubble balik ke parent — jadi kalau
+  // admin nambah 2 jabatan dengan cepat (mis. ketik "Ketua Kelas" lalu Enter,
+  // langsung disusul "Wakil OSIS" + Enter sebelum request pertama beres),
+  // request kedua masih mikir daftar jabatannya "kosong" (belum tau ada yang
+  // pertama), jadi yang kesimpen ke server cuma jabatan terakhir — punya
+  // duluan ketiban alias hilang. Efeknya kelihatan kayak "jabatan gak
+  // kesimpen" padahal sebenarnya konflik penulisan.
+  //
+  // FIX: simpen jabatan di state LOKAL (`roles`) sebagai sumber kebenaran
+  // untuk UI + perhitungan tambah/hapus berikutnya (bukan props), dan semua
+  // penyimpanan ke server diantrikan satu-satu lewat `queueRef` (promise
+  // chain) supaya gak ada dua request yang jalan bersamaan/tumpang tindih.
+  const [roles, setRoles] = useState(student.roles || []);
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const queueRef = useRef(Promise.resolve());
 
-  async function save(nextRoles) {
-    setBusy(true);
-    setError("");
-    try {
-      const res = await fetch(`/api/kelas/classes/${classId}/students/${student.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ roles: nextRoles }),
-      });
-      if (res.ok) {
-        onChanged(await res.json());
-      } else {
-        setError("Gagal menyimpan jabatan.");
+  // Kalau data murid berubah dari luar (misalnya abis dipindah kelas, atau
+  // polling ambil versi terbaru dari server), sinkron ulang — tapi JANGAN
+  // pas masih ada penyimpanan jabatan yang lagi berjalan, biar gak ketiban
+  // versi lama saat proses tambah/hapus di komponen ini masih berlangsung.
+  useEffect(() => {
+    if (!busy) setRoles(student.roles || []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [student.roles]);
+
+  function queueSave(nextRoles) {
+    setRoles(nextRoles); // langsung kelihatan di UI (optimistic)
+    queueRef.current = queueRef.current.then(async () => {
+      setBusy(true);
+      setError("");
+      try {
+        const res = await fetch(`/api/kelas/classes/${classId}/students/${student.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ roles: nextRoles }),
+        });
+        if (res.ok) {
+          const updated = await res.json();
+          onChanged(updated);
+        } else {
+          setError("Gagal menyimpan jabatan.");
+        }
+      } catch (err) {
+        setError("Gagal menyimpan (koneksi bermasalah).");
+      } finally {
+        setBusy(false);
       }
-    } catch (err) {
-      setError("Gagal menyimpan (koneksi bermasalah).");
-    } finally {
-      setBusy(false);
-    }
+    });
   }
 
   function addRole(e) {
     e.preventDefault();
     const value = draft.trim();
     if (!value) return;
-    const existing = student.roles || [];
-    if (existing.includes(value)) {
+    if (roles.includes(value)) {
       setDraft("");
       return;
     }
-    save([...existing, value]);
+    queueSave([...roles, value]);
     setDraft("");
   }
 
   function removeRoleAt(index) {
-    save((student.roles || []).filter((_, i) => i !== index));
+    queueSave(roles.filter((_, i) => i !== index));
   }
 
   return (
     <div className="w-full">
-      {(student.roles || []).length > 0 && (
+      {roles.length > 0 && (
         <div className="flex flex-wrap gap-1 justify-center mb-1">
-          {student.roles.map((r, i) => (
+          {roles.map((r, i) => (
             <span
               key={i}
               className="inline-flex items-center gap-1 text-[9px] mono uppercase bg-cetakGold/10 text-cetakGold border border-cetakGold/40 px-1.5 py-0.5"
@@ -626,7 +667,6 @@ function RolesInput({ classId, student, onChanged }) {
           className="field text-center text-[10px] py-1"
           placeholder="Jabatan (mis. Ketua Kelas)"
           value={draft}
-          disabled={busy}
           onChange={(e) => setDraft(e.target.value)}
         />
       </form>
@@ -1445,11 +1485,15 @@ export default function KelasManager({
   // Dipakai buat jeda polling sesaat pas ada aksi lokal (pindah/tambah/hapus)
   // lagi jalan, supaya hasil optimistic-update di layar gak "ketimpa" balik
   // sama data server yang belum sempat konsisten (lihat catatan di
-  // kelas-store.js soal delay propagasi cache blob).
+  // kelas-store.js soal delay propagasi cache blob). Default dinaikkan dari
+  // 2.5 detik jadi 6 detik — 2.5 detik kadang lebih pendek dari waktu
+  // propagasi Blob storage-nya sendiri, jadi kadang keburu poll ulang &
+  // "menimpa balik" perubahan yang baru aja disimpan (kelihatan kayak
+  // gagal kesimpen padahal sebenarnya sudah tersimpan di server).
   const pausedUntilRef = useRef(0);
   const inFlightRef = useRef(false);
 
-  function pausePolling(ms = 2500) {
+  function pausePolling(ms = 6000) {
     pausedUntilRef.current = Date.now() + ms;
   }
 
@@ -1606,7 +1650,7 @@ export function AlumniManager({ initialTeachers, initialClasses }) {
   const pausedUntilRef = useRef(0);
   const inFlightRef = useRef(false);
 
-  function pausePolling(ms = 2500) {
+  function pausePolling(ms = 6000) {
     pausedUntilRef.current = Date.now() + ms;
   }
 

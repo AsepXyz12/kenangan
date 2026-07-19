@@ -89,6 +89,47 @@ export async function deletePhoto(id) {
   return true;
 }
 
+function detectMediaType(contentType) {
+  const ct = (contentType || "").toString().trim();
+  if (ct.startsWith("video/")) return "video";
+  if (ct.startsWith("audio/")) return "audio";
+  if (ct.startsWith("image/")) return "image";
+  return "file";
+}
+
+// Nambah satu/lebih media BARU ke kenangan yang SUDAH ADA (dipakai dari
+// halaman edit) — jadi kalau salah upload atau kurang, admin tinggal tambah
+// atau hapus media satu-satu tanpa perlu hapus seluruh kenangan & upload
+// ulang semuanya dari nol.
+export async function addMediaItems(id, newItems) {
+  const photos = await readPhotos();
+  const photo = photos.find((p) => p.id === id);
+  if (!photo) return null;
+
+  const toAdd = (Array.isArray(newItems) ? newItems : [])
+    .map((it) => ({
+      url: (it.url || "").toString().trim(),
+      contentType: (it.contentType || "").toString().trim(),
+      mediaType: it.mediaType || detectMediaType(it.contentType),
+    }))
+    .filter((it) => it.url);
+  if (toAdd.length === 0) return photo;
+
+  const items = Array.isArray(photo.items) ? photo.items : [];
+  photo.items = [...items, ...toAdd];
+  // Kalau kenangan ini sebelumnya kosong (kasus data lama tanpa items sama
+  // sekali), pastikan field url/mediaType/contentType lama (dipakai kode
+  // lama) ikut terisi dari item pertama.
+  if (!photo.url && photo.items[0]) {
+    photo.url = photo.items[0].url;
+    photo.mediaType = photo.items[0].mediaType;
+    photo.contentType = photo.items[0].contentType;
+  }
+
+  await writePhotos(photos);
+  return photo;
+}
+
 export async function removeMediaItem(id, index) {
   const photos = await readPhotos();
   const photo = photos.find((p) => p.id === id);
