@@ -32,7 +32,10 @@ function StudentCard({ student, tape }) {
           <img
             src={student.photoUrl}
             alt={student.name}
-            className="w-full h-full object-cover"
+            // object-contain (bukan object-cover) supaya foto ukuran/rasio
+            // apa pun (potrait, landscape, kotak) selalu tampil utuh, gak
+            // dipaksa crop jadi kotak dan motong bagian wajah.
+            className="w-full h-full object-contain"
           />
         ) : (
           <span className="font-stamp text-2xl text-emerald/30">
@@ -44,8 +47,8 @@ function StudentCard({ student, tape }) {
         {student.name}
       </p>
       {student.hobby && (
-        <p className="text-center text-[9px] text-gold uppercase tracking-wide mt-0.5 truncate">
-          {student.hobby}
+        <p className="text-center text-[8px] uppercase tracking-[0.15em] text-gold/80 mt-1 truncate">
+          Hobi: {student.hobby}
         </p>
       )}
     </Link>
@@ -137,7 +140,7 @@ export default async function KelasPage() {
                   <div className="aspect-square w-full bg-parchment2 flex items-center justify-center overflow-hidden">
                     {t.photoUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={t.photoUrl} alt={t.name} className="w-full h-full object-cover" />
+                      <img src={t.photoUrl} alt={t.name} className="w-full h-full object-contain" />
                     ) : (
                       <span className="font-stamp text-2xl text-emerald/30">{initials(t.name)}</span>
                     )}

@@ -82,7 +82,7 @@ export default async function MuridPage({ params }) {
                 alt={student.name}
                 width={440}
                 height={440}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             ) : (
               <span className="font-stamp text-5xl text-emerald/30">
