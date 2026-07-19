@@ -35,7 +35,7 @@ export default function EditForm({ photo }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 border border-line p-5">
+    <form onSubmit={handleSubmit} className="admin-panel space-y-4 border border-line p-5">
       <div>
         <label className="block text-xs uppercase tracking-wide text-ink/60 mono mb-1">
           Judul

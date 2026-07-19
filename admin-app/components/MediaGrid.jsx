@@ -35,7 +35,7 @@ export default function MediaGrid({ photoId, items }) {
         {items.map((item, i) => (
           <div
             key={`${item.url}-${i}`}
-            className="relative aspect-square bg-line/30 border border-line overflow-hidden group"
+            className="admin-thumb relative aspect-square bg-line/30 border border-line overflow-hidden group"
           >
             {item.mediaType === "video" ? (
               <video src={item.url} className="w-full h-full object-cover" muted />

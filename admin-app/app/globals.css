@@ -187,7 +187,13 @@ html.enhanced input,
 html.enhanced select,
 html.enhanced textarea,
 html.enhanced .field,
-html.enhanced main > section {
+html.enhanced main > section,
+html.enhanced .admin-panel,
+html.enhanced .admin-panel-list,
+html.enhanced .admin-dropzone,
+html.enhanced .admin-chip,
+html.enhanced .admin-link-btn,
+html.enhanced .admin-thumb {
   transition:
     background-color 0.2s ease,
     border-color 0.2s ease,
@@ -285,6 +291,69 @@ html.enhanced main > section > div > a.mono:hover {
 /* Heading utama: sedikit lebih hidup */
 html.enhanced h1 {
   text-shadow: 0 2px 10px rgba(18, 56, 50, 0.1);
+}
+
+/* ---------------------------------------------------------------------
+   Class eksplisit untuk wrapper/komponen yang tadinya cuma pakai
+   "border border-line" generik (form Unggah Media, Pengaturan Logo, Edit
+   Form, list Komentar/Media, dsb). Ini SENGAJA memakai class baru yang
+   ditambahkan manual satu-satu ke tiap komponen (bukan selector
+   "border-line" langsung), supaya cuma wrapper besar yang dimaksud yang
+   kena — bukan kartu-kartu kecil di dalam grid kelas/murid yang juga
+   kebetulan pakai border serupa (itu penyebab bug melebar versi awal).
+   --------------------------------------------------------------------- */
+
+/* Panel/form besar: Unggah Media, Pengaturan Logo, Edit Form */
+html.enhanced .admin-panel {
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(18, 56, 50, 0.08) !important;
+  box-shadow: 0 4px 18px -10px rgba(18, 56, 50, 0.15);
+}
+
+/* List besar: Semua Media, Komentar */
+html.enhanced .admin-panel-list {
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(18, 56, 50, 0.08) !important;
+  box-shadow: 0 4px 18px -10px rgba(18, 56, 50, 0.15);
+}
+
+/* Dropzone "Pilih foto, video, atau audio" */
+html.enhanced .admin-dropzone {
+  border-radius: 12px;
+  background: rgba(18, 56, 50, 0.02);
+}
+
+html.enhanced .admin-dropzone:hover {
+  background: rgba(18, 56, 50, 0.04);
+}
+
+/* Chip daftar file yang sudah dipilih di form upload */
+html.enhanced .admin-chip {
+  border-radius: 8px;
+}
+
+/* Link "Ganti logo / Unggah logo" jadi terlihat seperti tombol kecil */
+html.enhanced .admin-link-btn {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none !important;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(18, 56, 50, 0.08);
+  border: 1px solid rgba(18, 56, 50, 0.15);
+}
+
+html.enhanced .admin-link-btn:hover {
+  background: rgba(18, 56, 50, 0.14);
+}
+
+/* Thumbnail kecil di grid multi-media (radius kecil, bukan besar — kotak
+   ini terlalu kecil untuk radius 14px seperti panel) */
+html.enhanced .admin-thumb {
+  border-radius: 6px;
 }
 
 /* Tombol toggle itu sendiri */

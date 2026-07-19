@@ -58,7 +58,7 @@ export default function LogoSettings({ initialSettings }) {
   const isBusy = status === "uploading" || status === "saving";
 
   return (
-    <div className="border border-line p-5 space-y-5">
+    <div className="admin-panel border border-line p-5 space-y-5">
       <div>
         <label className="block text-xs uppercase tracking-wide text-ink/60 mono mb-2">
           Logo situs
@@ -76,7 +76,7 @@ export default function LogoSettings({ initialSettings }) {
           <div>
             <label
               htmlFor="logo-file"
-              className="text-xs uppercase mono text-accent cursor-pointer underline"
+              className="admin-link-btn text-xs uppercase mono text-accent cursor-pointer underline"
             >
               {logoUrl ? "Ganti logo" : "Unggah logo"}
             </label>

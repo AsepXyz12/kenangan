@@ -36,7 +36,7 @@ export default function CommentModeration({ photoId, initialComments }) {
           Belum ada komentar di foto ini.
         </p>
       ) : (
-        <ul className="divide-y divide-line border border-line">
+        <ul className="admin-panel-list divide-y divide-line border border-line">
           {comments.map((c) => (
             <li key={c.id} className="p-3 flex items-start gap-3">
               <div className="min-w-0 flex-1">

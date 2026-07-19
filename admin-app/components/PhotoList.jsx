@@ -38,7 +38,7 @@ export default function PhotoList({ photos }) {
   }
 
   return (
-    <ul className="divide-y divide-line border border-line">
+    <ul className="admin-panel-list divide-y divide-line border border-line">
       {photos.map((p) => (
         <li key={p.id} className="p-3 flex items-center gap-3">
           <div className="relative w-14 h-14 shrink-0 bg-line/30 overflow-hidden flex items-center justify-center">

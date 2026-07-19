@@ -102,14 +102,14 @@ export default function UploadForm() {
   const totalSize = files.reduce((sum, f) => sum + f.size, 0);
 
   return (
-    <form onSubmit={handleSubmit} className="mt-6 space-y-4 border border-line p-5">
+    <form onSubmit={handleSubmit} className="admin-panel mt-6 space-y-4 border border-line p-5">
       <div>
         <label className="block text-xs uppercase tracking-wide text-ink/60 mono mb-1">
           Media
         </label>
         <label
           htmlFor="photo-file"
-          className="flex flex-col items-center justify-center gap-1 border border-dashed border-line bg-white px-4 py-6 text-center cursor-pointer hover:border-accent/50 transition-colors"
+          className="admin-dropzone flex flex-col items-center justify-center gap-1 border border-dashed border-line bg-white px-4 py-6 text-center cursor-pointer hover:border-accent/50 transition-colors"
         >
           <span className="text-xs uppercase tracking-wide mono">
             {files.length > 0 ? "Tambah / ganti pilihan" : "Pilih foto, video, atau audio"}
@@ -135,11 +135,11 @@ export default function UploadForm() {
         </p>
 
         {files.length > 0 && (
-          <ul className="mt-3 space-y-1.5 max-h-48 overflow-y-auto">
+          <ul className="admin-chip-list mt-3 space-y-1.5 max-h-48 overflow-y-auto">
             {files.map((f, i) => (
               <li
                 key={`${f.name}-${i}`}
-                className="flex items-center justify-between gap-2 text-xs bg-line/10 px-2.5 py-1.5"
+                className="admin-chip flex items-center justify-between gap-2 text-xs bg-line/10 px-2.5 py-1.5"
               >
                 <span className="truncate text-ink/70">{f.name}</span>
                 <span className="shrink-0 flex items-center gap-2">
