@@ -47,17 +47,13 @@ function StudentCard({ student, tape }) {
         {student.name}
       </p>
       {student.hobby && (
-        <div className="mt-1 text-center px-1">
-          <p className="text-[7px] uppercase tracking-[0.2em] text-gold/70">
-            Hobi
-          </p>
-          {/* line-clamp-2 (bukan truncate 1 baris) supaya hobi yang agak
-              panjang (mis. "Renang Bersama") tetap kebaca 2 baris, baru
-              dipotong "..." kalau memang kepanjangan banget */}
-          <p className="text-[9px] leading-tight text-ink/70 line-clamp-2">
-            {student.hobby}
-          </p>
-        </div>
+        // Format "Hobi: ..." nempel satu baris kayak biasa. Kalau kepanjangan,
+        // otomatis wrap turun ke baris ke-2 (bukan dipotong "..."), dibatasi
+        // line-clamp-2 aja biar kartu gak jadi tinggi banget kalau ada yang
+        // isi hobinya kepanjangan banget.
+        <p className="mt-1 text-center text-[8px] uppercase tracking-[0.15em] text-gold/80 leading-snug line-clamp-2 px-1">
+          Hobi: {student.hobby}
+        </p>
       )}
     </Link>
   );
