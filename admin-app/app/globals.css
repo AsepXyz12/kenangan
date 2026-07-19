@@ -155,3 +155,144 @@ code,
     content: none !important; /* jangan tampilkan URL link pas print */
   }
 }
+
+/* =====================================================================
+   MODE BAGUS (enhanced) — panel admin sengaja dibuat polos & cepat secara
+   default (lihat komentar di README). Blok ini menambahkan lapisan visual
+   modern murni lewat CSS ketika <html> punya class "enhanced" (dikontrol
+   EnhancedModeToggle.jsx + localStorage). Tidak ada markup yang berubah,
+   jadi mematikan toggle mengembalikan tampilan 100% seperti semula.
+   ===================================================================== */
+
+html.enhanced body {
+  background:
+    radial-gradient(900px 500px at 10% -10%, rgba(18, 56, 50, 0.05), transparent 60%),
+    radial-gradient(800px 500px at 100% 0%, rgba(184, 146, 63, 0.07), transparent 55%),
+    #fbfaf7;
+}
+
+html.enhanced * {
+  transition:
+    background-color 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.22s ease;
+}
+
+/* Tombol utama: gradient + shadow + hover-lift, rounded modern */
+html.enhanced .btn {
+  border-radius: 10px;
+  border: none;
+  background-image: linear-gradient(135deg, #1e5c50 0%, #123832 55%, #0d2b26 100%);
+  box-shadow:
+    0 4px 10px -2px rgba(18, 56, 50, 0.4),
+    0 1px 2px rgba(18, 56, 50, 0.2);
+}
+
+html.enhanced .btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 20px -4px rgba(18, 56, 50, 0.45),
+    0 2px 4px rgba(18, 56, 50, 0.25);
+}
+
+html.enhanced .btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+html.enhanced .btn-outline {
+  border-radius: 10px;
+  border: 1.5px solid rgba(18, 56, 50, 0.35);
+  box-shadow: 0 1px 2px rgba(18, 56, 50, 0.06);
+}
+
+html.enhanced .btn-outline:hover {
+  border-color: #123832;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px -3px rgba(18, 56, 50, 0.25);
+}
+
+html.enhanced .btn-danger {
+  border-radius: 10px;
+  border: 1.5px solid rgba(168, 73, 46, 0.45);
+  box-shadow: 0 1px 2px rgba(168, 73, 46, 0.08);
+}
+
+html.enhanced .btn-danger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px -4px rgba(168, 73, 46, 0.35);
+}
+
+/* Input & field: rounded, shadow tipis, ring lembut saat fokus */
+html.enhanced .field {
+  border-radius: 10px;
+  border-color: rgba(28, 28, 28, 0.14);
+  box-shadow: 0 1px 2px rgba(18, 56, 50, 0.05);
+}
+
+html.enhanced .field:focus {
+  box-shadow:
+    0 0 0 3px rgba(18, 56, 50, 0.15),
+    0 1px 2px rgba(18, 56, 50, 0.05);
+  transform: translateY(-1px);
+}
+
+/* Kartu/section jadi panel melayang: rounded + border tipis + shadow */
+html.enhanced main > div,
+html.enhanced section {
+  border-radius: 14px;
+}
+
+html.enhanced section {
+  padding: 1.25rem 1.5rem;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(18, 56, 50, 0.08);
+  box-shadow: 0 4px 18px -10px rgba(18, 56, 50, 0.15);
+}
+
+/* Link mono (Profil Kelas, Dashboard Alumni, Cetak) jadi chip halus */
+html.enhanced a.mono.underline {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none !important;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(18, 56, 50, 0.06);
+  border: 1px solid rgba(18, 56, 50, 0.1);
+}
+
+html.enhanced a.mono.underline:hover {
+  background: rgba(18, 56, 50, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Heading utama: sedikit lebih hidup */
+html.enhanced h1 {
+  text-shadow: 0 2px 10px rgba(18, 56, 50, 0.1);
+}
+
+/* Tombol toggle itu sendiri */
+html.enhanced .enhanced-toggle-btn {
+  border-radius: 999px !important;
+  box-shadow: 0 10px 24px -8px rgba(18, 56, 50, 0.5) !important;
+}
+
+.enhanced-toggle-btn {
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.enhanced-toggle-btn:hover {
+  transform: translateY(-2px);
+}
+
+.enhanced-toggle-btn:active {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.enhanced * {
+    transition: none !important;
+  }
+}

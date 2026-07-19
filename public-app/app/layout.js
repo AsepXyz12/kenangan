@@ -1,5 +1,6 @@
 import { Fraunces, Karla, Space_Mono } from "next/font/google";
 import { readSettings } from "@/lib/store";
+import EnhancedModeToggle from "@/components/EnhancedModeToggle";
 import "./globals.css";
 import "highlight.js/styles/atom-one-dark.css";
 
@@ -40,6 +41,7 @@ export default function RootLayout({ children }) {
         className={`${display.variable} ${body.variable} ${stamp.variable} font-body bg-parchment text-ink`}
       >
         {children}
+        <EnhancedModeToggle />
       </body>
     </html>
   );

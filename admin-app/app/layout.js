@@ -1,4 +1,5 @@
 import "./globals.css";
+import EnhancedModeToggle from "@/components/EnhancedModeToggle";
 
 export const metadata = {
   title: "Admin · Galeri Kenangan MA",
@@ -9,7 +10,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="id">
-      <body className="bg-paper text-ink antialiased">{children}</body>
+      <body className="bg-paper text-ink antialiased">
+        {children}
+        <EnhancedModeToggle />
+      </body>
     </html>
   );
 }
