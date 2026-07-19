@@ -47,12 +47,20 @@ export default async function HomePage() {
               </>
             )}
           </div>
-          <a
-            href="/kelas"
-            className="inline-block mt-5 font-stamp text-xs uppercase tracking-wide text-emerald underline"
-          >
-            Lihat Profil Kelas &amp; Wali Kelas &rarr;
-          </a>
+          <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2">
+            <a
+              href="/kelas"
+              className="font-stamp text-xs uppercase tracking-wide text-emerald underline"
+            >
+              Lihat Profil Kelas &amp; Wali Kelas &rarr;
+            </a>
+            <a
+              href="/alumni"
+              className="font-stamp text-xs uppercase tracking-wide text-clay underline"
+            >
+              Lihat Alumni &amp; Angkatan &rarr;
+            </a>
+          </div>
           <hr className="thread mt-8" />
         </div>
       </header>

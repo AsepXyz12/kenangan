@@ -1,111 +1,20 @@
-import Link from "next/link";
-import { readKelas, getAngkatanGroups } from "@/lib/kelas-store";
+import { readKelas } from "@/lib/kelas-store";
 import { readSettings } from "@/lib/store";
+import { ClassSection, TAPES, initials } from "@/components/KelasCards";
 
 export const dynamic = "force-dynamic";
-
-const TAPES = ["gold", "clay", "dusk"];
-
-function initials(name) {
-  return (
-    (name || "?")
-      .trim()
-      .split(/\s+/)
-      .slice(0, 2)
-      .map((w) => w[0]?.toUpperCase())
-      .join("") || "?"
-  );
-}
-
-function StudentCard({ student, tape }) {
-  return (
-    <Link
-      href={`/murid/${student.id}`}
-      data-tape={tape}
-      className="polaroid relative block w-full max-w-[150px] mx-auto rotate-[var(--r)]"
-      style={{ "--r": `${((student.name?.length || 0) % 5) - 2}deg` }}
-    >
-      <span className="stamp-tape" />
-      <div className="aspect-square w-full bg-parchment2 flex items-center justify-center overflow-hidden">
-        {student.photoUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={student.photoUrl}
-            alt={student.name}
-            // object-cover + object-top: tetap ngisi penuh kotak (rapi),
-            // tapi crop-nya diprioritasin motong bagian bawah/pinggir foto
-            // dulu, bukan dari tengah — soalnya muka biasanya ada di bagian
-            // atas foto (selfie/portrait), jadi mukanya gak ikut kepotong.
-            className="w-full h-full object-cover object-top"
-          />
-        ) : (
-          <span className="font-stamp text-2xl text-emerald/30">
-            {initials(student.name)}
-          </span>
-        )}
-      </div>
-      <p className="mt-2 text-center font-stamp text-xs uppercase tracking-wide text-ink/70 truncate">
-        {student.name}
-      </p>
-      {student.hobby && (
-        // Format "Hobi: ..." nempel satu baris kayak biasa. Kalau kepanjangan,
-        // otomatis wrap turun ke baris ke-2 (bukan dipotong "..."), dibatasi
-        // line-clamp-2 aja biar kartu gak jadi tinggi banget kalau ada yang
-        // isi hobinya kepanjangan banget.
-        <p className="mt-1 text-center text-[8px] uppercase tracking-[0.15em] text-gold/80 leading-snug line-clamp-2 px-1">
-          Hobi: {student.hobby}
-        </p>
-      )}
-    </Link>
-  );
-}
-
-function ClassSection({ kelas, teachers }) {
-  const wali = (kelas.waliKelasIds || [])
-    .map((id) => teachers.find((t) => t.id === id))
-    .filter(Boolean);
-
-  return (
-    <section className="mb-16">
-      <h2 className="font-display italic text-3xl sm:text-4xl text-emerald">
-        {kelas.name}
-      </h2>
-      {wali.length > 0 && (
-        <p className="mt-2 font-stamp text-xs uppercase tracking-wide text-ink/50">
-          Wali kelas: {wali.map((w) => w.name).join(" & ")}
-        </p>
-      )}
-      <hr className="thread mt-5 mb-7" />
-      {kelas.students.length === 0 ? (
-        <p className="text-sm text-ink/40">Belum ada data murid.</p>
-      ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-x-4 gap-y-8">
-          {kelas.students.map((s, i) => (
-            <StudentCard key={s.id} student={s} tape={TAPES[i % TAPES.length]} />
-          ))}
-        </div>
-      )}
-    </section>
-  );
-}
 
 export default async function KelasPage() {
   const { teachers, classes } = await readKelas();
   const settings = await readSettings();
   const siteName = settings.siteName || "Galeri Kenangan MA";
 
+  // Halaman ini KHUSUS kelas yang masih aktif. Kelas yang sudah jadi alumni
+  // (dikelompokkan per angkatan) ada di halaman terpisah: /alumni.
   const active = [...classes]
     .filter((c) => !c.isAlumni)
     .sort((a, b) => (a.order || 0) - (b.order || 0));
-  const alumniClasses = classes.filter((c) => c.isAlumni);
-  const angkatanGroups = getAngkatanGroups(alumniClasses);
-  // Kelas alumni yang tahun masuknya belum diketahui (data lama tanpa
-  // graduatedYear/entryYear) tetap ditampilkan, tapi di luar pengelompokan
-  // angkatan — supaya datanya tidak hilang begitu saja dari halaman publik.
-  const groupedIds = new Set(angkatanGroups.flatMap((g) => g.classes.map((c) => c.id)));
-  const alumniTanpaAngkatan = alumniClasses
-    .filter((c) => !groupedIds.has(c.id))
-    .sort((a, b) => (a.order || 0) - (b.order || 0));
+  const alumniCount = classes.filter((c) => c.isAlumni).length;
 
   return (
     <main>
@@ -117,21 +26,36 @@ export default async function KelasPage() {
           Profil Kelas
         </h1>
         <p className="mt-4 max-w-xl text-ink/70 leading-relaxed">
-          Wali kelas, guru mata pelajaran, dan wajah-wajah setiap kelas —
-          dikumpulkan sedikit demi sedikit sampai lengkap.
+          Wali kelas, guru mata pelajaran, dan wajah-wajah setiap kelas yang
+          masih aktif — dikumpulkan sedikit demi sedikit sampai lengkap.
         </p>
-        <a
-          href="/"
-          className="inline-block mt-4 font-stamp text-xs uppercase tracking-wide text-emerald underline"
-        >
-          &larr; Kembali ke galeri
-        </a>
+        <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
+          <a
+            href="/"
+            className="font-stamp text-xs uppercase tracking-wide text-emerald underline"
+          >
+            &larr; Kembali ke galeri
+          </a>
+          {alumniCount > 0 && (
+            <a
+              href="/alumni"
+              className="font-stamp text-xs uppercase tracking-wide text-clay underline"
+            >
+              Lihat Alumni &amp; Angkatan &rarr;
+            </a>
+          )}
+        </div>
         <hr className="thread mt-8" />
       </header>
 
       <div className="max-w-5xl mx-auto px-6 py-10">
         {classes.length === 0 && (
           <p className="text-ink/50 text-sm">Belum ada data kelas.</p>
+        )}
+        {classes.length > 0 && active.length === 0 && (
+          <p className="text-ink/50 text-sm mb-10">
+            Belum ada kelas aktif saat ini.
+          </p>
         )}
 
         {active.map((kelas) => (
@@ -168,45 +92,18 @@ export default async function KelasPage() {
           </section>
         )}
 
-        {angkatanGroups.length > 0 && (
-          <section>
+        {alumniCount > 0 && (
+          <a
+            href="/alumni"
+            className="block border border-dashed border-clay/40 px-6 py-8 text-center hover:bg-clay/5 transition-colors"
+          >
             <p className="font-stamp text-xs tracking-[0.25em] uppercase text-clay mb-2">
               Arsip
             </p>
-            <h2 className="font-display italic text-4xl sm:text-5xl text-emerald mb-8">
-              Alumni
-            </h2>
-            {angkatanGroups.map((group) => (
-              <div key={group.entryYear} className="mb-16">
-                <div className="flex items-baseline gap-3 mb-1">
-                  <span className="font-stamp text-xs uppercase tracking-wide bg-emerald text-parchment px-2 py-0.5">
-                    Angkatan {group.angkatanNumber}
-                  </span>
-                  <span className="font-stamp text-xs uppercase tracking-wide text-ink/50">
-                    Masuk {group.entryYear} &middot; Lulus {group.graduationYear}
-                  </span>
-                </div>
-                <hr className="thread mt-4 mb-7" />
-                {group.classes.map((kelas) => (
-                  <ClassSection key={kelas.id} kelas={kelas} teachers={teachers} />
-                ))}
-              </div>
-            ))}
-          </section>
-        )}
-
-        {alumniTanpaAngkatan.length > 0 && (
-          <section>
-            <p className="font-stamp text-xs tracking-[0.25em] uppercase text-clay mb-2">
-              Arsip
+            <p className="font-display italic text-2xl text-emerald">
+              Lihat {alumniCount} kelas alumni, dikelompokkan per angkatan &rarr;
             </p>
-            <h2 className="font-display italic text-3xl sm:text-4xl text-emerald mb-6">
-              Alumni lainnya
-            </h2>
-            {alumniTanpaAngkatan.map((kelas) => (
-              <ClassSection key={kelas.id} kelas={kelas} teachers={teachers} />
-            ))}
-          </section>
+          </a>
         )}
       </div>
 
