@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { upload } from "@vercel/blob/client";
+import PhotoCropModal from "./PhotoCropModal";
 
 async function uploadPhoto(file) {
   const blob = await upload(file.name, file, {
@@ -93,6 +94,7 @@ function TeacherRow({ teacher, onChanged, onDeleted }) {
   const [busy, setBusy] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const [cropFile, setCropFile] = useState(null);
 
   async function save() {
     setBusy(true);
@@ -165,7 +167,17 @@ function TeacherRow({ teacher, onChanged, onDeleted }) {
           placeholder="Mapel, dipisah koma"
         />
         <div className="flex items-center gap-2">
-          <PhotoButton label="Foto" busy={uploading} onPicked={handlePhoto} />
+          <PhotoButton label="Foto" busy={uploading} onPicked={setCropFile} />
+          {cropFile && (
+            <PhotoCropModal
+              file={cropFile}
+              onCancel={() => setCropFile(null)}
+              onConfirm={(croppedFile) => {
+                setCropFile(null);
+                handlePhoto(croppedFile);
+              }}
+            />
+          )}
           <button
             type="button"
             disabled={busy}
@@ -517,6 +529,7 @@ function StudentCard({ classId, student, otherClasses, onChanged, onDeleted, onM
   const [error, setError] = useState("");
   const [moveTarget, setMoveTarget] = useState("");
   const [moving, setMoving] = useState(false);
+  const [cropFile, setCropFile] = useState(null);
 
   async function save() {
     setSaving(true);
@@ -656,8 +669,18 @@ function StudentCard({ classId, student, otherClasses, onChanged, onDeleted, onM
         <PhotoButton
           label={student.photoUrl ? "Ganti foto" : "Upload foto"}
           busy={uploading}
-          onPicked={handlePhoto}
+          onPicked={setCropFile}
         />
+        {cropFile && (
+          <PhotoCropModal
+            file={cropFile}
+            onCancel={() => setCropFile(null)}
+            onConfirm={(croppedFile) => {
+              setCropFile(null);
+              handlePhoto(croppedFile);
+            }}
+          />
+        )}
         <button
           type="button"
           onClick={remove}

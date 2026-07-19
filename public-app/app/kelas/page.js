@@ -32,10 +32,11 @@ function StudentCard({ student, tape }) {
           <img
             src={student.photoUrl}
             alt={student.name}
-            // object-contain (bukan object-cover) supaya foto ukuran/rasio
-            // apa pun (potrait, landscape, kotak) selalu tampil utuh, gak
-            // dipaksa crop jadi kotak dan motong bagian wajah.
-            className="w-full h-full object-contain"
+            // object-cover + object-top: tetap ngisi penuh kotak (rapi),
+            // tapi crop-nya diprioritasin motong bagian bawah/pinggir foto
+            // dulu, bukan dari tengah — soalnya muka biasanya ada di bagian
+            // atas foto (selfie/portrait), jadi mukanya gak ikut kepotong.
+            className="w-full h-full object-cover object-top"
           />
         ) : (
           <span className="font-stamp text-2xl text-emerald/30">
@@ -144,7 +145,7 @@ export default async function KelasPage() {
                   <div className="aspect-square w-full bg-parchment2 flex items-center justify-center overflow-hidden">
                     {t.photoUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={t.photoUrl} alt={t.name} className="w-full h-full object-contain" />
+                      <img src={t.photoUrl} alt={t.name} className="w-full h-full object-cover object-top" />
                     ) : (
                       <span className="font-stamp text-2xl text-emerald/30">{initials(t.name)}</span>
                     )}
