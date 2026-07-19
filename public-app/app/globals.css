@@ -87,16 +87,16 @@ body {
 }
 
 .folder-tab {
-  width: 52%;
-  height: 16px;
+  width: 66%;
+  min-height: 20px;
   margin-left: 6%;
   background: #e7d9ae;
   border: 1px solid rgba(18, 56, 50, 0.25);
   border-bottom: none;
-  clip-path: polygon(0% 100%, 0% 35%, 12% 0%, 100% 0%, 100% 100%);
+  clip-path: polygon(0 100%, 0 14px, 14px 0, 100% 0, 100% 100%);
   display: flex;
   align-items: center;
-  overflow: hidden;
+  padding: 3px 10px 3px 14px;
   position: relative;
   z-index: 1;
 }

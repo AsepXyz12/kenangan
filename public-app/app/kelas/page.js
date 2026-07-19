@@ -69,10 +69,10 @@ export default async function KelasPage() {
             <hr className="thread mt-5 mb-7" />
             <a
               href="/kelas/guru"
-              className="folder-card relative block w-full max-w-[200px] rotate-[-1.5deg]"
+              className="folder-card relative block w-full max-w-md ml-auto mr-4 rotate-[-1.5deg]"
             >
               <div className="folder-tab">
-                <span className="font-stamp text-[9px] uppercase tracking-wide text-emerald/70 truncate px-2">
+                <span className="font-stamp text-[10px] leading-tight uppercase tracking-wide text-emerald/70 break-words">
                   Guru & Mapel
                 </span>
               </div>

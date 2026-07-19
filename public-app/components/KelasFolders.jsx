@@ -20,7 +20,7 @@ export default function KelasFolders({ classes, teachers }) {
   if (classes.length === 0) return null;
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-12">
+    <div className="grid grid-cols-1 gap-y-9">
       {classes.map((kelas) => {
         const wali = (kelas.waliKelasIds || [])
           .map((id) => teachers.find((t) => t.id === id))
@@ -30,11 +30,11 @@ export default function KelasFolders({ classes, teachers }) {
           <Link
             key={kelas.id}
             href={`/kelas/${kelas.id}`}
-            className="folder-card relative block w-full max-w-[200px] mx-auto rotate-[var(--r)]"
+            className="folder-card relative block w-full max-w-md ml-auto mr-4 rotate-[var(--r)]"
             style={{ "--r": `${((kelas.name?.length || 0) % 5) - 2}deg` }}
           >
             <div className="folder-tab">
-              <span className="font-stamp text-[9px] uppercase tracking-wide text-emerald/70 truncate px-2">
+              <span className="font-stamp text-[10px] leading-tight uppercase tracking-wide text-emerald/70 break-words">
                 {kelas.name}
               </span>
             </div>
