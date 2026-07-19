@@ -209,6 +209,11 @@ function runAutoPromotionIfDue(data) {
         order: slot.order,
         isAlumni: true,
         graduatedYear: p.graduationYear,
+        // MA di sini 3 tahun (Kelas 1 -> 2 -> 3 lalu lulus), jadi angkatan
+        // yang baru lulus tahun `graduationYear` pasti masuk 3 tahun
+        // sebelumnya. Diisi otomatis di sini supaya publik langsung tahu
+        // "Angkatan berapa" tanpa admin perlu input manual lagi.
+        entryYear: p.graduationYear - 3,
         waliKelasIds: [...(slot.waliKelasIds || [])],
         students: slot.students.map((s) => ({ ...s })),
       });
@@ -320,6 +325,68 @@ export async function undoLastPromotion() {
   p.enabled = false;
   await writeKelas(data);
   return { undone: true, data };
+}
+
+// ---------- Angkatan (tahun masuk / tahun lulus) ----------
+//
+// MA di sini ditempuh 3 tahun, jadi begitu tahun masuk diketahui, tahun
+// lulusnya otomatis tahun masuk + 3 — tidak perlu diisi manual dua-duanya.
+// `entryYear` diisi otomatis oleh runAutoPromotionIfDue waktu sebuah kelas
+// jadi alumni; buat data lama yang cuma punya `graduatedYear` (atau data
+// alumni yang ditambah manual tanpa entryYear), kita turunkan tahun masuknya
+// dari situ supaya tetap kebaca angkatannya.
+
+export function getEntryYear(kelas) {
+  if (Number.isInteger(kelas.entryYear)) return kelas.entryYear;
+  if (Number.isInteger(kelas.graduatedYear)) return kelas.graduatedYear - 3;
+  return null;
+}
+
+export function getGraduationYear(kelas) {
+  const entryYear = getEntryYear(kelas);
+  if (entryYear != null) return entryYear + 3;
+  return null;
+}
+
+// Kelompokkan semua kelas (biasanya yang isAlumni: true) yang tahun masuknya
+// diketahui jadi per-angkatan (satu tahun masuk = satu angkatan, walau ada
+// beberapa "kelas" — misal IPA & IPS — yang lulus bareng di tahun yang sama).
+// Nomor angkatan dihitung dari yang PALING LAMA = Angkatan 1, makin baru
+// makin besar nomornya. Hasil dikembalikan terurut dari yang PALING BARU ke
+// yang paling lama (nomor terbesar duluan), sesuai urutan tampil di halaman.
+// Sama seperti getAngkatanGroups, tapi hasilnya Map(classId -> nomor
+// angkatan) — dipakai di panel admin buat nampilin badge kecil "Angkatan #N"
+// di tiap kartu kelas alumni tanpa perlu mengubah tampilan daftar kelasnya.
+export function getAngkatanNumberByClassId(classes) {
+  const groups = getAngkatanGroups(classes);
+  const map = new Map();
+  for (const group of groups) {
+    for (const kelas of group.classes) {
+      map.set(kelas.id, group.angkatanNumber);
+    }
+  }
+  return map;
+}
+
+export function getAngkatanGroups(classes) {
+  const groups = new Map();
+  for (const kelas of classes) {
+    const entryYear = getEntryYear(kelas);
+    if (entryYear == null) continue;
+    if (!groups.has(entryYear)) {
+      groups.set(entryYear, {
+        entryYear,
+        graduationYear: entryYear + 3,
+        classes: [],
+      });
+    }
+    groups.get(entryYear).classes.push(kelas);
+  }
+  const ascending = Array.from(groups.values()).sort((a, b) => a.entryYear - b.entryYear);
+  ascending.forEach((group, i) => {
+    group.angkatanNumber = i + 1;
+  });
+  return ascending.reverse();
 }
 
 async function getUrl() {
@@ -450,13 +517,14 @@ export async function deleteTeacher(id) {
 
 // ---------- Kelas ----------
 
-export async function addClass({ name }) {
+export async function addClass({ name, entryYear }) {
   const data = await readKelasRaw();
   const kelas = {
     id: randomUUID(),
     name: name || "Kelas baru",
     order: data.classes.length + 1,
     isAlumni: false,
+    entryYear: Number.isInteger(entryYear) ? entryYear : null,
     waliKelasIds: [],
     students: [],
   };
@@ -473,6 +541,9 @@ export async function updateClass(id, patch) {
   if (Array.isArray(patch.waliKelasIds)) kelas.waliKelasIds = patch.waliKelasIds;
   if (typeof patch.isAlumni === "boolean") kelas.isAlumni = patch.isAlumni;
   if (typeof patch.order === "number") kelas.order = patch.order;
+  if (patch.entryYear === null || Number.isInteger(patch.entryYear)) {
+    kelas.entryYear = patch.entryYear;
+  }
   await writeKelas(data);
   return kelas;
 }

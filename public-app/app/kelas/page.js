@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { readKelas } from "@/lib/kelas-store";
+import { readKelas, getAngkatanGroups } from "@/lib/kelas-store";
 import { readSettings } from "@/lib/store";
 
 export const dynamic = "force-dynamic";
@@ -97,8 +97,14 @@ export default async function KelasPage() {
   const active = [...classes]
     .filter((c) => !c.isAlumni)
     .sort((a, b) => (a.order || 0) - (b.order || 0));
-  const alumni = [...classes]
-    .filter((c) => c.isAlumni)
+  const alumniClasses = classes.filter((c) => c.isAlumni);
+  const angkatanGroups = getAngkatanGroups(alumniClasses);
+  // Kelas alumni yang tahun masuknya belum diketahui (data lama tanpa
+  // graduatedYear/entryYear) tetap ditampilkan, tapi di luar pengelompokan
+  // angkatan — supaya datanya tidak hilang begitu saja dari halaman publik.
+  const groupedIds = new Set(angkatanGroups.flatMap((g) => g.classes.map((c) => c.id)));
+  const alumniTanpaAngkatan = alumniClasses
+    .filter((c) => !groupedIds.has(c.id))
     .sort((a, b) => (a.order || 0) - (b.order || 0));
 
   return (
@@ -162,15 +168,42 @@ export default async function KelasPage() {
           </section>
         )}
 
-        {alumni.length > 0 && (
+        {angkatanGroups.length > 0 && (
           <section>
             <p className="font-stamp text-xs tracking-[0.25em] uppercase text-clay mb-2">
               Arsip
             </p>
-            <h2 className="font-display italic text-4xl sm:text-5xl text-emerald mb-6">
+            <h2 className="font-display italic text-4xl sm:text-5xl text-emerald mb-8">
               Alumni
             </h2>
-            {alumni.map((kelas) => (
+            {angkatanGroups.map((group) => (
+              <div key={group.entryYear} className="mb-16">
+                <div className="flex items-baseline gap-3 mb-1">
+                  <span className="font-stamp text-xs uppercase tracking-wide bg-emerald text-parchment px-2 py-0.5">
+                    Angkatan {group.angkatanNumber}
+                  </span>
+                  <span className="font-stamp text-xs uppercase tracking-wide text-ink/50">
+                    Masuk {group.entryYear} &middot; Lulus {group.graduationYear}
+                  </span>
+                </div>
+                <hr className="thread mt-4 mb-7" />
+                {group.classes.map((kelas) => (
+                  <ClassSection key={kelas.id} kelas={kelas} teachers={teachers} />
+                ))}
+              </div>
+            ))}
+          </section>
+        )}
+
+        {alumniTanpaAngkatan.length > 0 && (
+          <section>
+            <p className="font-stamp text-xs tracking-[0.25em] uppercase text-clay mb-2">
+              Arsip
+            </p>
+            <h2 className="font-display italic text-3xl sm:text-4xl text-emerald mb-6">
+              Alumni lainnya
+            </h2>
+            {alumniTanpaAngkatan.map((kelas) => (
               <ClassSection key={kelas.id} kelas={kelas} teachers={teachers} />
             ))}
           </section>

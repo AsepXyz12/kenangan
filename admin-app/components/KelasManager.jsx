@@ -12,6 +12,35 @@ async function uploadPhoto(file) {
   return blob.url;
 }
 
+// ---------- Angkatan (tahun masuk / tahun lulus) ----------
+//
+// Sengaja diduplikasi dari lib/kelas-store.js (bukan di-import) karena file
+// itu juga mengekspor fungsi server (pakai @vercel/blob & crypto) yang tidak
+// boleh ikut ke bundle client. Logikanya harus tetap sama persis dengan versi
+// server & versi public-app: MA 3 tahun, jadi tahun lulus = tahun masuk + 3.
+function getEntryYear(kelas) {
+  if (Number.isInteger(kelas.entryYear)) return kelas.entryYear;
+  if (Number.isInteger(kelas.graduatedYear)) return kelas.graduatedYear - 3;
+  return null;
+}
+
+function computeAngkatanGroups(classes) {
+  const groups = new Map();
+  for (const kelas of classes) {
+    const entryYear = getEntryYear(kelas);
+    if (entryYear == null) continue;
+    if (!groups.has(entryYear)) {
+      groups.set(entryYear, { entryYear, graduationYear: entryYear + 3, classes: [] });
+    }
+    groups.get(entryYear).classes.push(kelas);
+  }
+  const ascending = Array.from(groups.values()).sort((a, b) => a.entryYear - b.entryYear);
+  ascending.forEach((group, i) => {
+    group.angkatanNumber = i + 1;
+  });
+  return ascending.reverse(); // paling baru duluan
+}
+
 function initials(name) {
   return (name || "?")
     .trim()
@@ -744,7 +773,16 @@ function AddStudent({ classId, onAdded }) {
 
 // ---------- Kelas ----------
 
-function ClassBlock({ kelas, teachers, allClasses, onChanged, onDeleted, onStudentMoved, onAllStudentsMoved }) {
+function ClassBlock({
+  kelas,
+  teachers,
+  allClasses,
+  angkatanNumber,
+  onChanged,
+  onDeleted,
+  onStudentMoved,
+  onAllStudentsMoved,
+}) {
   const [name, setName] = useState(kelas.name);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -849,6 +887,11 @@ function ClassBlock({ kelas, teachers, allClasses, onChanged, onDeleted, onStude
             />
             Alumni
           </label>
+          {kelas.isAlumni && angkatanNumber != null && (
+            <span className="text-[10px] uppercase mono px-1.5 py-0.5 border border-cetakGold text-cetakGold">
+              Angkatan {angkatanNumber}
+            </span>
+          )}
           <button
             type="button"
             disabled={busy}
@@ -858,6 +901,31 @@ function ClassBlock({ kelas, teachers, allClasses, onChanged, onDeleted, onStude
             Hapus kelas
           </button>
         </div>
+
+        {kelas.isAlumni && (
+          <div className="flex flex-wrap items-center gap-1.5 text-xs mono text-ink/60">
+            <label className="flex items-center gap-1.5">
+              Tahun masuk:
+              <input
+                type="number"
+                placeholder="mis. 2022"
+                defaultValue={kelas.entryYear ?? (kelas.graduatedYear ? kelas.graduatedYear - 3 : "")}
+                onBlur={(e) => {
+                  const val = e.target.value.trim();
+                  patch({ entryYear: val === "" ? null : Number(val) });
+                }}
+                className="field py-1 w-20 focus:border-accent"
+              />
+            </label>
+            <span className="text-ink/40">
+              (MA 3 tahun, jadi lulus otomatis dihitung{" "}
+              {(kelas.entryYear ?? (kelas.graduatedYear ? kelas.graduatedYear - 3 : null)) != null
+                ? (kelas.entryYear ?? kelas.graduatedYear - 3) + 3
+                : "—"}
+              )
+            </span>
+          </div>
+        )}
 
         {kelas.students.length > 0 && (
           <div className="flex flex-wrap items-center gap-1.5">
@@ -1271,7 +1339,11 @@ function PromotionPanel({ initialPromotion }) {
 // pendek biar kerasa "real-time" tapi gak spam server tiap detik.
 const POLL_INTERVAL_MS = 4000;
 
-export default function KelasManager({ initialTeachers, initialClasses, initialPromotion }) {
+export default function KelasManager({
+  initialTeachers,
+  initialClasses,
+  initialPromotion,
+}) {
   const [teachers, setTeachers] = useState(initialTeachers);
   const [classes, setClasses] = useState(
     [...initialClasses].sort((a, b) => (a.order || 0) - (b.order || 0))
@@ -1361,11 +1433,21 @@ export default function KelasManager({ initialTeachers, initialClasses, initialP
       </section>
 
       <section>
-        <h2 className="text-xs uppercase tracking-wide text-ink/50 mono mb-3">
-          Kelas & murid ({classes.length})
-        </h2>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-xs uppercase tracking-wide text-ink/50 mono">
+            Kelas & murid aktif ({classes.filter((c) => !c.isAlumni).length})
+          </h2>
+          <a
+            href="/alumni"
+            className="text-[11px] uppercase mono text-accent underline shrink-0"
+          >
+            Kelola alumni &rarr;
+          </a>
+        </div>
         <div className="space-y-6">
-          {classes.map((c) => (
+          {classes
+            .filter((c) => !c.isAlumni)
+            .map((c) => (
             <ClassBlock
               key={c.id}
               kelas={c}
@@ -1413,6 +1495,172 @@ export default function KelasManager({ initialTeachers, initialClasses, initialP
         <div className="mt-4">
           <AddClass onAdded={(c) => setClasses((prev) => [...prev, c])} />
         </div>
+      </section>
+    </div>
+  );
+}
+
+// ---------- Dashboard Alumni (terpisah dari dashboard Kelas) ----------
+//
+// Fokusnya beda dari KelasManager: di sini isinya CUMA kelas yang sudah jadi
+// alumni, dikelompokkan per angkatan (tahun masuk → tahun lulus), diurutkan
+// dari angkatan paling baru. Tambah kelas baru & kelola kelas aktif tetap di
+// dashboard Kelas — dashboard ini murni buat mengelola arsip alumni.
+export function AlumniManager({ initialTeachers, initialClasses }) {
+  const [teachers, setTeachers] = useState(initialTeachers);
+  const [classes, setClasses] = useState(initialClasses);
+  const pausedUntilRef = useRef(0);
+  const inFlightRef = useRef(false);
+
+  function pausePolling(ms = 2500) {
+    pausedUntilRef.current = Date.now() + ms;
+  }
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function poll() {
+      if (inFlightRef.current) return;
+      if (document.visibilityState !== "visible") return;
+      if (Date.now() < pausedUntilRef.current) return;
+      inFlightRef.current = true;
+      try {
+        const res = await fetch("/api/kelas/state", { cache: "no-store" });
+        if (res.ok && !cancelled) {
+          const data = await res.json();
+          setTeachers((prev) =>
+            JSON.stringify(prev) === JSON.stringify(data.teachers) ? prev : data.teachers
+          );
+          setClasses((prev) =>
+            JSON.stringify(prev) === JSON.stringify(data.classes) ? prev : data.classes
+          );
+        }
+      } catch (err) {
+        // Diam-diam gagal aja, coba lagi di interval berikutnya.
+      } finally {
+        inFlightRef.current = false;
+      }
+    }
+
+    const id = setInterval(poll, POLL_INTERVAL_MS);
+    document.addEventListener("visibilitychange", poll);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+      document.removeEventListener("visibilitychange", poll);
+    };
+  }, []);
+
+  const alumni = classes.filter((c) => c.isAlumni);
+  const groups = computeAngkatanGroups(alumni);
+  const groupedIds = new Set(groups.flatMap((g) => g.classes.map((c) => c.id)));
+  // Alumni lama yang belum ada tahun masuknya (data lama tanpa entryYear
+  // ataupun graduatedYear) — tetap ditampilkan biar gak "hilang", tinggal
+  // diisi tahun masuknya lewat kartu kelasnya masing-masing.
+  const ungrouped = alumni.filter((c) => !groupedIds.has(c.id));
+
+  function handleChanged(updated) {
+    pausePolling();
+    setClasses((prev) => prev.map((x) => (x.id === updated.id ? updated : x)));
+  }
+  function handleDeleted(id) {
+    pausePolling();
+    setClasses((prev) => prev.filter((x) => x.id !== id));
+  }
+  function handleStudentMoved(fromClassId, toClassId, student) {
+    pausePolling();
+    setClasses((prev) =>
+      prev.map((x) => {
+        if (x.id === fromClassId) {
+          return { ...x, students: x.students.filter((s) => s.id !== student.id) };
+        }
+        if (x.id === toClassId) {
+          return { ...x, students: [...x.students, student] };
+        }
+        return x;
+      })
+    );
+  }
+  function handleAllStudentsMoved(fromClassId, toClassId, movedStudents) {
+    pausePolling();
+    setClasses((prev) =>
+      prev.map((x) => {
+        if (x.id === fromClassId) return { ...x, students: [] };
+        if (x.id === toClassId) return { ...x, students: [...x.students, ...movedStudents] };
+        return x;
+      })
+    );
+  }
+
+  return (
+    <div className="space-y-10">
+      <section>
+        <h2 className="text-xs uppercase tracking-wide text-ink/50 mono mb-3">
+          Angkatan alumni ({alumni.length} kelas)
+        </h2>
+
+        {alumni.length === 0 && (
+          <p className="text-sm text-ink/40">
+            Belum ada kelas alumni. Kelas jadi alumni otomatis lewat kenaikan
+            kelas di dashboard Kelas, atau bisa ditandai manual di sana.
+          </p>
+        )}
+
+        <div className="space-y-10">
+          {groups.map((group) => (
+            <div key={group.entryYear}>
+              <div className="flex flex-wrap items-baseline gap-2 mb-3">
+                <span className="text-[11px] uppercase mono px-2 py-0.5 border border-cetakGold text-cetakGold font-semibold">
+                  Angkatan {group.angkatanNumber}
+                </span>
+                <span className="text-xs mono text-ink/50">
+                  Masuk {group.entryYear} &middot; Lulus {group.graduationYear}
+                </span>
+              </div>
+              <div className="space-y-6">
+                {group.classes.map((c) => (
+                  <ClassBlock
+                    key={c.id}
+                    kelas={c}
+                    teachers={teachers}
+                    allClasses={classes}
+                    angkatanNumber={group.angkatanNumber}
+                    onChanged={handleChanged}
+                    onDeleted={handleDeleted}
+                    onStudentMoved={handleStudentMoved}
+                    onAllStudentsMoved={handleAllStudentsMoved}
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {ungrouped.length > 0 && (
+          <div className="mt-10">
+            <h3 className="text-xs uppercase tracking-wide text-ink/50 mono mb-3">
+              Alumni tanpa tahun masuk ({ungrouped.length})
+            </h3>
+            <p className="text-xs text-ink/40 mb-3">
+              Isi &quot;Tahun masuk&quot; di kartu kelas di bawah biar otomatis
+              masuk ke pengelompokan angkatan di atas.
+            </p>
+            <div className="space-y-6">
+              {ungrouped.map((c) => (
+                <ClassBlock
+                  key={c.id}
+                  kelas={c}
+                  teachers={teachers}
+                  allClasses={classes}
+                  onChanged={handleChanged}
+                  onDeleted={handleDeleted}
+                  onStudentMoved={handleStudentMoved}
+                  onAllStudentsMoved={handleAllStudentsMoved}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </section>
     </div>
   );

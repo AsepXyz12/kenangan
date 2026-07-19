@@ -28,6 +28,9 @@ export default async function AdminPage() {
             <a href="/kelas" className="text-xs uppercase mono text-accent underline">
               Profil Kelas
             </a>
+            <a href="/alumni" className="text-xs uppercase mono text-accent underline">
+              Dashboard Alumni
+            </a>
             <a href="/cetak" className="text-xs uppercase mono text-accent underline">
               Cetak / Unduh PDF
             </a>
