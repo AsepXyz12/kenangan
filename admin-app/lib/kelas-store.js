@@ -346,7 +346,19 @@ async function readKelasRaw() {
     await writeKelas(seeded);
     return seeded;
   }
-  const res = await fetch(url, { cache: "no-store" });
+  // PENTING: URL blob ini stabil (addRandomSuffix: false, allowOverwrite:
+  // true), jadi CDN di depan Vercel Blob bisa saja masih nyimpen respons
+  // versi lama beberapa saat setelah writeKelas() barusan menimpa isinya —
+  // walau cacheControlMaxAge sudah 0. Ini yang bikin data abis pindah/edit
+  // kadang "belum keupdate" pas dibaca lagi (bug tombol pindah kelas: bukan
+  // gagal beneran, cuma baca versi lama). Tambahin cache-buster + header
+  // no-cache eksplisit di SETIAP baca, bukan cuma andalin fetch cache Next.js.
+  const bustedUrl = `${url}${url.includes("?") ? "&" : "?"}_=${Date.now()}`;
+  const res = await fetch(bustedUrl, {
+    cache: "no-store",
+    next: { revalidate: 0 },
+    headers: { "Cache-Control": "no-cache, no-store, must-revalidate", Pragma: "no-cache" },
+  });
   if (!res.ok) return seedKelas();
   const data = await res.json();
   if (!data || !Array.isArray(data.teachers) || !Array.isArray(data.classes)) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { upload } from "@vercel/blob/client";
 
 async function uploadPhoto(file) {
@@ -1224,11 +1224,68 @@ function PromotionPanel({ initialPromotion }) {
 
 // ---------- Root ----------
 
+// Berapa sering polling ke server buat ngambil data terbaru (ms). Cukup
+// pendek biar kerasa "real-time" tapi gak spam server tiap detik.
+const POLL_INTERVAL_MS = 4000;
+
 export default function KelasManager({ initialTeachers, initialClasses, initialPromotion }) {
   const [teachers, setTeachers] = useState(initialTeachers);
   const [classes, setClasses] = useState(
     [...initialClasses].sort((a, b) => (a.order || 0) - (b.order || 0))
   );
+  // Dipakai buat jeda polling sesaat pas ada aksi lokal (pindah/tambah/hapus)
+  // lagi jalan, supaya hasil optimistic-update di layar gak "ketimpa" balik
+  // sama data server yang belum sempat konsisten (lihat catatan di
+  // kelas-store.js soal delay propagasi cache blob).
+  const pausedUntilRef = useRef(0);
+  const inFlightRef = useRef(false);
+
+  function pausePolling(ms = 2500) {
+    pausedUntilRef.current = Date.now() + ms;
+  }
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function poll() {
+      if (inFlightRef.current) return;
+      if (document.visibilityState !== "visible") return;
+      if (Date.now() < pausedUntilRef.current) return;
+      inFlightRef.current = true;
+      try {
+        const res = await fetch("/api/kelas/state", { cache: "no-store" });
+        if (res.ok && !cancelled) {
+          const data = await res.json();
+          const sortedClasses = [...(data.classes || [])].sort(
+            (a, b) => (a.order || 0) - (b.order || 0)
+          );
+          // Cuma trigger re-render kalau isinya beneran beda, biar gak
+          // ganggu state lokal (mis. teks lagi diketik di kolom lain) tanpa
+          // alasan tiap 4 detik.
+          setTeachers((prev) =>
+            JSON.stringify(prev) === JSON.stringify(data.teachers) ? prev : data.teachers
+          );
+          setClasses((prev) =>
+            JSON.stringify(prev) === JSON.stringify(sortedClasses) ? prev : sortedClasses
+          );
+        }
+      } catch (err) {
+        // Diem-diem gagal aja, biar gak ganggu — nanti dicoba lagi di
+        // interval berikutnya. Aksi manual (klik tombol) tetap kasih error
+        // sendiri lewat jalurnya masing-masing.
+      } finally {
+        inFlightRef.current = false;
+      }
+    }
+
+    const id = setInterval(poll, POLL_INTERVAL_MS);
+    document.addEventListener("visibilitychange", poll);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+      document.removeEventListener("visibilitychange", poll);
+    };
+  }, []);
 
   return (
     <div className="space-y-10">
@@ -1271,11 +1328,16 @@ export default function KelasManager({ initialTeachers, initialClasses, initialP
               kelas={c}
               teachers={teachers}
               allClasses={classes}
-              onChanged={(updated) =>
-                setClasses((prev) => prev.map((x) => (x.id === updated.id ? updated : x)))
-              }
-              onDeleted={(id) => setClasses((prev) => prev.filter((x) => x.id !== id))}
-              onStudentMoved={(fromClassId, toClassId, student) =>
+              onChanged={(updated) => {
+                pausePolling();
+                setClasses((prev) => prev.map((x) => (x.id === updated.id ? updated : x)));
+              }}
+              onDeleted={(id) => {
+                pausePolling();
+                setClasses((prev) => prev.filter((x) => x.id !== id));
+              }}
+              onStudentMoved={(fromClassId, toClassId, student) => {
+                pausePolling();
                 setClasses((prev) =>
                   prev.map((x) => {
                     if (x.id === fromClassId) {
@@ -1286,9 +1348,10 @@ export default function KelasManager({ initialTeachers, initialClasses, initialP
                     }
                     return x;
                   })
-                )
-              }
-              onAllStudentsMoved={(fromClassId, toClassId, movedStudents) =>
+                );
+              }}
+              onAllStudentsMoved={(fromClassId, toClassId, movedStudents) => {
+                pausePolling();
                 setClasses((prev) =>
                   prev.map((x) => {
                     if (x.id === fromClassId) {
@@ -1299,8 +1362,8 @@ export default function KelasManager({ initialTeachers, initialClasses, initialP
                     }
                     return x;
                   })
-                )
-              }
+                );
+              }}
             />
           ))}
         </div>
