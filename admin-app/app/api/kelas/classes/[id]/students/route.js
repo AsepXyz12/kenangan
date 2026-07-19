@@ -11,6 +11,7 @@ export async function POST(request, { params }) {
     name: body.name,
     photoUrl: body.photoUrl,
     hobby: body.hobby,
+    favoriteSubject: body.favoriteSubject,
     skills: body.skills,
   });
   if (!student) {

@@ -552,6 +552,7 @@ function SkillsInput({ classId, student, onChanged }) {
 function StudentCard({ classId, student, otherClasses, onChanged, onDeleted, onMoved }) {
   const [name, setName] = useState(student.name);
   const [hobby, setHobby] = useState(student.hobby || "");
+  const [favoriteSubject, setFavoriteSubject] = useState(student.favoriteSubject || "");
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [justSaved, setJustSaved] = useState(false);
@@ -568,7 +569,7 @@ function StudentCard({ classId, student, otherClasses, onChanged, onDeleted, onM
       const res = await fetch(`/api/kelas/classes/${classId}/students/${student.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, hobby }),
+        body: JSON.stringify({ name, hobby, favoriteSubject }),
       });
       if (res.ok) {
         onChanged(await res.json());
@@ -656,6 +657,12 @@ function StudentCard({ classId, student, otherClasses, onChanged, onDeleted, onM
         placeholder="Hobi (mis. coding)"
         value={hobby}
         onChange={(e) => setHobby(e.target.value)}
+      />
+      <input
+        className="field text-center text-[10px] py-1 focus:border-cetakGold"
+        placeholder="Mapel favorit (mis. Matematika)"
+        value={favoriteSubject}
+        onChange={(e) => setFavoriteSubject(e.target.value)}
       />
       <SkillsInput classId={classId} student={student} onChanged={onChanged} />
       <button

@@ -52,6 +52,14 @@ export function StudentCard({ student, tape }) {
           Hobi: {student.hobby}
         </p>
       )}
+      {student.favoriteSubject && (
+        // Sama persis gaya "Hobi" di atas (biar konsisten & gak norak),
+        // cuma dibedakan warnanya jadi emerald supaya sekilas bisa dibedakan
+        // dari baris hobi kalau dua-duanya keisi.
+        <p className="mt-0.5 text-center text-[8px] uppercase tracking-[0.15em] text-emerald/70 leading-snug line-clamp-2 px-1">
+          Suka: {student.favoriteSubject}
+        </p>
+      )}
     </Link>
   );
 }

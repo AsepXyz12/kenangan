@@ -158,10 +158,17 @@ code,
 
 /* =====================================================================
    MODE BAGUS (enhanced) — panel admin sengaja dibuat polos & cepat secara
-   default (lihat komentar di README). Blok ini menambahkan lapisan visual
-   modern murni lewat CSS ketika <html> punya class "enhanced" (dikontrol
-   EnhancedModeToggle.jsx + localStorage). Tidak ada markup yang berubah,
-   jadi mematikan toggle mengembalikan tampilan 100% seperti semula.
+   default. Blok ini menambahkan lapisan visual modern murni lewat CSS
+   ketika <html> punya class "enhanced" (dikontrol EnhancedModeToggle.jsx +
+   localStorage). Tidak ada markup yang berubah, jadi mematikan toggle
+   mengembalikan tampilan 100% seperti semula.
+
+   Catatan penting: versi pertama fitur ini pakai selector generik
+   (`section`, `main > div`, `a.mono.underline`, `html.enhanced *`) yang
+   ternyata kena ke banyak section/div/link NESTED di dalam KelasManager,
+   PhotoList, dll — bukan cuma section besar di halaman utama. Akibatnya
+   padding & border numpuk berlapis-lapis dan admin jadi melebar/berantakan.
+   Versi ini memperbaikinya dengan selector yang jauh lebih spesifik.
    ===================================================================== */
 
 html.enhanced body {
@@ -171,30 +178,38 @@ html.enhanced body {
     #fbfaf7;
 }
 
-html.enhanced * {
+/* Transition dibatasi ke elemen interaktif saja (bukan `*` universal),
+   supaya tidak ada efek transisi aneh di elemen statis dan performa tetap
+   ringan di halaman dengan banyak baris murid/foto. */
+html.enhanced button,
+html.enhanced a,
+html.enhanced input,
+html.enhanced select,
+html.enhanced textarea,
+html.enhanced .field,
+html.enhanced main > section {
   transition:
-    background-color 0.22s ease,
-    border-color 0.22s ease,
-    box-shadow 0.22s ease,
-    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 0.22s ease;
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.2s ease;
 }
 
-/* Tombol utama: gradient + shadow + hover-lift, rounded modern */
+/* Tombol utama: gradient + shadow lembut. Radius sedang (8px, bukan 10px)
+   dan hover-lift kecil (1px, bukan 2px) karena banyak instance tombol ini
+   berukuran kecil (px-2 py-1) dan berjejer padat di baris-baris kelas/murid
+   — lift besar di situ terlihat berlebihan dan bikin baris "gonjang-ganjing". */
 html.enhanced .btn {
-  border-radius: 10px;
+  border-radius: 8px;
   border: none;
   background-image: linear-gradient(135deg, #1e5c50 0%, #123832 55%, #0d2b26 100%);
-  box-shadow:
-    0 4px 10px -2px rgba(18, 56, 50, 0.4),
-    0 1px 2px rgba(18, 56, 50, 0.2);
+  box-shadow: 0 2px 6px -1px rgba(18, 56, 50, 0.35);
 }
 
 html.enhanced .btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow:
-    0 10px 20px -4px rgba(18, 56, 50, 0.45),
-    0 2px 4px rgba(18, 56, 50, 0.25);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px -2px rgba(18, 56, 50, 0.4);
 }
 
 html.enhanced .btn:active:not(:disabled) {
@@ -202,57 +217,56 @@ html.enhanced .btn:active:not(:disabled) {
 }
 
 html.enhanced .btn-outline {
-  border-radius: 10px;
+  border-radius: 8px;
   border: 1.5px solid rgba(18, 56, 50, 0.35);
-  box-shadow: 0 1px 2px rgba(18, 56, 50, 0.06);
 }
 
 html.enhanced .btn-outline:hover {
   border-color: #123832;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 10px -3px rgba(18, 56, 50, 0.25);
 }
 
 html.enhanced .btn-danger {
-  border-radius: 10px;
+  border-radius: 8px;
   border: 1.5px solid rgba(168, 73, 46, 0.45);
-  box-shadow: 0 1px 2px rgba(168, 73, 46, 0.08);
 }
 
 html.enhanced .btn-danger:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 14px -4px rgba(168, 73, 46, 0.35);
+  background: rgba(168, 73, 46, 0.08);
 }
 
-/* Input & field: rounded, shadow tipis, ring lembut saat fokus */
+/* Input & field: rounded tipis + shadow halus. Radius kecil (6px, bukan
+   10px) karena banyak field ini dipakai sempit di dalam tabel/grid (kolom
+   NIS, tahun, umur) — radius besar di kotak sempit terlihat aneh. Efek
+   fokus juga tidak pakai translateY supaya baris tabel/daftar murid tidak
+   "loncat" saat salah satu inputnya difokuskan. */
 html.enhanced .field {
-  border-radius: 10px;
+  border-radius: 6px;
   border-color: rgba(28, 28, 28, 0.14);
   box-shadow: 0 1px 2px rgba(18, 56, 50, 0.05);
 }
 
 html.enhanced .field:focus {
-  box-shadow:
-    0 0 0 3px rgba(18, 56, 50, 0.15),
-    0 1px 2px rgba(18, 56, 50, 0.05);
-  transform: translateY(-1px);
+  box-shadow: 0 0 0 3px rgba(18, 56, 50, 0.15);
 }
 
-/* Kartu/section jadi panel melayang: rounded + border tipis + shadow */
-html.enhanced main > div,
-html.enhanced section {
+/* Kartu/panel utama: HANYA <section> yang jadi anak langsung <main>,
+   supaya section-section kecil yang bertebaran di dalam komponen (baris
+   kelas, baris guru, kartu murid, dll) TIDAK ikut kena padding/border/shadow
+   berlapis-lapis. Ini akar masalah versi sebelumnya. */
+html.enhanced main > section {
   border-radius: 14px;
-}
-
-html.enhanced section {
   padding: 1.25rem 1.5rem;
   background: rgba(255, 255, 255, 0.7);
   border: 1px solid rgba(18, 56, 50, 0.08);
   box-shadow: 0 4px 18px -10px rgba(18, 56, 50, 0.15);
 }
 
-/* Link mono (Profil Kelas, Dashboard Alumni, Cetak) jadi chip halus */
-html.enhanced a.mono.underline {
+/* Link mono di header halaman (Profil Kelas / Dashboard Alumni / Cetak /
+   Kelola alumni) jadi chip halus. Dibatasi ke link langsung di dalam baris
+   header, BUKAN semua link mono di seluruh halaman — supaya link kecil di
+   dalam kartu kelas/murid tidak ikut berubah jadi pill besar. */
+html.enhanced main > div > div > a.mono,
+html.enhanced main > section > div > a.mono {
   display: inline-flex;
   align-items: center;
   text-decoration: none !important;
@@ -262,7 +276,8 @@ html.enhanced a.mono.underline {
   border: 1px solid rgba(18, 56, 50, 0.1);
 }
 
-html.enhanced a.mono.underline:hover {
+html.enhanced main > div > div > a.mono:hover,
+html.enhanced main > section > div > a.mono:hover {
   background: rgba(18, 56, 50, 0.1);
   transform: translateY(-1px);
 }

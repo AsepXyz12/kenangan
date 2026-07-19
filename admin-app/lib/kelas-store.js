@@ -29,7 +29,14 @@ function seedKelas() {
     lasim: teacher("Pak Lasim", ["PPKn", "Aswaja"]),
   };
 
-  const student = (name) => ({ id: randomUUID(), name, photoUrl: null, hobby: "", skills: [] });
+  const student = (name) => ({
+    id: randomUUID(),
+    name,
+    photoUrl: null,
+    hobby: "",
+    favoriteSubject: "",
+    skills: [],
+  });
 
   const classes = [
     {
@@ -557,7 +564,7 @@ export async function deleteClass(id) {
 
 // ---------- Murid ----------
 
-export async function addStudent(classId, { name, photoUrl, hobby, skills }) {
+export async function addStudent(classId, { name, photoUrl, hobby, favoriteSubject, skills }) {
   const data = await readKelasRaw();
   const kelas = data.classes.find((c) => c.id === classId);
   if (!kelas) return null;
@@ -566,6 +573,7 @@ export async function addStudent(classId, { name, photoUrl, hobby, skills }) {
     name: name || "",
     photoUrl: photoUrl || null,
     hobby: hobby || "",
+    favoriteSubject: favoriteSubject || "",
     skills: Array.isArray(skills) ? skills.filter(Boolean) : [],
   };
   kelas.students.push(student);
@@ -582,6 +590,7 @@ export async function updateStudent(classId, studentId, patch) {
   if (typeof patch.name === "string") student.name = patch.name;
   if (patch.photoUrl !== undefined) student.photoUrl = patch.photoUrl;
   if (typeof patch.hobby === "string") student.hobby = patch.hobby;
+  if (typeof patch.favoriteSubject === "string") student.favoriteSubject = patch.favoriteSubject;
   if (Array.isArray(patch.skills)) student.skills = patch.skills.filter(Boolean);
   await writeKelas(data);
   return student;

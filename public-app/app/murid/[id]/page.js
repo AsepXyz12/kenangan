@@ -115,6 +115,21 @@ export default async function MuridPage({ params }) {
           <p className="text-sm text-ink/40">Hobi belum diisi.</p>
         )}
 
+        {student.favoriteSubject && (
+          // Sama persis gaya blok "Hobi" di atas biar konsisten & tetap
+          // elegan — cuma diberi jarak (mt-6) supaya kedua blok tidak
+          // nempel kalau dua-duanya keisi, dan warna label dibedakan
+          // (emerald, bukan gold) biar sekilas kebeda dari blok hobi.
+          <div className="w-full mt-6">
+            <p className="font-stamp text-[11px] uppercase tracking-[0.2em] text-emerald">
+              Mapel Favorit
+            </p>
+            <p className="font-display italic text-2xl mt-1 text-ink">
+              {student.favoriteSubject}
+            </p>
+          </div>
+        )}
+
         {student.skills && student.skills.length > 0 && (() => {
           const tagSkills = student.skills.filter((s) => !isCodeSkill(s));
           const codeSkills = student.skills.filter(isCodeSkill);
