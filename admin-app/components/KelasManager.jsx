@@ -368,9 +368,18 @@ function SkillsInput({ classId, student, onChanged }) {
   const [error, setError] = useState("");
   const [info, setInfo] = useState("");
   const queueRef = useRef(Promise.resolve());
+  // Sama seperti fix di RolesInput: optimistic update sebelumnya gak pernah
+  // dibatalkan kalau save-nya gagal, jadi chip skill kelihatan "berhasil"
+  // walau server nolak — bikin serasa kesimpen padahal enggak. confirmedRef
+  // nyimpen versi terakhir yang BENERAN dikonfirmasi server, dipakai buat
+  // balikin state kalau ada request yang gagal.
+  const confirmedRef = useRef(student.skills || []);
 
   useEffect(() => {
-    if (!busy) setSkills(student.skills || []);
+    if (!busy) {
+      setSkills(student.skills || []);
+      confirmedRef.current = student.skills || [];
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [student.skills]);
 
@@ -378,7 +387,6 @@ function SkillsInput({ classId, student, onChanged }) {
     setSkills(nextSkills);
     queueRef.current = queueRef.current.then(async () => {
       setBusy(true);
-      setError("");
       try {
         const res = await fetch(`/api/kelas/classes/${classId}/students/${student.id}`, {
           method: "PUT",
@@ -387,12 +395,21 @@ function SkillsInput({ classId, student, onChanged }) {
         });
         if (res.ok) {
           const updated = await res.json();
+          confirmedRef.current = updated.skills || [];
+          setError("");
           onChanged(updated);
         } else {
-          setError("Gagal menyimpan skill.");
+          const data = await res.json().catch(() => ({}));
+          setSkills(confirmedRef.current);
+          setError(
+            data.error
+              ? `Gagal menyimpan skill: ${data.error} (dibatalkan, coba lagi)`
+              : "Gagal menyimpan skill — sesi admin mungkin habis, coba login ulang. Dibatalkan."
+          );
         }
       } catch (err) {
-        setError("Gagal menyimpan (koneksi bermasalah).");
+        setSkills(confirmedRef.current);
+        setError("Gagal menyimpan (koneksi bermasalah) — dibatalkan, coba lagi.");
       } finally {
         setBusy(false);
       }
@@ -557,7 +574,11 @@ function SkillsInput({ classId, student, onChanged }) {
         </form>
       )}
 
-      {error && <p className="text-[9px] text-danger mono mt-1">{error}</p>}
+      {error && (
+        <p className="text-[11px] font-semibold text-danger mono mt-1.5 bg-danger/10 border border-danger/40 px-2 py-1">
+          ⚠ {error}
+        </p>
+      )}
     </div>
   );
 }
@@ -589,13 +610,31 @@ function RolesInput({ classId, student, onChanged }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const queueRef = useRef(Promise.resolve());
+  // BUG BARU yang ketemu belakangan (setelah fix race condition di atas):
+  // optimistic update di queueSave() langsung nampilin chip di layar SEBELUM
+  // request ke server kelar — itu jelas emang tujuannya (biar berasa cepat).
+  // Masalahnya, kalau request itu ternyata GAGAL (401 sesi admin abis, 500
+  // dari server, dst), state optimistic-nya TIDAK PERNAH dibatalkan — cuma
+  // muncul pesan error super kecil (9px, gampang keluput) di bawah, sementara
+  // chip jabatan tetap kelihatan "berhasil" ketambah di layar. Makanya admin
+  // ngerasa udah kesimpen, padahal cuma optimistic UI doang — begitu di-
+  // refresh (ambil ulang dari server), balik ke kondisi asli sebelum
+  // ditambah. Ini kemungkinan besar penyebab sebenarnya laporan "jabatan
+  // kesimpen tapi ilang lagi abis refresh", BUKAN race condition yang tadi.
+  // FIX: simpen `confirmedRef` = jabatan terakhir yang BENERAN dikonfirmasi
+  // server. Kalau save gagal, balikin `roles` ke situ (bukan diam-diam
+  // dibiarkan salah) + tampilin error yang jelas kelihatan, bukan teks kecil.
+  const confirmedRef = useRef(student.roles || []);
 
   // Kalau data murid berubah dari luar (misalnya abis dipindah kelas, atau
   // polling ambil versi terbaru dari server), sinkron ulang — tapi JANGAN
   // pas masih ada penyimpanan jabatan yang lagi berjalan, biar gak ketiban
   // versi lama saat proses tambah/hapus di komponen ini masih berlangsung.
   useEffect(() => {
-    if (!busy) setRoles(student.roles || []);
+    if (!busy) {
+      setRoles(student.roles || []);
+      confirmedRef.current = student.roles || [];
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [student.roles]);
 
@@ -603,7 +642,6 @@ function RolesInput({ classId, student, onChanged }) {
     setRoles(nextRoles); // langsung kelihatan di UI (optimistic)
     queueRef.current = queueRef.current.then(async () => {
       setBusy(true);
-      setError("");
       try {
         const res = await fetch(`/api/kelas/classes/${classId}/students/${student.id}`, {
           method: "PUT",
@@ -612,12 +650,23 @@ function RolesInput({ classId, student, onChanged }) {
         });
         if (res.ok) {
           const updated = await res.json();
+          confirmedRef.current = updated.roles || [];
+          setError("");
           onChanged(updated);
         } else {
-          setError("Gagal menyimpan jabatan.");
+          const data = await res.json().catch(() => ({}));
+          // Batalkan optimistic update — jangan biarkan UI bohong bilang
+          // "kesimpen" padahal server nolak.
+          setRoles(confirmedRef.current);
+          setError(
+            data.error
+              ? `Gagal menyimpan jabatan: ${data.error} (perubahan dibatalkan, coba lagi)`
+              : "Gagal menyimpan jabatan — sesi admin mungkin habis, coba login ulang. Perubahan dibatalkan."
+          );
         }
       } catch (err) {
-        setError("Gagal menyimpan (koneksi bermasalah).");
+        setRoles(confirmedRef.current);
+        setError("Gagal menyimpan (koneksi bermasalah) — perubahan dibatalkan, coba lagi.");
       } finally {
         setBusy(false);
       }
@@ -670,7 +719,11 @@ function RolesInput({ classId, student, onChanged }) {
           onChange={(e) => setDraft(e.target.value)}
         />
       </form>
-      {error && <p className="text-[9px] text-danger mono mt-1">{error}</p>}
+      {error && (
+        <p className="text-[11px] font-semibold text-danger mono mt-1.5 bg-danger/10 border border-danger/40 px-2 py-1">
+          ⚠ {error}
+        </p>
+      )}
     </div>
   );
 }
