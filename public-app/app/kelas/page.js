@@ -69,11 +69,14 @@ export default async function KelasPage() {
             <hr className="thread mt-5 mb-7" />
             <a
               href="/kelas/guru"
-              data-tape="dusk"
-              className="polaroid relative block w-full max-w-[160px] rotate-[-1.5deg]"
+              className="folder-card relative block w-full max-w-[200px] rotate-[-1.5deg]"
             >
-              <span className="stamp-tape" />
-              <div className="aspect-[9/16] w-full bg-parchment2 flex items-center justify-center overflow-hidden relative">
+              <div className="folder-tab">
+                <span className="font-stamp text-[9px] uppercase tracking-wide text-emerald/70 truncate px-2">
+                  Guru & Mapel
+                </span>
+              </div>
+              <div className="folder-body aspect-[4/3] w-full bg-parchment2 flex items-center justify-center overflow-hidden">
                 {guruFolder.photoUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img

@@ -78,6 +78,72 @@ body {
   );
 }
 
+/* ---------- Folder card — dipakai di /kelas untuk mewakili "satu kelas
+   = satu map/folder". Bentuknya map dokumen: ada tab kecil di kiri atas,
+   badan mapnya landscape (bukan potret kayak polaroid). ---------- */
+
+.folder-card {
+  display: block;
+}
+
+.folder-tab {
+  width: 52%;
+  height: 16px;
+  margin-left: 6%;
+  background: #e7d9ae;
+  border: 1px solid rgba(18, 56, 50, 0.25);
+  border-bottom: none;
+  clip-path: polygon(0% 100%, 0% 35%, 12% 0%, 100% 0%, 100% 100%);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.folder-body {
+  border: 1px solid rgba(18, 56, 50, 0.25);
+  border-radius: 0 8px 8px 8px;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.06),
+    0 12px 24px -12px rgba(18, 56, 50, 0.35);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  position: relative;
+  margin-top: -1px;
+}
+
+.folder-card:hover .folder-body {
+  transform: translateY(-5px) rotate(0deg) !important;
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.08),
+    0 22px 38px -14px rgba(18, 56, 50, 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .folder-body {
+    transition: none;
+  }
+}
+
+html.enhanced .folder-tab {
+  border-radius: 6px 10px 0 0;
+}
+
+html.enhanced .folder-body {
+  border-radius: 0 14px 14px 14px;
+  overflow: hidden;
+  box-shadow:
+    0 1px 2px rgba(18, 56, 50, 0.08),
+    0 18px 34px -16px rgba(18, 56, 50, 0.45);
+}
+
+html.enhanced .folder-card:hover .folder-body {
+  transform: translateY(-8px) scale(1.015) rotate(0deg) !important;
+  box-shadow:
+    0 6px 14px rgba(0, 0, 0, 0.1),
+    0 30px 48px -18px rgba(18, 56, 50, 0.5);
+}
+
 /* ---------- Stitched thread divider — the page's signature motif ---------- */
 
 .thread {
