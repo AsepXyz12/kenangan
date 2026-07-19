@@ -22,7 +22,7 @@ export function StudentCard({ student, tape }) {
       style={{ "--r": `${((student.name?.length || 0) % 5) - 2}deg` }}
     >
       <span className="stamp-tape" />
-      <div className="aspect-square w-full bg-parchment2 flex items-center justify-center overflow-hidden">
+      <div className="aspect-square w-full bg-parchment2 flex items-center justify-center overflow-hidden relative">
         {student.photoUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -37,6 +37,14 @@ export function StudentCard({ student, tape }) {
         ) : (
           <span className="font-stamp text-2xl text-emerald/30">
             {initials(student.name)}
+          </span>
+        )}
+        {student.roles && student.roles.length > 0 && (
+          // Badge cuma nampilin jabatan PERTAMA (biar gak penuh kalau ada
+          // beberapa peran sekaligus) — daftar lengkapnya ada di halaman
+          // detail murid. Nempel di pojok kiri bawah foto, gaya label kecil.
+          <span className="absolute bottom-1 left-1 font-stamp text-[7px] uppercase tracking-wide bg-gold text-parchment px-1.5 py-0.5 leading-none shadow-sm">
+            {student.roles[0]}
           </span>
         )}
       </div>

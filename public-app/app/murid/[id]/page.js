@@ -100,6 +100,23 @@ export default async function MuridPage({ params }) {
           {wali.length > 0 && <> · Wali: {wali.map((w) => w.name).join(" & ")}</>}
         </p>
 
+        {student.roles && student.roles.length > 0 && (
+          // Semua jabatan ditampilkan lengkap di sini (beda dari kartu murid
+          // yang cuma nunjukin 1 badge biar gak penuh) — jadi kalau seorang
+          // murid rangkap jabatan (mis. Wakil Ketua Kelas + Anggota OSIS),
+          // dua-duanya kelihatan jelas di sini tanpa bentrok/tertutup.
+          <div className="mt-3 flex flex-wrap justify-center gap-1.5">
+            {student.roles.map((role, i) => (
+              <span
+                key={i}
+                className="font-stamp text-[10px] uppercase tracking-wide bg-gold text-parchment px-2.5 py-1"
+              >
+                {role}
+              </span>
+            ))}
+          </div>
+        )}
+
         <hr className="thread mt-8 mb-8 w-full" />
 
         {student.hobby ? (

@@ -549,6 +549,92 @@ function SkillsInput({ classId, student, onChanged }) {
   );
 }
 
+// ---------- Jabatan/Peran murid (Ketua Kelas, Wakil, Anggota OSIS, dst) ----------
+//
+// Diisi bebas teks (bukan dropdown tetap) karena satu murid bisa punya lebih
+// dari satu peran sekaligus (mis. "Wakil Ketua Kelas" + "Anggota OSIS"), dan
+// nama-nama jabatan tiap kelas/angkatan bisa beda-beda. Polanya sengaja
+// dibikin sederhana (tag chip biasa), beda dari SkillsInput yang lebih rumit
+// karena SkillsInput juga harus nanganin cuplikan kode.
+function RolesInput({ classId, student, onChanged }) {
+  const [draft, setDraft] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+
+  async function save(nextRoles) {
+    setBusy(true);
+    setError("");
+    try {
+      const res = await fetch(`/api/kelas/classes/${classId}/students/${student.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ roles: nextRoles }),
+      });
+      if (res.ok) {
+        onChanged(await res.json());
+      } else {
+        setError("Gagal menyimpan jabatan.");
+      }
+    } catch (err) {
+      setError("Gagal menyimpan (koneksi bermasalah).");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function addRole(e) {
+    e.preventDefault();
+    const value = draft.trim();
+    if (!value) return;
+    const existing = student.roles || [];
+    if (existing.includes(value)) {
+      setDraft("");
+      return;
+    }
+    save([...existing, value]);
+    setDraft("");
+  }
+
+  function removeRoleAt(index) {
+    save((student.roles || []).filter((_, i) => i !== index));
+  }
+
+  return (
+    <div className="w-full">
+      {(student.roles || []).length > 0 && (
+        <div className="flex flex-wrap gap-1 justify-center mb-1">
+          {student.roles.map((r, i) => (
+            <span
+              key={i}
+              className="inline-flex items-center gap-1 text-[9px] mono uppercase bg-cetakGold/10 text-cetakGold border border-cetakGold/40 px-1.5 py-0.5"
+            >
+              {r}
+              <button
+                type="button"
+                onClick={() => removeRoleAt(i)}
+                className="text-cetakGold/70 hover:text-danger"
+                aria-label={`Hapus jabatan ${r}`}
+              >
+                ×
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
+      <form onSubmit={addRole} className="flex gap-1">
+        <input
+          className="field text-center text-[10px] py-1"
+          placeholder="Jabatan (mis. Ketua Kelas)"
+          value={draft}
+          disabled={busy}
+          onChange={(e) => setDraft(e.target.value)}
+        />
+      </form>
+      {error && <p className="text-[9px] text-danger mono mt-1">{error}</p>}
+    </div>
+  );
+}
+
 function StudentCard({ classId, student, otherClasses, onChanged, onDeleted, onMoved }) {
   const [name, setName] = useState(student.name);
   const [hobby, setHobby] = useState(student.hobby || "");
@@ -664,6 +750,7 @@ function StudentCard({ classId, student, otherClasses, onChanged, onDeleted, onM
         value={favoriteSubject}
         onChange={(e) => setFavoriteSubject(e.target.value)}
       />
+      <RolesInput classId={classId} student={student} onChanged={onChanged} />
       <SkillsInput classId={classId} student={student} onChanged={onChanged} />
       <button
         type="button"
