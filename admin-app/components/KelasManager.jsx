@@ -700,10 +700,12 @@ function AddStudent({ classId, onAdded }) {
 
 // ---------- Kelas ----------
 
-function ClassBlock({ kelas, teachers, allClasses, onChanged, onDeleted, onStudentMoved }) {
+function ClassBlock({ kelas, teachers, allClasses, onChanged, onDeleted, onStudentMoved, onAllStudentsMoved }) {
   const [name, setName] = useState(kelas.name);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [moveAllTarget, setMoveAllTarget] = useState("");
+  const [movingAll, setMovingAll] = useState(false);
 
   async function patch(body) {
     setBusy(true);
@@ -724,6 +726,38 @@ function ClassBlock({ kelas, teachers, allClasses, onChanged, onDeleted, onStude
       setError("Gagal menyimpan (koneksi bermasalah).");
     } finally {
       setBusy(false);
+    }
+  }
+
+  async function moveAllToClass() {
+    if (!moveAllTarget) return;
+    const target = (allClasses || []).find((c) => c.id === moveAllTarget);
+    if (!target) return;
+    if (
+      !confirm(
+        `Pindahkan SEMUA ${kelas.students.length} murid dari "${kelas.name}" ke "${target.name}"?`
+      )
+    )
+      return;
+    setMovingAll(true);
+    setError("");
+    try {
+      const res = await fetch(`/api/kelas/classes/${kelas.id}/move-all-students`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ toClassId: moveAllTarget }),
+      });
+      if (res.ok) {
+        onAllStudentsMoved(kelas.id, moveAllTarget, kelas.students);
+        setMoveAllTarget("");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Gagal memindahkan semua murid.");
+      }
+    } catch (err) {
+      setError("Gagal memindahkan (koneksi bermasalah).");
+    } finally {
+      setMovingAll(false);
     }
   }
 
@@ -781,6 +815,38 @@ function ClassBlock({ kelas, teachers, allClasses, onChanged, onDeleted, onStude
             Hapus kelas
           </button>
         </div>
+
+        {kelas.students.length > 0 && (
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="text-xs mono text-ink/50">
+              Pindah SEMUA {kelas.students.length} murid ke:
+            </span>
+            <select
+              className="field text-xs py-1"
+              value={moveAllTarget}
+              disabled={movingAll}
+              onChange={(e) => setMoveAllTarget(e.target.value)}
+            >
+              <option value="">Pilih kelas tujuan...</option>
+              {(allClasses || [])
+                .filter((c) => c.id !== kelas.id)
+                .map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                    {c.isAlumni ? " (alumni)" : ""}
+                  </option>
+                ))}
+            </select>
+            <button
+              type="button"
+              onClick={moveAllToClass}
+              disabled={movingAll || !moveAllTarget}
+              className="text-[11px] mono uppercase border border-line px-2 py-1 disabled:opacity-40"
+            >
+              {movingAll ? "Memindahkan..." : "Pindah semua"}
+            </button>
+          </div>
+        )}
 
         <div>
           <p className="text-xs uppercase tracking-wide text-ink/50 mono mb-1.5">
@@ -1217,6 +1283,19 @@ export default function KelasManager({ initialTeachers, initialClasses, initialP
                     }
                     if (x.id === toClassId) {
                       return { ...x, students: [...x.students, student] };
+                    }
+                    return x;
+                  })
+                )
+              }
+              onAllStudentsMoved={(fromClassId, toClassId, movedStudents) =>
+                setClasses((prev) =>
+                  prev.map((x) => {
+                    if (x.id === fromClassId) {
+                      return { ...x, students: [] };
+                    }
+                    if (x.id === toClassId) {
+                      return { ...x, students: [...x.students, ...movedStudents] };
                     }
                     return x;
                   })

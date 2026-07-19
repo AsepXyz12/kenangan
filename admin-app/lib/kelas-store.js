@@ -379,7 +379,7 @@ export async function writeKelas(data) {
 // ---------- Guru ----------
 
 export async function addTeacher({ name, subjects, photoUrl }) {
-  const data = await readKelas();
+  const data = await readKelasRaw();
   const teacher = {
     id: randomUUID(),
     name: name || "",
@@ -392,7 +392,7 @@ export async function addTeacher({ name, subjects, photoUrl }) {
 }
 
 export async function updateTeacher(id, patch) {
-  const data = await readKelas();
+  const data = await readKelasRaw();
   const teacher = data.teachers.find((t) => t.id === id);
   if (!teacher) return null;
   if (typeof patch.name === "string") teacher.name = patch.name;
@@ -403,7 +403,7 @@ export async function updateTeacher(id, patch) {
 }
 
 export async function deleteTeacher(id) {
-  const data = await readKelas();
+  const data = await readKelasRaw();
   data.teachers = data.teachers.filter((t) => t.id !== id);
   data.classes.forEach((c) => {
     c.waliKelasIds = (c.waliKelasIds || []).filter((wid) => wid !== id);
@@ -415,7 +415,7 @@ export async function deleteTeacher(id) {
 // ---------- Kelas ----------
 
 export async function addClass({ name }) {
-  const data = await readKelas();
+  const data = await readKelasRaw();
   const kelas = {
     id: randomUUID(),
     name: name || "Kelas baru",
@@ -430,7 +430,7 @@ export async function addClass({ name }) {
 }
 
 export async function updateClass(id, patch) {
-  const data = await readKelas();
+  const data = await readKelasRaw();
   const kelas = data.classes.find((c) => c.id === id);
   if (!kelas) return null;
   if (typeof patch.name === "string") kelas.name = patch.name;
@@ -442,7 +442,7 @@ export async function updateClass(id, patch) {
 }
 
 export async function deleteClass(id) {
-  const data = await readKelas();
+  const data = await readKelasRaw();
   data.classes = data.classes.filter((c) => c.id !== id);
   await writeKelas(data);
   return true;
@@ -451,7 +451,7 @@ export async function deleteClass(id) {
 // ---------- Murid ----------
 
 export async function addStudent(classId, { name, photoUrl, hobby, skills }) {
-  const data = await readKelas();
+  const data = await readKelasRaw();
   const kelas = data.classes.find((c) => c.id === classId);
   if (!kelas) return null;
   const student = {
@@ -467,7 +467,7 @@ export async function addStudent(classId, { name, photoUrl, hobby, skills }) {
 }
 
 export async function updateStudent(classId, studentId, patch) {
-  const data = await readKelas();
+  const data = await readKelasRaw();
   const kelas = data.classes.find((c) => c.id === classId);
   if (!kelas) return null;
   const student = kelas.students.find((s) => s.id === studentId);
@@ -481,7 +481,7 @@ export async function updateStudent(classId, studentId, patch) {
 }
 
 export async function deleteStudent(classId, studentId) {
-  const data = await readKelas();
+  const data = await readKelasRaw();
   const kelas = data.classes.find((c) => c.id === classId);
   if (!kelas) return false;
   kelas.students = kelas.students.filter((s) => s.id !== studentId);
@@ -494,7 +494,7 @@ export async function deleteStudent(classId, studentId) {
 // kode) — dipakai buat benerin manual kalau susunan kelas kacau (misal
 // gara-gara kenaikan kelas otomatis yang salah tanggal).
 export async function moveStudent(fromClassId, studentId, toClassId) {
-  const data = await readKelas();
+  const data = await readKelasRaw();
   const fromKelas = data.classes.find((c) => c.id === fromClassId);
   const toKelas = data.classes.find((c) => c.id === toClassId);
   if (!fromKelas || !toKelas) return null;
@@ -504,4 +504,18 @@ export async function moveStudent(fromClassId, studentId, toClassId) {
   toKelas.students.push(student);
   await writeKelas(data);
   return student;
+}
+
+// Pindahin SEMUA murid dari satu kelas ke kelas lain sekaligus (dipakai
+// waktu susunan kelas berantakan dan perlu digeser borongan, bukan satu-satu).
+export async function moveAllStudents(fromClassId, toClassId) {
+  const data = await readKelasRaw();
+  const fromKelas = data.classes.find((c) => c.id === fromClassId);
+  const toKelas = data.classes.find((c) => c.id === toClassId);
+  if (!fromKelas || !toKelas) return null;
+  const moved = fromKelas.students;
+  fromKelas.students = [];
+  toKelas.students = [...toKelas.students, ...moved];
+  await writeKelas(data);
+  return moved;
 }
