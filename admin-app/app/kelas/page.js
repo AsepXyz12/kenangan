@@ -13,14 +13,14 @@ export default async function KelasPage() {
 
   return (
     <main className="max-w-5xl mx-auto px-6 py-10">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-y-3">
         <div>
           <p className="text-xs uppercase tracking-wide text-ink/50 mono">
             Galeri Kenangan MA
           </p>
           <h1 className="text-2xl font-semibold mt-1">Profil Kelas</h1>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center flex-wrap gap-3 gap-y-2">
           <a href="/alumni" className="text-xs uppercase mono text-accent underline">
             Dashboard Alumni
           </a>
