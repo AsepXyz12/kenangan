@@ -1640,10 +1640,142 @@ function PromotionPanel({ initialPromotion }) {
 // pendek biar kerasa "real-time" tapi gak spam server tiap detik.
 const POLL_INTERVAL_MS = 4000;
 
+// Cover foto buat "folder guru" di halaman publik — satu foto buat semua
+// guru (bukan per-guru), sama polanya kayak groupPhotoUrl/groupPhotoFit di
+// tiap kelas, cuma disimpan terpisah (data.guruFolder) lewat endpoint sendiri.
+function GuruFolderPanel({ initialGuruFolder }) {
+  const [folder, setFolder] = useState(
+    initialGuruFolder || { photoUrl: null, photoFit: "cover" }
+  );
+  const [uploading, setUploading] = useState(false);
+  const [cropFile, setCropFile] = useState(null);
+  const [error, setError] = useState("");
+
+  const fit = folder.photoFit === "contain" ? "contain" : "cover";
+
+  async function save(patch) {
+    setError("");
+    try {
+      const res = await fetch("/api/kelas/guru-folder", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(patch),
+      });
+      if (res.ok) {
+        setFolder(await res.json());
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || "Gagal menyimpan foto folder guru.");
+      }
+    } catch (err) {
+      setError("Gagal menyimpan (koneksi bermasalah).");
+    }
+  }
+
+  async function handlePhoto(file) {
+    setUploading(true);
+    setError("");
+    try {
+      const photoUrl = await uploadPhoto(file);
+      await save({ photoUrl });
+    } catch (err) {
+      setError("Gagal upload foto (koneksi bermasalah).");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  function pickPhoto(file) {
+    if (fit === "contain") {
+      handlePhoto(file);
+    } else {
+      setCropFile(file);
+    }
+  }
+
+  function removePhoto() {
+    if (!confirm("Hapus foto folder guru?")) return;
+    save({ photoUrl: null });
+  }
+
+  return (
+    <div className="border border-line p-4">
+      <p className="text-xs uppercase tracking-wide text-ink/50 mono mb-1.5">
+        Foto folder guru (cover halaman publik /kelas/guru)
+      </p>
+      <div className="flex flex-wrap items-center gap-3">
+        <div
+          className={`w-16 h-16 shrink-0 overflow-hidden bg-line/30 flex items-center justify-center ${
+            fit === "contain" ? "bg-line/10" : ""
+          }`}
+        >
+          {folder.photoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={folder.photoUrl}
+              alt="Folder guru"
+              className={`w-full h-full ${fit === "contain" ? "object-contain" : "object-cover"}`}
+            />
+          ) : (
+            <span className="text-[10px] text-ink/40 mono text-center px-1">Belum ada</span>
+          )}
+        </div>
+        <PhotoButton
+          label={folder.photoUrl ? "Ganti foto" : "Unggah foto"}
+          busy={uploading}
+          onPicked={pickPhoto}
+        />
+        {cropFile && (
+          <PhotoCropModal
+            file={cropFile}
+            onCancel={() => setCropFile(null)}
+            onConfirm={(croppedFile) => {
+              setCropFile(null);
+              handlePhoto(croppedFile);
+            }}
+          />
+        )}
+        {folder.photoUrl && (
+          <button
+            type="button"
+            onClick={removePhoto}
+            className="btn-danger text-[11px] uppercase mono px-2 py-1 border"
+          >
+            Hapus
+          </button>
+        )}
+      </div>
+      <div className="flex items-center gap-1.5 mt-2">
+        <span className="text-[11px] mono text-ink/50">Mode:</span>
+        <button
+          type="button"
+          onClick={() => save({ photoFit: "cover" })}
+          className={`text-[11px] mono px-2 py-1 border ${
+            fit === "cover" ? "bg-accent text-paper border-accent" : "border-line text-ink/60"
+          }`}
+        >
+          Dipotong (persegi)
+        </button>
+        <button
+          type="button"
+          onClick={() => save({ photoFit: "contain" })}
+          className={`text-[11px] mono px-2 py-1 border ${
+            fit === "contain" ? "bg-accent text-paper border-accent" : "border-line text-ink/60"
+          }`}
+        >
+          Utuh (tanpa potong)
+        </button>
+      </div>
+      {error && <p className="text-xs text-danger mono mt-2">{error}</p>}
+    </div>
+  );
+}
+
 export default function KelasManager({
   initialTeachers,
   initialClasses,
   initialPromotion,
+  initialGuruFolder,
 }) {
   const [teachers, setTeachers] = useState(initialTeachers);
   const [classes, setClasses] = useState(
@@ -1726,6 +1858,9 @@ export default function KelasManager({
         <h2 className="text-xs uppercase tracking-wide text-ink/50 mono mb-3">
           Guru & mata pelajaran ({teachers.length})
         </h2>
+        <div className="mb-4">
+          <GuruFolderPanel initialGuruFolder={initialGuruFolder} />
+        </div>
         <div className="space-y-2">
           {teachers.map((t) => (
             <TeacherRow

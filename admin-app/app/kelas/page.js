@@ -10,6 +10,7 @@ export default async function KelasPage() {
   const authed = isAdminAuthed();
   const data = authed ? await readKelas() : { teachers: [], classes: [] };
   const promotion = authed ? getPromotionPreview(data) : null;
+  const guruFolder = authed ? data.guruFolder || { photoUrl: null, photoFit: "cover" } : null;
 
   return (
     <main className="max-w-5xl mx-auto px-6 py-10">
@@ -54,6 +55,7 @@ export default async function KelasPage() {
             initialTeachers={data.teachers}
             initialClasses={data.classes}
             initialPromotion={promotion}
+            initialGuruFolder={guruFolder}
           />
         </div>
       )}

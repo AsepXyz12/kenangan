@@ -487,6 +487,26 @@ export async function writeKelas(data) {
   return data;
 }
 
+// ---------- Folder Guru ----------
+//
+// Sama konsepnya kayak groupPhotoUrl/groupPhotoFit di kelas: cover foto buat
+// "folder" guru di halaman publik /kelas. Bedanya ini bukan per-kelas,
+// tapi satu untuk seluruh daftar guru, jadi disimpan terpisah di root data
+// (data.guruFolder), bukan di salah satu objek kelas.
+export async function updateGuruFolder(patch) {
+  const data = await readKelasRaw();
+  const folder = data.guruFolder || { photoUrl: null, photoFit: "cover" };
+  if (typeof patch.photoUrl === "string" || patch.photoUrl === null) {
+    folder.photoUrl = patch.photoUrl;
+  }
+  if (patch.photoFit === "cover" || patch.photoFit === "contain") {
+    folder.photoFit = patch.photoFit;
+  }
+  data.guruFolder = folder;
+  await writeKelas(data);
+  return folder;
+}
+
 // ---------- Guru ----------
 
 export async function addTeacher({ name, subjects, photoUrl }) {

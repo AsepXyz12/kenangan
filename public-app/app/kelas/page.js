@@ -1,12 +1,11 @@
 import { readKelas } from "@/lib/kelas-store";
 import { readSettings } from "@/lib/store";
-import { TAPES, initials } from "@/components/KelasCards";
 import KelasFolders from "@/components/KelasFolders";
 
 export const dynamic = "force-dynamic";
 
 export default async function KelasPage() {
-  const { teachers, classes } = await readKelas();
+  const { teachers, classes, guruFolder: guruFolderRaw } = await readKelas();
   const settings = await readSettings();
   const siteName = settings.siteName || "Galeri Kenangan MA";
 
@@ -16,6 +15,7 @@ export default async function KelasPage() {
     .filter((c) => !c.isAlumni)
     .sort((a, b) => (a.order || 0) - (b.order || 0));
   const alumniCount = classes.filter((c) => c.isAlumni).length;
+  const guruFolder = { photoFit: "cover", ...(guruFolderRaw || {}) };
 
   return (
     <main>
@@ -67,27 +67,33 @@ export default async function KelasPage() {
               Guru & Mata Pelajaran
             </h2>
             <hr className="thread mt-5 mb-7" />
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-x-4 gap-y-8">
-              {teachers.map((t, i) => (
-                <div key={t.id} data-tape={TAPES[i % TAPES.length]} className="polaroid relative w-full max-w-[150px] mx-auto">
-                  <span className="stamp-tape" />
-                  <div className="aspect-square w-full bg-parchment2 flex items-center justify-center overflow-hidden">
-                    {t.photoUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={t.photoUrl} alt={t.name} className="w-full h-full object-cover object-top" />
-                    ) : (
-                      <span className="font-stamp text-2xl text-emerald/30">{initials(t.name)}</span>
-                    )}
-                  </div>
-                  <p className="mt-2 text-center font-stamp text-xs uppercase tracking-wide text-ink/70">
-                    {t.name}
-                  </p>
-                  <p className="text-center text-[10px] text-ink/40 mt-0.5 leading-tight">
-                    {(t.subjects || []).join(", ")}
-                  </p>
-                </div>
-              ))}
-            </div>
+            <a
+              href="/kelas/guru"
+              data-tape="dusk"
+              className="polaroid relative block w-full max-w-[160px] rotate-[-1.5deg]"
+            >
+              <span className="stamp-tape" />
+              <div className="aspect-[9/16] w-full bg-parchment2 flex items-center justify-center overflow-hidden relative">
+                {guruFolder.photoUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={guruFolder.photoUrl}
+                    alt="Guru & Mata Pelajaran"
+                    className={`w-full h-full ${
+                      guruFolder.photoFit === "contain" ? "object-contain" : "object-cover"
+                    }`}
+                  />
+                ) : (
+                  <span className="font-stamp text-2xl text-emerald/30">GR</span>
+                )}
+                <span className="absolute bottom-1 right-1 font-stamp text-[8px] uppercase tracking-wide bg-emerald/85 text-parchment px-1.5 py-0.5">
+                  {teachers.length} guru
+                </span>
+              </div>
+              <p className="mt-2 text-center font-display italic text-base text-emerald truncate">
+                Guru & Mapel
+              </p>
+            </a>
           </section>
         )}
 

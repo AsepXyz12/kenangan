@@ -14,5 +14,6 @@ export async function GET() {
     teachers: data.teachers,
     classes: data.classes,
     promotion: getPromotionPreview(data),
+    guruFolder: data.guruFolder || { photoUrl: null, photoFit: "cover" },
   });
 }
