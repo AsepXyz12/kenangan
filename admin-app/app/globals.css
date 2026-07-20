@@ -240,6 +240,32 @@ html.enhanced .btn-danger:hover {
   background: rgba(168, 73, 46, 0.08);
 }
 
+/* FIX "sebagian tombol keubah, sebagian nggak": banyak tombol di admin
+   (link-style kecil, chip toggle aktif/nonaktif, tombol hapus, dll di
+   KelasManager/PhotoList/MediaGrid/UploadForm/CommentModeration) TIDAK
+   pakai class `.btn` / `.btn-outline` / `.btn-danger` sama sekali — cuma
+   Tailwind utility polos (`border border-line`, `text-danger`, dst).
+   Sebelumnya cuma 3 class di atas yang dikasih visual treatment, jadi
+   tombol-tombol lain itu keliatan diem aja pas Mode Bagus dinyalain.
+   Rule generik di bawah ini kasih semua <button> (apapun class-nya)
+   sentuhan lift + shadow tipis pas hover, TANPA menyentuh warna/border
+   masing-masing (biar warna semantik kayak merah=danger, gold=aktif,
+   dst tetap keliatan bedanya). Class `.btn` di atas & yang lebih
+   spesifik tetap menang duluan karena specificity-nya lebih tinggi. */
+html.enhanced button:not(:disabled) {
+  border-radius: 6px;
+}
+
+html.enhanced button:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px -3px rgba(18, 56, 50, 0.3);
+}
+
+html.enhanced button:not(:disabled):active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
 /* Input & field: rounded tipis + shadow halus. Radius kecil (6px, bukan
    10px) karena banyak field ini dipakai sempit di dalam tabel/grid (kolom
    NIS, tahun, umur) — radius besar di kotak sempit terlihat aneh. Efek
