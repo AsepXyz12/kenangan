@@ -177,56 +177,48 @@ code,
    ===================================================================== */
 
 /* Inti "hilangin hitam-putih": ganti channel r g b dari --color-ink &
-   --color-paper. Karena ink/paper di tailwind.config.js sekarang dibaca
-   lewat rgb(var(...) / <alpha-value>), SEMUA pemakaian text-ink, text-ink/60,
-   bg-paper, dst di seluruh app (layout, KelasManager, MediaGrid, form, dll)
-   otomatis ikut berubah — tanpa perlu sentuh className manapun.
-   - ink: dari abu-abu netral #1C1C1C → hijau tua gelap (senada accent
-     #123832), jadi teks tetap kontras & gampang dibaca tapi tidak hitam.
-   - paper: dari putih nyaris polos #FAFAF8 → gading hangat (senada
-     parchment situs publik), jadi background tidak putih steril. */
+   --color-paper. Karena ink/paper di tailwind.config.js dibaca lewat
+   rgb(var(...) / <alpha-value>), SEMUA pemakaian text-ink, text-ink/60,
+   bg-paper, dst di seluruh app otomatis ikut berubah — tanpa sentuh
+   className manapun.
+   - ink: abu-abu netral #1C1C1C → hijau tua gelap senada accent, teks
+     tetap kontras & gampang dibaca tapi tidak hitam pekat.
+   - paper: putih nyaris polos #FAFAF8 → gading hangat senada parchment
+     situs publik, background tidak putih steril. */
 html.enhanced {
-  --color-ink: 26 38 34;
-  --color-paper: 250 248 242;
+  --color-ink: 24 34 30;
+  --color-paper: 250 248 241;
 }
 
 html.enhanced body {
   background:
-    radial-gradient(900px 500px at 10% -10%, rgba(18, 56, 50, 0.06), transparent 60%),
-    radial-gradient(800px 500px at 100% 0%, rgba(184, 146, 63, 0.08), transparent 55%),
+    radial-gradient(1100px 600px at 8% -10%, rgba(18, 56, 50, 0.07), transparent 60%),
+    radial-gradient(900px 550px at 100% 0%, rgba(184, 146, 63, 0.09), transparent 55%),
     rgb(var(--color-paper));
 }
 
-/* Sisa background putih polos yang tidak lewat class bg-paper (modal crop
-   foto, overlay gelap di thumbnail) — diselaraskan juga biar tidak ada lagi
-   kotak putih polos yang lolos dari palet baru. */
 html.enhanced .bg-white {
   background-color: rgb(var(--color-paper)) !important;
 }
 
-/* Scrollbar ikut senada (Chromium/Edge) — detail kecil biar tidak ada garis
-   scrollbar abu-abu default yang terasa "kembali" ke nuansa hitam-putih. */
+/* Scrollbar senada tema */
 html.enhanced ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
-
 html.enhanced ::-webkit-scrollbar-track {
   background: transparent;
 }
-
 html.enhanced ::-webkit-scrollbar-thumb {
-  background: rgba(18, 56, 50, 0.25);
+  background: rgba(18, 56, 50, 0.28);
   border-radius: 999px;
 }
-
 html.enhanced ::-webkit-scrollbar-thumb:hover {
-  background: rgba(18, 56, 50, 0.4);
+  background: rgba(18, 56, 50, 0.45);
 }
 
-/* Transition dibatasi ke elemen interaktif saja (bukan `*` universal),
-   supaya tidak ada efek transisi aneh di elemen statis dan performa tetap
-   ringan di halaman dengan banyak baris murid/foto. */
+/* Transition dibatasi ke elemen interaktif + border-line/chip, bukan `*`
+   universal, supaya performa tetap ringan di halaman dengan banyak baris. */
 html.enhanced button,
 html.enhanced a,
 html.enhanced input,
@@ -239,136 +231,175 @@ html.enhanced .admin-panel-list,
 html.enhanced .admin-dropzone,
 html.enhanced .admin-chip,
 html.enhanced .admin-link-btn,
-html.enhanced .admin-thumb {
+html.enhanced .admin-thumb,
+html.enhanced [class*="border-line"],
+html.enhanced [class*="border-accent"],
+html.enhanced [class*="border-danger"],
+html.enhanced [class*="border-cetakGold"] {
   transition:
     background-color 0.2s ease,
     border-color 0.2s ease,
     box-shadow 0.2s ease,
+    color 0.2s ease,
     transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
     opacity 0.2s ease;
 }
 
-/* Tombol utama: gradient + shadow lembut. Radius sedang (8px, bukan 10px)
-   dan hover-lift kecil (1px, bukan 2px) karena banyak instance tombol ini
-   berukuran kecil (px-2 py-1) dan berjejer padat di baris-baris kelas/murid
-   — lift besar di situ terlihat berlebihan dan bikin baris "gonjang-ganjing". */
-/* PENTING: selector di bawah sengaja :not(.btn-outline):not(.btn-danger).
-   Sebelumnya "html.enhanced .btn" (2 class = specificity lebih tinggi)
-   nabrak ".btn-outline"/".btn-danger" (1 class) yang didefinisikan di
-   BASE css — background gradient gelap punya .btn menang padahal
-   .btn-outline harusnya transparan, jadi tombol yang pakai KEDUA class
-   sekaligus (mis. tombol "Keluar" = className="btn btn-outline") jadi
-   kotak gelap dengan teks gelap juga di atasnya (nyaris tidak kebaca).
-   Dengan :not() ini, gradient HANYA nempel ke tombol solid murni;
-   outline & danger dapat treatment lengkap sendiri di bawah supaya tidak
-   pernah lagi ketiban gradient punya .btn. */
+/* =====================================================================
+   TOMBOL — solid, outline, danger
+   :not(.btn-outline):not(.btn-danger) supaya gradient solid tidak pernah
+   nabrak tombol yang punya kedua class sekaligus (mis. "btn btn-outline").
+   ===================================================================== */
 html.enhanced .btn:not(.btn-outline):not(.btn-danger) {
   border-radius: 8px;
   border: none;
   background-image: linear-gradient(135deg, #1e5c50 0%, #123832 55%, #0d2b26 100%);
   box-shadow: 0 2px 6px -1px rgba(18, 56, 50, 0.35);
 }
-
 html.enhanced .btn:not(.btn-outline):not(.btn-danger):hover:not(:disabled) {
   transform: translateY(-1px);
   box-shadow: 0 4px 10px -2px rgba(18, 56, 50, 0.4);
 }
-
 html.enhanced .btn:not(.btn-outline):not(.btn-danger):active:not(:disabled) {
   transform: translateY(0);
 }
 
-/* Outline: background & warna teks didefinisikan EKSPLISIT di sini (bukan
-   cuma border), supaya tidak lagi bergantung pada .btn di base css yang
-   bisa saja ketiban rule lain di masa depan. Fill lembut (bukan 100%
-   transparan) biar tetap kebaca sebagai "tombol", bukan cuma teks polos. */
 html.enhanced .btn-outline {
   border-radius: 8px;
-  border: 1.5px solid rgba(18, 56, 50, 0.4);
-  background: rgba(18, 56, 50, 0.06);
+  border: 1.5px solid rgba(18, 56, 50, 0.45);
+  background: rgba(18, 56, 50, 0.09);
   background-image: none;
   color: #123832;
+  font-weight: 600;
 }
-
 html.enhanced .btn-outline:hover:not(:disabled) {
   border-color: #123832;
-  background: rgba(18, 56, 50, 0.12);
+  background: rgba(18, 56, 50, 0.16);
   transform: translateY(-1px);
 }
 
 html.enhanced .btn-danger {
   border-radius: 8px;
-  border: 1.5px solid rgba(168, 73, 46, 0.5);
-  background: rgba(168, 73, 46, 0.07);
+  border: 1.5px solid rgba(168, 73, 46, 0.55);
+  background: rgba(168, 73, 46, 0.1);
   background-image: none;
   color: #a8492e;
+  font-weight: 600;
 }
-
 html.enhanced .btn-danger:hover:not(:disabled) {
-  background: rgba(168, 73, 46, 0.14);
+  background: rgba(168, 73, 46, 0.18);
   border-color: #a8492e;
   transform: translateY(-1px);
 }
 
-/* FIX "sebagian tombol keubah, sebagian nggak": banyak tombol di admin
-   (link-style kecil, chip toggle aktif/nonaktif, tombol hapus, dll di
-   KelasManager/PhotoList/MediaGrid/UploadForm/CommentModeration) TIDAK
-   pakai class `.btn` / `.btn-outline` / `.btn-danger` sama sekali — cuma
-   Tailwind utility polos (`border border-line`, `text-danger`, dst).
-   Sebelumnya cuma 3 class di atas yang dikasih visual treatment, jadi
-   tombol-tombol lain itu keliatan diem aja pas Mode Bagus dinyalain.
-   Rule generik di bawah ini kasih semua <button> (apapun class-nya)
-   sentuhan lift + shadow tipis pas hover, TANPA menyentuh warna/border
-   masing-masing (biar warna semantik kayak merah=danger, gold=aktif,
-   dst tetap keliatan bedanya). Class `.btn` di atas & yang lebih
-   spesifik tetap menang duluan karena specificity-nya lebih tinggi. */
+/* Tombol generik tanpa class .btn (link-style kecil, chip toggle, dst)
+   tetap dapat lift + shadow tipis, tanpa menyentuh warna semantiknya. */
 html.enhanced button:not(:disabled) {
   border-radius: 6px;
 }
-
 html.enhanced button:not(:disabled):hover {
   transform: translateY(-1px);
   box-shadow: 0 2px 8px -3px rgba(18, 56, 50, 0.3);
 }
-
 html.enhanced button:not(:disabled):active {
   transform: translateY(0);
   box-shadow: none;
 }
 
-/* Input & field: rounded tipis + shadow halus. Radius kecil (6px, bukan
-   10px) karena banyak field ini dipakai sempit di dalam tabel/grid (kolom
-   NIS, tahun, umur) — radius besar di kotak sempit terlihat aneh. Efek
-   fokus juga tidak pakai translateY supaya baris tabel/daftar murid tidak
-   "loncat" saat salah satu inputnya difokuskan. */
+/* =====================================================================
+   FIELD & INPUT
+   ===================================================================== */
 html.enhanced .field {
   border-radius: 6px;
-  border-color: rgba(18, 56, 50, 0.18);
+  border-color: rgba(18, 56, 50, 0.2);
   background: rgb(var(--color-paper));
   box-shadow: 0 1px 2px rgba(18, 56, 50, 0.05);
 }
-
 html.enhanced .field:focus {
-  box-shadow: 0 0 0 3px rgba(18, 56, 50, 0.15);
+  box-shadow: 0 0 0 3px rgba(18, 56, 50, 0.16);
 }
 
-/* Kartu/panel utama: HANYA <section> yang jadi anak langsung <main>,
-   supaya section-section kecil yang bertebaran di dalam komponen (baris
-   kelas, baris guru, kartu murid, dll) TIDAK ikut kena padding/border/shadow
-   berlapis-lapis. Ini akar masalah versi sebelumnya. */
+/* =====================================================================
+   TOKEN WARNA UTILITY TAILWIND — INI KUNCINYA
+   Sebelumnya hanya class custom (.btn, .admin-panel, dst) yang disentuh,
+   jadi puluhan elemen di KelasManager/PhotoList/MediaGrid yang cuma pakai
+   utility polos (border-line, text-danger, text-accent, bg-ink/5, dst)
+   keliatan "diem aja" — itu penyebab tampilan belang setengah-berubah.
+   Selector [class*="..."] di bawah menjangkau SEMUA elemen yang memakai
+   token warna itu, apa pun kombinasi class lainnya, tanpa perlu menambah
+   class baru satu-satu ke tiap komponen. */
+
+/* Border abu netral -> border hijau lembut, kontras cukup (bukan 8% pucat) */
+html.enhanced [class*="border-line"] {
+  border-color: rgba(18, 56, 50, 0.22) !important;
+  background-color: rgba(255, 255, 255, 0.55);
+}
+
+/* Border/text/bg accent (hijau) — dipertegas, tidak transparan cetek */
+html.enhanced [class*="border-accent"] {
+  border-color: rgba(18, 56, 50, 0.55) !important;
+}
+html.enhanced [class*="text-accent"] {
+  color: #123832 !important;
+}
+html.enhanced [class*="bg-accent/"] {
+  background-color: rgba(18, 56, 50, 0.14) !important;
+}
+
+/* Border/text/bg danger (merah bata) — sama, dipertegas */
+html.enhanced [class*="border-danger"] {
+  border-color: rgba(168, 73, 46, 0.55) !important;
+}
+html.enhanced [class*="text-danger"] {
+  color: #a8492e !important;
+}
+html.enhanced [class*="bg-danger/"] {
+  background-color: rgba(168, 73, 46, 0.14) !important;
+}
+
+/* Border/bg cetakGold (emas) — dipakai badge skill/role */
+html.enhanced [class*="border-cetakGold"] {
+  border-color: rgba(184, 146, 63, 0.6) !important;
+}
+html.enhanced [class*="bg-cetakGold/"] {
+  background-color: rgba(184, 146, 63, 0.16) !important;
+}
+
+/* bg-ink/NN (badge skill netral, overlay gelap tipis) — ikut palet ink baru
+   otomatis lewat CSS var, tapi dipertegas dikit biar tidak nyaris tak
+   kelihatan seperti versi lama. */
+html.enhanced [class*="bg-ink/"] {
+  background-color: rgba(24, 34, 30, 0.09) !important;
+}
+
+/* Badge/chip kecil (skill, role, status) jadi pill halus + shadow tipis,
+   bukan kotak tajam polos seperti mode dasar. */
+html.enhanced .inline-flex.items-center.gap-1 {
+  border-radius: 999px;
+  box-shadow: 0 1px 2px rgba(18, 56, 50, 0.06);
+}
+
+/* =====================================================================
+   PANEL & KARTU
+   ===================================================================== */
 html.enhanced main > section {
   border-radius: 14px;
   padding: 1.25rem 1.5rem;
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(6px);
-  border: 1px solid rgba(18, 56, 50, 0.1);
-  box-shadow: 0 4px 18px -10px rgba(18, 56, 50, 0.18);
+  border: 1px solid rgba(18, 56, 50, 0.12);
+  box-shadow: 0 4px 18px -10px rgba(18, 56, 50, 0.2);
 }
 
-/* Link mono di header halaman (Profil Kelas / Dashboard Alumni / Cetak /
-   Kelola alumni) jadi chip halus. Dibatasi ke link langsung di dalam baris
-   header, BUKAN semua link mono di seluruh halaman — supaya link kecil di
-   dalam kartu kelas/murid tidak ikut berubah jadi pill besar. */
+/* Kotak-kotak kecil di dalam KelasManager (baris kelas, baris murid, form
+   tambah skill) yang pakai "border border-line p-3" / "p-2" polos —
+   dijadikan kartu mini bergaya sama, bukan kotak siku tajam kosong. */
+html.enhanced .border.border-line {
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 1px 4px -1px rgba(18, 56, 50, 0.08);
+}
+
 html.enhanced main > div > div > a.mono,
 html.enhanced main > section > div > a.mono {
   display: inline-flex;
@@ -377,78 +408,55 @@ html.enhanced main > section > div > a.mono {
   font-weight: 600;
   padding: 0.35rem 0.85rem;
   border-radius: 999px;
-  background: rgba(18, 56, 50, 0.1);
-  border: 1px solid rgba(18, 56, 50, 0.22);
+  background: rgba(18, 56, 50, 0.12);
+  border: 1px solid rgba(18, 56, 50, 0.28);
   box-shadow: 0 1px 3px rgba(18, 56, 50, 0.06);
 }
-
 html.enhanced main > div > div > a.mono:hover,
 html.enhanced main > section > div > a.mono:hover {
-  background: rgba(18, 56, 50, 0.18);
-  border-color: rgba(18, 56, 50, 0.35);
+  background: rgba(18, 56, 50, 0.2);
+  border-color: rgba(18, 56, 50, 0.4);
   transform: translateY(-1px);
   box-shadow: 0 3px 8px -2px rgba(18, 56, 50, 0.2);
 }
 
-/* Heading utama: sedikit lebih hidup */
 html.enhanced h1 {
-  text-shadow: 0 2px 10px rgba(18, 56, 50, 0.1);
+  text-shadow: 0 2px 10px rgba(18, 56, 50, 0.12);
 }
 
-/* ---------------------------------------------------------------------
-   Class eksplisit untuk wrapper/komponen yang tadinya cuma pakai
-   "border border-line" generik (form Unggah Media, Pengaturan Logo, Edit
-   Form, list Komentar/Media, dsb). Ini SENGAJA memakai class baru yang
-   ditambahkan manual satu-satu ke tiap komponen (bukan selector
-   "border-line" langsung), supaya cuma wrapper besar yang dimaksud yang
-   kena — bukan kartu-kartu kecil di dalam grid kelas/murid yang juga
-   kebetulan pakai border serupa (itu penyebab bug melebar versi awal).
-   --------------------------------------------------------------------- */
-
-/* Panel/form besar: Unggah Media, Pengaturan Logo, Edit Form */
+/* Panel/form besar & list besar */
 html.enhanced .admin-panel {
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(6px);
-  border-color: rgba(18, 56, 50, 0.1) !important;
-  box-shadow: 0 4px 18px -10px rgba(18, 56, 50, 0.18);
+  border-color: rgba(18, 56, 50, 0.12) !important;
+  box-shadow: 0 4px 18px -10px rgba(18, 56, 50, 0.2);
 }
-
-/* List besar: Semua Media, Komentar */
 html.enhanced .admin-panel-list {
   border-radius: 14px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(6px);
-  border-color: rgba(18, 56, 50, 0.1) !important;
-  box-shadow: 0 4px 18px -10px rgba(18, 56, 50, 0.18);
+  border-color: rgba(18, 56, 50, 0.12) !important;
+  box-shadow: 0 4px 18px -10px rgba(18, 56, 50, 0.2);
 }
 
-/* Dropzone "Pilih foto, video, atau audio" — sebelumnya opacity 0.02/0.04
-   nyaris tak terlihat sama sekali, sekarang tetap ringan tapi jelas
-   kebaca sebagai kotak drop-target, dengan border putus-putus yang
-   lebih tegas juga (bukan abu-abu pudar). */
 html.enhanced .admin-dropzone {
   border-radius: 12px;
-  background: rgba(18, 56, 50, 0.035);
+  background: rgba(18, 56, 50, 0.05);
+  border-color: rgba(18, 56, 50, 0.28) !important;
+}
+html.enhanced .admin-dropzone:hover {
+  background: rgba(18, 56, 50, 0.09);
+  border-color: rgba(18, 56, 50, 0.4) !important;
+}
+
+html.enhanced .admin-chip {
+  border-radius: 8px;
+  background: rgba(18, 56, 50, 0.08);
   border-color: rgba(18, 56, 50, 0.22) !important;
 }
 
-html.enhanced .admin-dropzone:hover {
-  background: rgba(18, 56, 50, 0.07);
-  border-color: rgba(18, 56, 50, 0.35) !important;
-}
-
-/* Chip daftar file yang sudah dipilih di form upload */
-html.enhanced .admin-chip {
-  border-radius: 8px;
-  background: rgba(18, 56, 50, 0.06);
-  border-color: rgba(18, 56, 50, 0.18) !important;
-}
-
-/* Link "Ganti logo / Unggah logo" — dibikin senada tombol .btn-outline
-   (fill lembut + border jelas + teks accent tebal) supaya sekelas
-   dengan tombol lain, bukan pill pucat yang gampang kelewatan. */
 html.enhanced .admin-link-btn {
   display: inline-flex;
   align-items: center;
@@ -457,39 +465,33 @@ html.enhanced .admin-link-btn {
   color: #123832;
   padding: 0.35rem 0.85rem;
   border-radius: 999px;
-  background: rgba(18, 56, 50, 0.1);
-  border: 1px solid rgba(18, 56, 50, 0.25);
+  background: rgba(18, 56, 50, 0.12);
+  border: 1px solid rgba(18, 56, 50, 0.3);
   box-shadow: 0 1px 3px rgba(18, 56, 50, 0.06);
 }
-
 html.enhanced .admin-link-btn:hover {
-  background: rgba(18, 56, 50, 0.2);
-  border-color: rgba(18, 56, 50, 0.4);
+  background: rgba(18, 56, 50, 0.22);
+  border-color: rgba(18, 56, 50, 0.45);
   transform: translateY(-1px);
   box-shadow: 0 3px 8px -2px rgba(18, 56, 50, 0.2);
 }
 
-/* Thumbnail kecil di grid multi-media (radius kecil, bukan besar — kotak
-   ini terlalu kecil untuk radius 14px seperti panel) */
 html.enhanced .admin-thumb {
   border-radius: 6px;
 }
 
-/* Tombol toggle itu sendiri */
+/* Tombol toggle Mode Bagus itu sendiri */
 html.enhanced .enhanced-toggle-btn {
   border-radius: 999px !important;
   box-shadow: 0 10px 24px -8px rgba(18, 56, 50, 0.5) !important;
 }
-
 .enhanced-toggle-btn {
   border-radius: 999px;
   cursor: pointer;
 }
-
 .enhanced-toggle-btn:hover {
   transform: translateY(-2px);
 }
-
 .enhanced-toggle-btn:active {
   transform: translateY(0);
 }
