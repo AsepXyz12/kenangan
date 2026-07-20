@@ -2,6 +2,23 @@ import Link from "next/link";
 
 export const TAPES = ["gold", "clay", "dusk"];
 
+// Urutan tampil: anak IPA dikelompokkan di ATAS, IPS di BAWAH, yang belum
+// diisi jurusan ada di tengah — biar publik gampang bedain tanpa harus buka
+// tiap kartu satu-satu. Di dalam satu kelompok jurusan, urutan aslinya tetap
+// dipertahankan (itu yang jaga posisi laki-laki di atas / perempuan di bawah
+// dari fitur tambah murid).
+const JURUSAN_RANK = { IPA: 0, IPS: 2 };
+export function sortByJurusan(students) {
+  return [...students]
+    .map((s, i) => ({ s, i }))
+    .sort((a, b) => {
+      const ra = JURUSAN_RANK[a.s.jurusan] ?? 1;
+      const rb = JURUSAN_RANK[b.s.jurusan] ?? 1;
+      return ra !== rb ? ra - rb : a.i - b.i;
+    })
+    .map(({ s }) => s);
+}
+
 export function initials(name) {
   return (
     (name || "?")
@@ -106,7 +123,7 @@ export function ClassSection({ kelas, teachers }) {
         <p className="text-sm text-ink/40">Belum ada data murid.</p>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-x-4 gap-y-8">
-          {kelas.students.map((s, i) => (
+          {sortByJurusan(kelas.students).map((s, i) => (
             <StudentCard key={s.id} student={s} tape={TAPES[i % TAPES.length]} />
           ))}
         </div>

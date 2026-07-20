@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { readKelas } from "@/lib/kelas-store";
 import { readSettings } from "@/lib/store";
-import { StudentCard, TAPES } from "@/components/KelasCards";
+import { StudentCard, TAPES, sortByJurusan } from "@/components/KelasCards";
 
 export const dynamic = "force-dynamic";
 
@@ -71,7 +71,7 @@ export default async function KelasDetailPage({ params }) {
           <p className="text-sm text-ink/40 text-center">Belum ada data murid.</p>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-x-4 gap-y-8">
-            {kelas.students.map((s, i) => (
+            {sortByJurusan(kelas.students).map((s, i) => (
               <StudentCard key={s.id} student={s} tape={TAPES[i % TAPES.length]} />
             ))}
           </div>

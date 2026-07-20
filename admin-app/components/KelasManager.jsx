@@ -12,6 +12,22 @@ async function uploadPhoto(file) {
   return blob.url;
 }
 
+// Sama persis logikanya dengan versi public-app: IPA dikelompokkan di ATAS,
+// IPS di BAWAH, yang belum diisi jurusan di tengah — urutan asli (laki-laki
+// atas / perempuan bawah) tetap kejaga di dalam tiap kelompok. Ini cuma
+// ngatur urutan TAMPILAN grid di admin (data mentahnya tidak diubah).
+const JURUSAN_RANK = { IPA: 0, IPS: 2 };
+function sortByJurusan(students) {
+  return [...students]
+    .map((s, i) => ({ s, i }))
+    .sort((a, b) => {
+      const ra = JURUSAN_RANK[a.s.jurusan] ?? 1;
+      const rb = JURUSAN_RANK[b.s.jurusan] ?? 1;
+      return ra !== rb ? ra - rb : a.i - b.i;
+    })
+    .map(({ s }) => s);
+}
+
 // ---------- Angkatan (tahun masuk / tahun lulus) ----------
 //
 // Sengaja diduplikasi dari lib/kelas-store.js (bukan di-import) karena file
@@ -1357,7 +1373,7 @@ function ClassBlock({
           Murid ({kelas.students.length})
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-3">
-          {kelas.students.map((s) => (
+          {sortByJurusan(kelas.students).map((s) => (
             <StudentCard
               key={s.id}
               classId={kelas.id}
