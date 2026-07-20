@@ -95,6 +95,15 @@ export default async function MuridPage({ params }) {
         <h1 className="font-display italic text-4xl mt-8 text-emerald">
           {student.name}
         </h1>
+        {(student.jurusan === "IPA" || student.jurusan === "IPS") && (
+          <span
+            className={`inline-block mt-2 font-display italic font-bold text-xl px-3 py-0.5 rounded shadow-sm ${
+              student.jurusan === "IPA" ? "bg-emerald text-parchment" : "bg-clay text-parchment"
+            }`}
+          >
+            {student.jurusan}
+          </span>
+        )}
         <p className="mt-2 font-stamp text-xs uppercase tracking-wide text-ink/50">
           {kelas.name}
           {wali.length > 0 && <> · Wali: {wali.map((w) => w.name).join(" & ")}</>}

@@ -731,6 +731,7 @@ function RolesInput({ classId, student, onChanged }) {
 function StudentCard({ classId, student, otherClasses, onChanged, onDeleted, onMoved }) {
   const [name, setName] = useState(student.name);
   const [gender, setGender] = useState(student.gender || null);
+  const [jurusan, setJurusan] = useState(student.jurusan || null);
   const [hobby, setHobby] = useState(student.hobby || "");
   const [favoriteSubject, setFavoriteSubject] = useState(student.favoriteSubject || "");
   const [uploading, setUploading] = useState(false);
@@ -749,7 +750,7 @@ function StudentCard({ classId, student, otherClasses, onChanged, onDeleted, onM
       const res = await fetch(`/api/kelas/classes/${classId}/students/${student.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, hobby, favoriteSubject, gender }),
+        body: JSON.stringify({ name, hobby, favoriteSubject, gender, jurusan }),
       });
       if (res.ok) {
         onChanged(await res.json());
@@ -843,6 +844,26 @@ function StudentCard({ classId, student, otherClasses, onChanged, onDeleted, onM
             onClick={() => setGender(opt.value)}
             className={`text-[9px] mono uppercase px-1.5 py-1 border ${
               gender === opt.value
+                ? "bg-accent text-paper border-accent"
+                : "border-line text-ink/60"
+            }`}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+      <div className="flex items-center gap-1">
+        {[
+          { value: null, label: "Umum" },
+          { value: "IPA", label: "IPA" },
+          { value: "IPS", label: "IPS" },
+        ].map((opt) => (
+          <button
+            key={opt.label}
+            type="button"
+            onClick={() => setJurusan(opt.value)}
+            className={`text-[9px] mono uppercase px-1.5 py-1 border ${
+              (jurusan || null) === opt.value
                 ? "bg-accent text-paper border-accent"
                 : "border-line text-ink/60"
             }`}
@@ -1152,27 +1173,6 @@ function ClassBlock({
               Angkatan {angkatanNumber}
             </span>
           )}
-          <div className="flex items-center gap-1">
-            {[
-              { value: null, label: "Umum" },
-              { value: "IPA", label: "IPA" },
-              { value: "IPS", label: "IPS" },
-            ].map((opt) => (
-              <button
-                key={opt.label}
-                type="button"
-                disabled={busy}
-                onClick={() => patch({ jurusan: opt.value })}
-                className={`text-[11px] mono uppercase px-2 py-1 border ${
-                  (kelas.jurusan || null) === opt.value
-                    ? "bg-accent text-paper border-accent"
-                    : "border-line text-ink/60"
-                }`}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
           <button
             type="button"
             disabled={busy}

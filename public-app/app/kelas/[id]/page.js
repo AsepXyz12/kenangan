@@ -27,15 +27,6 @@ export default async function KelasDetailPage({ params }) {
         <h1 className="font-display italic text-5xl sm:text-6xl mt-3 text-emerald leading-[1.05]">
           {kelas.name}
         </h1>
-        {(kelas.jurusan === "IPA" || kelas.jurusan === "IPS") && (
-          <span
-            className={`inline-block mt-2 font-display italic font-bold text-xl sm:text-2xl px-3 py-0.5 rounded shadow-sm ${
-              kelas.jurusan === "IPA" ? "bg-emerald text-parchment" : "bg-clay text-parchment"
-            }`}
-          >
-            {kelas.jurusan}
-          </span>
-        )}
         {wali.length > 0 && (
           <p className="mt-3 font-stamp text-xs uppercase tracking-wide text-ink/50">
             Wali kelas: {wali.map((w) => w.name).join(" & ")}

@@ -47,6 +47,20 @@ export function StudentCard({ student, tape }) {
             {student.roles[0]}
           </span>
         )}
+        {(student.jurusan === "IPA" || student.jurusan === "IPS") && (
+          // Label jurusan MURID (bukan kelas) — nempel di pojok kanan atas,
+          // dibuat besar & kontras biar publik langsung lihat siapa IPA
+          // siapa IPS walau satu kelas isinya campuran.
+          <span
+            className={`absolute top-1 right-1 font-display italic font-bold text-sm leading-none px-2 py-1 rounded shadow-sm ${
+              student.jurusan === "IPA"
+                ? "bg-emerald text-parchment"
+                : "bg-clay text-parchment"
+            }`}
+          >
+            {student.jurusan}
+          </span>
+        )}
       </div>
       <p className="mt-2 text-center font-stamp text-xs uppercase tracking-wide text-ink/70 truncate">
         {student.name}

@@ -545,7 +545,7 @@ export async function deleteTeacher(id) {
 
 // ---------- Kelas ----------
 
-export async function addClass({ name, entryYear, jurusan }) {
+export async function addClass({ name, entryYear }) {
   const data = await readKelasRaw();
   const kelas = {
     id: randomUUID(),
@@ -553,9 +553,6 @@ export async function addClass({ name, entryYear, jurusan }) {
     order: data.classes.length + 1,
     isAlumni: false,
     entryYear: Number.isInteger(entryYear) ? entryYear : null,
-    // Jurusan (IPA/IPS) — dipakai buat kelas yang sudah dipecah per jurusan
-    // (biasanya mulai kelas 2/XI). null = belum/tidak dipecah jurusan.
-    jurusan: jurusan === "IPA" || jurusan === "IPS" ? jurusan : null,
     waliKelasIds: [],
     students: [],
   };
@@ -569,10 +566,6 @@ export async function updateClass(id, patch) {
   const kelas = data.classes.find((c) => c.id === id);
   if (!kelas) return null;
   if (typeof patch.name === "string") kelas.name = patch.name;
-  if (patch.jurusan === "IPA" || patch.jurusan === "IPS" || patch.jurusan === null) {
-    // IPA/IPS — kalau null berarti kelas ini belum/tidak dipecah jurusan.
-    kelas.jurusan = patch.jurusan;
-  }
   if (Array.isArray(patch.waliKelasIds)) kelas.waliKelasIds = patch.waliKelasIds;
   if (typeof patch.isAlumni === "boolean") kelas.isAlumni = patch.isAlumni;
   if (typeof patch.order === "number") kelas.order = patch.order;
@@ -607,7 +600,7 @@ export async function deleteClass(id) {
 // dua kelompok tanpa perlu diurutkan manual tiap kali ada yang keluar/masuk.
 export async function addStudent(
   classId,
-  { name, photoUrl, hobby, favoriteSubject, roles, skills, gender }
+  { name, photoUrl, hobby, favoriteSubject, roles, skills, gender, jurusan }
 ) {
   const data = await readKelasRaw();
   const kelas = data.classes.find((c) => c.id === classId);
@@ -616,6 +609,10 @@ export async function addStudent(
     id: randomUUID(),
     name: name || "",
     gender: gender === "L" || gender === "P" ? gender : null,
+    // Jurusan (IPA/IPS) melekat ke MURID, bukan ke kelas — soalnya satu
+    // wadah kelas (mis. "Kelas 2") sekarang isinya campuran murid IPA dan
+    // IPS. null = belum diisi / belum jurusan.
+    jurusan: jurusan === "IPA" || jurusan === "IPS" ? jurusan : null,
     photoUrl: photoUrl || null,
     hobby: hobby || "",
     favoriteSubject: favoriteSubject || "",
@@ -640,6 +637,9 @@ export async function updateStudent(classId, studentId, patch) {
   if (typeof patch.name === "string") student.name = patch.name;
   if (patch.gender === "L" || patch.gender === "P" || patch.gender === null) {
     student.gender = patch.gender;
+  }
+  if (patch.jurusan === "IPA" || patch.jurusan === "IPS" || patch.jurusan === null) {
+    student.jurusan = patch.jurusan;
   }
   if (patch.photoUrl !== undefined) student.photoUrl = patch.photoUrl;
   if (typeof patch.hobby === "string") student.hobby = patch.hobby;

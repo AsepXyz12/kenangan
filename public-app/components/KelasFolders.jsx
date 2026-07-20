@@ -39,17 +39,6 @@ export default function KelasFolders({ classes, teachers }) {
               </span>
             </div>
             <div className="folder-body aspect-[4/3] w-full bg-parchment2 flex items-center justify-center overflow-hidden">
-              {(kelas.jurusan === "IPA" || kelas.jurusan === "IPS") && (
-                <span
-                  className={`absolute top-2 left-2 z-10 font-display italic font-bold text-2xl sm:text-3xl px-2.5 py-0.5 rounded shadow-sm ${
-                    kelas.jurusan === "IPA"
-                      ? "bg-emerald text-parchment"
-                      : "bg-clay text-parchment"
-                  }`}
-                >
-                  {kelas.jurusan}
-                </span>
-              )}
               {kelas.groupPhotoUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img

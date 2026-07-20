@@ -15,6 +15,7 @@ export async function POST(request, { params }) {
     roles: body.roles,
     skills: body.skills,
     gender: body.gender,
+    jurusan: body.jurusan,
   });
   if (!student) {
     return NextResponse.json({ error: "Kelas tidak ditemukan" }, { status: 404 });
