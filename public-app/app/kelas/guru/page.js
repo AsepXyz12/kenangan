@@ -42,13 +42,17 @@ export default async function GuruPage() {
                 className="polaroid relative w-full max-w-[150px] mx-auto"
               >
                 <span className="stamp-tape" />
-                <div className="aspect-square w-full bg-parchment2 flex items-center justify-center overflow-hidden">
+                <div
+                  className={`w-full bg-parchment2 flex items-center justify-center overflow-hidden ${
+                    t.photoUrl ? "" : "aspect-square"
+                  }`}
+                >
                   {t.photoUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={t.photoUrl}
                       alt={t.name}
-                      className="w-full h-full object-cover object-top"
+                      className="w-full h-auto block"
                     />
                   ) : (
                     <span className="font-stamp text-2xl text-emerald/30">{initials(t.name)}</span>

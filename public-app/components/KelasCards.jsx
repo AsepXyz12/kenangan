@@ -39,17 +39,23 @@ export function StudentCard({ student, tape }) {
       style={{ "--r": `${((student.name?.length || 0) % 5) - 2}deg` }}
     >
       <span className="stamp-tape" />
-      <div className="aspect-square w-full bg-parchment2 flex items-center justify-center overflow-hidden relative">
+      <div
+        className={`w-full bg-parchment2 flex items-center justify-center overflow-hidden relative ${
+          student.photoUrl ? "" : "aspect-square"
+        }`}
+      >
         {student.photoUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={student.photoUrl}
             alt={student.name}
-            // object-cover + object-top: tetap ngisi penuh kotak (rapi),
-            // tapi crop-nya diprioritasin motong bagian bawah/pinggir foto
-            // dulu, bukan dari tengah — soalnya muka biasanya ada di bagian
-            // atas foto (selfie/portrait), jadi mukanya gak ikut kepotong.
-            className="w-full h-full object-cover object-top"
+            // Foto yang diupload sekarang udah dalam rasio asli/pilihan
+            // admin sendiri (lihat PhotoCropModal), jadi di sini tinggal
+            // ditampilin apa adanya (w-full, height ngikutin) — gak perlu
+            // dipaksa persegi atau di-cover lagi, biar apapun bentuk/ukuran
+            // fotonya tetap pas, gak ada bagian kepotong & gak ada sisa
+            // warna background yang keliatan.
+            className="w-full h-auto block"
           />
         ) : (
           <span className="font-stamp text-2xl text-emerald/30">

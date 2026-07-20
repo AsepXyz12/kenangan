@@ -2,13 +2,15 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 
-const VIEWPORT = 280; // ukuran kotak crop yang keliatan di layar (px)
-const OUTPUT = 800; // resolusi hasil crop yang diupload (px, persegi)
+const MAX_BOX = 320; // sisi terpanjang kotak crop di layar (px)
+const OUTPUT_MAX = 900; // sisi terpanjang hasil crop yang diupload (px)
 
-// Modal crop foto persegi, manual (drag buat geser posisi, slider buat
-// zoom). Dipakai sebelum foto di-upload supaya bagian yang penting (muka)
-// bisa diposisikan sendiri oleh admin, gak nebak-nebak pake object-position
-// otomatis kayak sebelumnya.
+// Modal crop foto, manual (drag buat geser posisi, slider buat zoom).
+// PENTING: kotak crop-nya sekarang ngikutin rasio ASLI foto (bukan
+// dipaksa persegi), jadi di zoom = 1 foto selalu pas nutupin seluruh
+// kotak tanpa sisa ruang kosong DAN tanpa motong bagian foto sama
+// sekali — apapun bentuk/ukuran fotonya. Zoom > 1 baru dipakai kalau
+// admin sengaja mau crop lebih rapat (misalnya biar muka lebih besar).
 export default function PhotoCropModal({ file, onCancel, onConfirm }) {
   const [imgEl, setImgEl] = useState(null);
   const [zoom, setZoom] = useState(1);
@@ -30,42 +32,59 @@ export default function PhotoCropModal({ file, onCancel, onConfirm }) {
     return () => URL.revokeObjectURL(url);
   }, [file]);
 
-  // Skala dasar supaya gambar selalu nutupin seluruh kotak crop (cover-fit)
-  // di zoom = 1. Zoom > 1 tinggal ngali skala dasar ini.
-  const baseScale = useMemo(() => {
-    if (!imgEl) return 1;
-    return VIEWPORT / Math.min(imgEl.naturalWidth, imgEl.naturalHeight);
+  // Kotak crop di layar: rasio-nya SAMA PERSIS kayak rasio asli foto
+  // (bukan persegi tetap), dibatasi cuma biar gak lebih besar dari
+  // MAX_BOX di sisi terpanjangnya. Dengan ini, "cover-fit" di zoom = 1
+  // otomatis == "seluruh foto keliatan", jadi gak akan pernah ada
+  // ruang kosong DAN gak akan pernah kepotong secara paksa.
+  const { boxW, boxH } = useMemo(() => {
+    if (!imgEl) return { boxW: MAX_BOX, boxH: MAX_BOX };
+    const fit = MAX_BOX / Math.max(imgEl.naturalWidth, imgEl.naturalHeight);
+    return {
+      boxW: imgEl.naturalWidth * fit,
+      boxH: imgEl.naturalHeight * fit,
+    };
   }, [imgEl]);
+
+  // Skala dasar: di zoom = 1, foto pas nutupin seluruh kotak (yang
+  // rasionya udah disamain sama foto di atas), jadi otomatis "cover"
+  // = "utuh", dua-duanya sekaligus.
+  const baseScale = boxW && imgEl ? boxW / imgEl.naturalWidth : 1;
 
   const scale = baseScale * zoom;
   const dispW = imgEl ? imgEl.naturalWidth * scale : 0;
   const dispH = imgEl ? imgEl.naturalHeight * scale : 0;
 
-  function clampAxis(pos, dispSize) {
-    if (dispSize <= VIEWPORT) {
-      // Fotonya lebih kecil dari kotak crop (lagi di-zoom out) — taruh di
-      // tengah aja, gak perlu (dan gak bisa) di-drag.
-      return (VIEWPORT - dispSize) / 2;
+  function clampAxis(pos, dispSize, boxSize) {
+    if (dispSize <= boxSize) {
+      // Toleransi pembulatan floating-point — taruh di tengah aja.
+      return (boxSize - dispSize) / 2;
     }
-    const min = VIEWPORT - dispSize;
+    const min = boxSize - dispSize;
     return Math.min(0, Math.max(min, pos));
   }
 
   function clampOffset(next, w = dispW, h = dispH) {
     return {
-      x: clampAxis(next.x, w),
-      y: clampAxis(next.y, h),
+      x: clampAxis(next.x, w, boxW),
+      y: clampAxis(next.y, h, boxH),
     };
   }
 
-  // Pas pertama kali gambar muncul, taruh di tengah
+  // Pas pertama kali gambar muncul, taruh di tengah (di zoom 1 ini
+  // otomatis (0,0) karena dispW/H == boxW/H, tapi tetap dihitung biar
+  // aman kalau ada sisa pembulatan)
   useEffect(() => {
     if (!imgEl) return;
     setOffset(
-      clampOffset({
-        x: (VIEWPORT - imgEl.naturalWidth * baseScale) / 2,
-        y: (VIEWPORT - imgEl.naturalHeight * baseScale) / 2,
-      })
+      clampOffset(
+        {
+          x: (boxW - imgEl.naturalWidth * baseScale) / 2,
+          y: (boxH - imgEl.naturalHeight * baseScale) / 2,
+        },
+        imgEl.naturalWidth * baseScale,
+        imgEl.naturalHeight * baseScale
+      )
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [imgEl]);
@@ -98,13 +117,13 @@ export default function PhotoCropModal({ file, onCancel, onConfirm }) {
     const nextH = imgEl.naturalHeight * nextScale;
     // Jaga titik tengah kotak crop tetap nunjuk ke bagian gambar yang sama
     // pas di-zoom, biar gak "loncat" posisinya.
-    const centerX = VIEWPORT / 2 - offset.x;
-    const centerY = VIEWPORT / 2 - offset.y;
+    const centerX = boxW / 2 - offset.x;
+    const centerY = boxH / 2 - offset.y;
     const ratio = nextScale / scale;
     const nextOffset = clampOffset(
       {
-        x: VIEWPORT / 2 - centerX * ratio,
-        y: VIEWPORT / 2 - centerY * ratio,
+        x: boxW / 2 - centerX * ratio,
+        y: boxH / 2 - centerY * ratio,
       },
       nextW,
       nextH
@@ -118,17 +137,24 @@ export default function PhotoCropModal({ file, onCancel, onConfirm }) {
     setSaving(true);
     setError("");
     try {
+      // Resolusi output ngikutin rasio ASLI foto juga (bukan dipaksa
+      // persegi), dibatasi di sisi terpanjang OUTPUT_MAX px.
+      const outFit =
+        OUTPUT_MAX / Math.max(imgEl.naturalWidth, imgEl.naturalHeight);
+      const outW = Math.round(imgEl.naturalWidth * outFit);
+      const outH = Math.round(imgEl.naturalHeight * outFit);
+
       const canvas = document.createElement("canvas");
-      canvas.width = OUTPUT;
-      canvas.height = OUTPUT;
+      canvas.width = outW;
+      canvas.height = outH;
       const ctx = canvas.getContext("2d");
-      const ratio = OUTPUT / VIEWPORT;
-      // Zoom minimal sekarang dikunci di 1x (lihat slider di bawah), jadi
-      // foto selalu nutupin penuh kotak crop — gak akan pernah nyisain
-      // ruang kosong. Fill warna ini cuma jaga-jaga (safety net) kalau ada
-      // kondisi aneh, harusnya gak pernah kepake lagi.
+      const ratio = outW / boxW;
+      // Foto selalu nutupin penuh kotak crop dari zoom = 1 ke atas
+      // (lihat komentar baseScale di atas), jadi gak akan pernah nyisa
+      // ruang kosong — fill warna ini cuma jaga-jaga kalau ada kondisi
+      // aneh, harusnya gak pernah kepake.
       ctx.fillStyle = "#EFE7D2";
-      ctx.fillRect(0, 0, OUTPUT, OUTPUT);
+      ctx.fillRect(0, 0, outW, outH);
       ctx.drawImage(
         imgEl,
         offset.x * ratio,
@@ -162,7 +188,7 @@ export default function PhotoCropModal({ file, onCancel, onConfirm }) {
 
         <div
           className="relative mx-auto overflow-hidden bg-line/30 touch-none select-none cursor-move"
-          style={{ width: VIEWPORT, height: VIEWPORT }}
+          style={{ width: boxW, height: boxH }}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
@@ -183,8 +209,6 @@ export default function PhotoCropModal({ file, onCancel, onConfirm }) {
               }}
             />
           )}
-          {/* Panduan bulat tipis di tengah, biar gampang nyamain posisi muka */}
-          <div className="absolute inset-4 border border-dashed border-paper/70 rounded-full pointer-events-none" />
         </div>
 
         <div className="flex items-center gap-2 mt-3">
@@ -202,8 +226,9 @@ export default function PhotoCropModal({ file, onCancel, onConfirm }) {
         </div>
 
         <p className="mono text-[9px] text-ink/40 mt-1">
-          Geser foto buat pas-in posisi, atur zoom kalau perlu. Bagian di
-          dalam lingkaran putus-putus itu yang bakal kepake.
+          Default-nya foto udah keliatan utuh (gak kepotong). Geser buat
+          reposisi, atau naikin zoom kalau mau crop lebih rapat (misalnya
+          biar muka lebih besar).
         </p>
 
         {error && <p className="text-danger text-[11px] mt-2">{error}</p>}

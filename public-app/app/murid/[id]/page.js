@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import hljs from "highlight.js";
 import { getStudentDetail } from "@/lib/kelas-store";
@@ -75,14 +74,20 @@ export default async function MuridPage({ params }) {
           style={{ transform: "rotate(-1.5deg)" }}
         >
           <span className="stamp-tape" aria-hidden="true" />
-          <div className="aspect-square w-full bg-parchment2 flex items-center justify-center overflow-hidden">
+          <div
+            className={`w-full bg-parchment2 flex items-center justify-center overflow-hidden ${
+              student.photoUrl ? "" : "aspect-square"
+            }`}
+          >
             {student.photoUrl ? (
-              <Image
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
                 src={student.photoUrl}
                 alt={student.name}
-                width={440}
-                height={440}
-                className="w-full h-full object-cover object-top"
+                // Sama kayak di kartu grid: foto udah dalam rasio
+                // asli/pilihan admin sendiri, jadi tampilin apa adanya,
+                // gak dipaksa persegi/cover lagi.
+                className="w-full h-auto block"
               />
             ) : (
               <span className="font-stamp text-5xl text-emerald/30">
