@@ -730,6 +730,7 @@ function RolesInput({ classId, student, onChanged }) {
 
 function StudentCard({ classId, student, otherClasses, onChanged, onDeleted, onMoved }) {
   const [name, setName] = useState(student.name);
+  const [gender, setGender] = useState(student.gender || null);
   const [hobby, setHobby] = useState(student.hobby || "");
   const [favoriteSubject, setFavoriteSubject] = useState(student.favoriteSubject || "");
   const [uploading, setUploading] = useState(false);
@@ -748,7 +749,7 @@ function StudentCard({ classId, student, otherClasses, onChanged, onDeleted, onM
       const res = await fetch(`/api/kelas/classes/${classId}/students/${student.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, hobby, favoriteSubject }),
+        body: JSON.stringify({ name, hobby, favoriteSubject, gender }),
       });
       if (res.ok) {
         onChanged(await res.json());
@@ -831,6 +832,25 @@ function StudentCard({ classId, student, otherClasses, onChanged, onDeleted, onM
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
+      <div className="flex items-center gap-1">
+        {[
+          { value: "L", label: "Laki-laki" },
+          { value: "P", label: "Perempuan" },
+        ].map((opt) => (
+          <button
+            key={opt.value}
+            type="button"
+            onClick={() => setGender(opt.value)}
+            className={`text-[9px] mono uppercase px-1.5 py-1 border ${
+              gender === opt.value
+                ? "bg-accent text-paper border-accent"
+                : "border-line text-ink/60"
+            }`}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
       <input
         className="field text-center text-[10px] py-1 focus:border-cetakGold"
         placeholder="Hobi (mis. coding)"
@@ -915,8 +935,7 @@ function AddStudent({ classId, onAdded }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
-  async function submit(e) {
-    e.preventDefault();
+  async function submit(gender) {
     if (!name.trim()) return;
     setBusy(true);
     setError("");
@@ -924,10 +943,10 @@ function AddStudent({ classId, onAdded }) {
       const res = await fetch(`/api/kelas/classes/${classId}/students`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ name, gender }),
       });
       if (res.ok) {
-        onAdded(await res.json());
+        onAdded(await res.json(), gender);
         setName("");
       } else {
         const data = await res.json().catch(() => ({}));
@@ -942,15 +961,33 @@ function AddStudent({ classId, onAdded }) {
 
   return (
     <div>
-      <form onSubmit={submit} className="flex items-center gap-2">
+      <form
+        onSubmit={(e) => e.preventDefault()}
+        className="flex flex-wrap items-center gap-2"
+      >
         <input
-          className="field text-xs"
+          className="field text-xs flex-1 min-w-[140px]"
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Nama murid baru"
         />
-        <button disabled={busy} className="btn text-[11px] uppercase mono px-3 py-1.5 shrink-0">
-          + Tambah
+        <button
+          type="button"
+          disabled={busy || !name.trim()}
+          onClick={() => submit("L")}
+          title="Ditambah di paling atas daftar"
+          className="btn text-[11px] uppercase mono px-2.5 py-1.5 shrink-0 disabled:opacity-50"
+        >
+          + Laki-laki
+        </button>
+        <button
+          type="button"
+          disabled={busy || !name.trim()}
+          onClick={() => submit("P")}
+          title="Ditambah di paling bawah daftar"
+          className="btn text-[11px] uppercase mono px-2.5 py-1.5 shrink-0 disabled:opacity-50"
+        >
+          + Perempuan
         </button>
       </form>
       {error && <p className="text-xs text-danger mono mt-1">{error}</p>}
@@ -1084,8 +1121,12 @@ function ClassBlock({
   function removeStudentInPlace(studentId) {
     onChanged({ ...kelas, students: kelas.students.filter((s) => s.id !== studentId) });
   }
-  function addStudentInPlace(student) {
-    onChanged({ ...kelas, students: [...kelas.students, student] });
+  function addStudentInPlace(student, gender) {
+    onChanged({
+      ...kelas,
+      students:
+        gender === "L" ? [student, ...kelas.students] : [...kelas.students, student],
+    });
   }
 
   return (

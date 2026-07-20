@@ -602,20 +602,31 @@ export async function deleteClass(id) {
 
 // ---------- Murid ----------
 
-export async function addStudent(classId, { name, photoUrl, hobby, favoriteSubject, roles, skills }) {
+// Laki-laki ditambah di PALING ATAS daftar, perempuan di PALING BAWAH
+// (kebiasaan absen manual) — jadi urutan murid otomatis rapi terpisah
+// dua kelompok tanpa perlu diurutkan manual tiap kali ada yang keluar/masuk.
+export async function addStudent(
+  classId,
+  { name, photoUrl, hobby, favoriteSubject, roles, skills, gender }
+) {
   const data = await readKelasRaw();
   const kelas = data.classes.find((c) => c.id === classId);
   if (!kelas) return null;
   const student = {
     id: randomUUID(),
     name: name || "",
+    gender: gender === "L" || gender === "P" ? gender : null,
     photoUrl: photoUrl || null,
     hobby: hobby || "",
     favoriteSubject: favoriteSubject || "",
     roles: Array.isArray(roles) ? roles.filter(Boolean) : [],
     skills: Array.isArray(skills) ? skills.filter(Boolean) : [],
   };
-  kelas.students.push(student);
+  if (student.gender === "L") {
+    kelas.students.unshift(student);
+  } else {
+    kelas.students.push(student);
+  }
   await writeKelas(data);
   return student;
 }
@@ -627,6 +638,9 @@ export async function updateStudent(classId, studentId, patch) {
   const student = kelas.students.find((s) => s.id === studentId);
   if (!student) return null;
   if (typeof patch.name === "string") student.name = patch.name;
+  if (patch.gender === "L" || patch.gender === "P" || patch.gender === null) {
+    student.gender = patch.gender;
+  }
   if (patch.photoUrl !== undefined) student.photoUrl = patch.photoUrl;
   if (typeof patch.hobby === "string") student.hobby = patch.hobby;
   if (typeof patch.favoriteSubject === "string") student.favoriteSubject = patch.favoriteSubject;
