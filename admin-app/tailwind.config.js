@@ -7,8 +7,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        ink: "#1C1C1C",
-        paper: "#FAFAF8",
+        // ink & paper dibuat lewat CSS variable (bukan hex langsung) supaya
+        // Mode Bagus bisa ganti warnanya app-wide dari satu tempat di
+        // globals.css (html.enhanced), tanpa perlu ubah className di
+        // ratusan tempat. Default (mode polos) tetap identik dengan hex
+        // lama, jadi tidak ada perubahan visual saat Mode Bagus mati.
+        ink: "rgb(var(--color-ink) / <alpha-value>)",
+        paper: "rgb(var(--color-paper) / <alpha-value>)",
         line: "#D8D5CC",
         accent: "#123832",
         danger: "#A8492E",

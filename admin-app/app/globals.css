@@ -4,6 +4,11 @@
 
 :root {
   color-scheme: light;
+  /* Default "ink" & "paper" — identik dengan hex lama (#1C1C1C / #FAFAF8),
+     dipecah jadi channel r g b supaya bisa dipakai Tailwind dengan
+     opacity-modifier (text-ink/60, dst). Mode Bagus override ini di bawah. */
+  --color-ink: 28 28 28;
+  --color-paper: 250 250 248;
 }
 
 body {
@@ -171,11 +176,52 @@ code,
    Versi ini memperbaikinya dengan selector yang jauh lebih spesifik.
    ===================================================================== */
 
+/* Inti "hilangin hitam-putih": ganti channel r g b dari --color-ink &
+   --color-paper. Karena ink/paper di tailwind.config.js sekarang dibaca
+   lewat rgb(var(...) / <alpha-value>), SEMUA pemakaian text-ink, text-ink/60,
+   bg-paper, dst di seluruh app (layout, KelasManager, MediaGrid, form, dll)
+   otomatis ikut berubah — tanpa perlu sentuh className manapun.
+   - ink: dari abu-abu netral #1C1C1C → hijau tua gelap (senada accent
+     #123832), jadi teks tetap kontras & gampang dibaca tapi tidak hitam.
+   - paper: dari putih nyaris polos #FAFAF8 → gading hangat (senada
+     parchment situs publik), jadi background tidak putih steril. */
+html.enhanced {
+  --color-ink: 26 38 34;
+  --color-paper: 250 248 242;
+}
+
 html.enhanced body {
   background:
-    radial-gradient(900px 500px at 10% -10%, rgba(18, 56, 50, 0.05), transparent 60%),
-    radial-gradient(800px 500px at 100% 0%, rgba(184, 146, 63, 0.07), transparent 55%),
-    #fbfaf7;
+    radial-gradient(900px 500px at 10% -10%, rgba(18, 56, 50, 0.06), transparent 60%),
+    radial-gradient(800px 500px at 100% 0%, rgba(184, 146, 63, 0.08), transparent 55%),
+    rgb(var(--color-paper));
+}
+
+/* Sisa background putih polos yang tidak lewat class bg-paper (modal crop
+   foto, overlay gelap di thumbnail) — diselaraskan juga biar tidak ada lagi
+   kotak putih polos yang lolos dari palet baru. */
+html.enhanced .bg-white {
+  background-color: rgb(var(--color-paper)) !important;
+}
+
+/* Scrollbar ikut senada (Chromium/Edge) — detail kecil biar tidak ada garis
+   scrollbar abu-abu default yang terasa "kembali" ke nuansa hitam-putih. */
+html.enhanced ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+html.enhanced ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html.enhanced ::-webkit-scrollbar-thumb {
+  background: rgba(18, 56, 50, 0.25);
+  border-radius: 999px;
+}
+
+html.enhanced ::-webkit-scrollbar-thumb:hover {
+  background: rgba(18, 56, 50, 0.4);
 }
 
 /* Transition dibatasi ke elemen interaktif saja (bukan `*` universal),
@@ -273,7 +319,8 @@ html.enhanced button:not(:disabled):active {
    "loncat" saat salah satu inputnya difokuskan. */
 html.enhanced .field {
   border-radius: 6px;
-  border-color: rgba(28, 28, 28, 0.14);
+  border-color: rgba(18, 56, 50, 0.18);
+  background: rgb(var(--color-paper));
   box-shadow: 0 1px 2px rgba(18, 56, 50, 0.05);
 }
 
