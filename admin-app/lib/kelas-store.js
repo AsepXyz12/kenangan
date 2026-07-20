@@ -545,7 +545,7 @@ export async function deleteTeacher(id) {
 
 // ---------- Kelas ----------
 
-export async function addClass({ name, entryYear }) {
+export async function addClass({ name, entryYear, jurusan }) {
   const data = await readKelasRaw();
   const kelas = {
     id: randomUUID(),
@@ -553,6 +553,9 @@ export async function addClass({ name, entryYear }) {
     order: data.classes.length + 1,
     isAlumni: false,
     entryYear: Number.isInteger(entryYear) ? entryYear : null,
+    // Jurusan (IPA/IPS) — dipakai buat kelas yang sudah dipecah per jurusan
+    // (biasanya mulai kelas 2/XI). null = belum/tidak dipecah jurusan.
+    jurusan: jurusan === "IPA" || jurusan === "IPS" ? jurusan : null,
     waliKelasIds: [],
     students: [],
   };
@@ -566,6 +569,10 @@ export async function updateClass(id, patch) {
   const kelas = data.classes.find((c) => c.id === id);
   if (!kelas) return null;
   if (typeof patch.name === "string") kelas.name = patch.name;
+  if (patch.jurusan === "IPA" || patch.jurusan === "IPS" || patch.jurusan === null) {
+    // IPA/IPS — kalau null berarti kelas ini belum/tidak dipecah jurusan.
+    kelas.jurusan = patch.jurusan;
+  }
   if (Array.isArray(patch.waliKelasIds)) kelas.waliKelasIds = patch.waliKelasIds;
   if (typeof patch.isAlumni === "boolean") kelas.isAlumni = patch.isAlumni;
   if (typeof patch.order === "number") kelas.order = patch.order;

@@ -1111,6 +1111,27 @@ function ClassBlock({
               Angkatan {angkatanNumber}
             </span>
           )}
+          <div className="flex items-center gap-1">
+            {[
+              { value: null, label: "Umum" },
+              { value: "IPA", label: "IPA" },
+              { value: "IPS", label: "IPS" },
+            ].map((opt) => (
+              <button
+                key={opt.label}
+                type="button"
+                disabled={busy}
+                onClick={() => patch({ jurusan: opt.value })}
+                className={`text-[11px] mono uppercase px-2 py-1 border ${
+                  (kelas.jurusan || null) === opt.value
+                    ? "bg-accent text-paper border-accent"
+                    : "border-line text-ink/60"
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
           <button
             type="button"
             disabled={busy}

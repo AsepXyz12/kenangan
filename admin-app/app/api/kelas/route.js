@@ -17,7 +17,11 @@ export async function POST(request) {
   }
   const body = await request.json();
   if (body.type === "class") {
-    const kelas = await addClass({ name: body.name, entryYear: body.entryYear });
+    const kelas = await addClass({
+      name: body.name,
+      entryYear: body.entryYear,
+      jurusan: body.jurusan,
+    });
     return NextResponse.json(kelas);
   }
   const teacher = await addTeacher({
