@@ -123,10 +123,10 @@ export default function PhotoCropModal({ file, onCancel, onConfirm }) {
       canvas.height = OUTPUT;
       const ctx = canvas.getContext("2d");
       const ratio = OUTPUT / VIEWPORT;
-      // Kalau lagi di-zoom out (foto lebih kecil dari kotak crop), bagian
-      // kosong di pinggir foto diisi warna krem (samain sama background
-      // galeri publik) dulu — soalnya JPEG gak bisa transparan, defaultnya
-      // bakal item kalau gak diisi.
+      // Zoom minimal sekarang dikunci di 1x (lihat slider di bawah), jadi
+      // foto selalu nutupin penuh kotak crop — gak akan pernah nyisain
+      // ruang kosong. Fill warna ini cuma jaga-jaga (safety net) kalau ada
+      // kondisi aneh, harusnya gak pernah kepake lagi.
       ctx.fillStyle = "#EFE7D2";
       ctx.fillRect(0, 0, OUTPUT, OUTPUT);
       ctx.drawImage(
@@ -191,7 +191,7 @@ export default function PhotoCropModal({ file, onCancel, onConfirm }) {
           <span className="mono text-[10px] text-ink/50">Zoom</span>
           <input
             type="range"
-            min={0.3}
+            min={1}
             max={3}
             step={0.01}
             value={zoom}
