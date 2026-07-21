@@ -67,6 +67,41 @@ export default async function HomePage() {
 
       <Gallery photos={photos} years={years} />
 
+      <section className="max-w-5xl mx-auto px-6 pb-4">
+        <div className="border-t border-emerald/10 pt-10 text-center">
+          <p className="font-stamp text-xs tracking-[0.25em] uppercase text-emerald-light">
+            Mau Daftar ke MA?
+          </p>
+          <p className="mt-2 text-sm text-ink/60 max-w-md mx-auto">
+            Hubungi salah satu contact person kami lewat WhatsApp untuk info pendaftaran.
+          </p>
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href="https://wa.me/6285336119255"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 font-stamp text-xs uppercase tracking-wide bg-emerald text-parchment px-5 py-2.5 hover:bg-emerald-light transition-colors"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4" aria-hidden="true">
+                <path d="M12.04 2c-5.52 0-10 4.48-10 10 0 1.77.46 3.5 1.34 5.02L2 22l5.13-1.35c1.46.8 3.1 1.22 4.91 1.22 5.52 0 10-4.48 10-10s-4.48-10-10-10zm5.85 14.24c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.13.11-1.82-.11-.42-.13-.96-.31-1.65-.6-2.9-1.25-4.8-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.02-2.41.27-.29.58-.36.78-.36.19 0 .39 0 .56.01.18.01.42-.07.66.5.24.58.82 2 .9 2.14.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.16-.29.36-.42.49-.14.14-.28.29-.12.57.16.27.71 1.17 1.52 1.9 1.05.94 1.93 1.23 2.2 1.37.27.14.43.12.59-.07.16-.19.68-.79.86-1.06.18-.27.36-.22.6-.13.24.09 1.52.72 1.78.85.26.13.44.19.5.3.06.11.06.63-.18 1.31z" />
+              </svg>
+              Pak Wilan
+            </a>
+            <a
+              href="https://wa.me/6282142950566"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 font-stamp text-xs uppercase tracking-wide bg-emerald text-parchment px-5 py-2.5 hover:bg-emerald-light transition-colors"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4" aria-hidden="true">
+                <path d="M12.04 2c-5.52 0-10 4.48-10 10 0 1.77.46 3.5 1.34 5.02L2 22l5.13-1.35c1.46.8 3.1 1.22 4.91 1.22 5.52 0 10-4.48 10-10s-4.48-10-10-10zm5.85 14.24c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.13.11-1.82-.11-.42-.13-.96-.31-1.65-.6-2.9-1.25-4.8-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-3 0-1.42.75-2.12 1.02-2.41.27-.29.58-.36.78-.36.19 0 .39 0 .56.01.18.01.42-.07.66.5.24.58.82 2 .9 2.14.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.16-.29.36-.42.49-.14.14-.28.29-.12.57.16.27.71 1.17 1.52 1.9 1.05.94 1.93 1.23 2.2 1.37.27.14.43.12.59-.07.16-.19.68-.79.86-1.06.18-.27.36-.22.6-.13.24.09 1.52.72 1.78.85.26.13.44.19.5.3.06.11.06.63-.18 1.31z" />
+              </svg>
+              Bu Era
+            </a>
+          </div>
+        </div>
+      </section>
+
       <footer className="max-w-5xl mx-auto px-6 py-10 text-center">
         <hr className="thread mb-6" />
         <p className="font-stamp text-xs text-ink/40">
