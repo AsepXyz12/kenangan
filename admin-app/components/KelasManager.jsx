@@ -1152,12 +1152,11 @@ function ClassBlock({
     patch({ groupPhotoUrl: null });
   }
 
-  function toggleWali(teacherId) {
-    const current = kelas.waliKelasIds || [];
-    const next = current.includes(teacherId)
-      ? current.filter((id) => id !== teacherId)
-      : [...current, teacherId];
-    patch({ waliKelasIds: next });
+  function setWali(teacherId) {
+    // Dropdown single-select: pilih 1 guru langsung GANTI wali kelas yang
+    // lama (bukan nambah), dan pilih opsi kosong ("— Belum ada wali —")
+    // untuk mengosongkan wali kelas ini.
+    patch({ waliKelasIds: teacherId ? [teacherId] : [] });
   }
 
   async function removeClass() {
@@ -1359,28 +1358,22 @@ function ClassBlock({
           <p className="text-xs uppercase tracking-wide text-ink/50 mono mb-1.5">
             Wali kelas untuk <span className="text-ink font-semibold">{kelas.name || "(kelas belum diberi nama)"}</span>
           </p>
-          <div className="flex flex-wrap gap-1.5">
-            {teachers.length === 0 && (
-              <span className="text-xs text-ink/40">Belum ada data guru.</span>
-            )}
-            {teachers.map((t) => {
-              const active = (kelas.waliKelasIds || []).includes(t.id);
-              return (
-                <button
-                  key={t.id}
-                  type="button"
-                  onClick={() => toggleWali(t.id)}
-                  className={`text-[11px] mono px-2 py-1 border ${
-                    active
-                      ? "bg-accent text-paper border-accent"
-                      : "border-line text-ink/60"
-                  }`}
-                >
+          {teachers.length === 0 ? (
+            <span className="text-xs text-ink/40">Belum ada data guru.</span>
+          ) : (
+            <select
+              className="field text-sm"
+              value={(kelas.waliKelasIds || [])[0] || ""}
+              onChange={(e) => setWali(e.target.value || null)}
+            >
+              <option value="">— Belum ada wali —</option>
+              {teachers.map((t) => (
+                <option key={t.id} value={t.id}>
                   {t.name}
-                </button>
-              );
-            })}
-          </div>
+                </option>
+              ))}
+            </select>
+          )}
         </div>
         {error && <p className="text-xs text-danger mono">{error}</p>}
       </div>
