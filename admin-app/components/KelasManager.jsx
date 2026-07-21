@@ -1159,6 +1159,15 @@ function ClassBlock({
     patch({ waliKelasIds: teacherId ? [teacherId] : [] });
   }
 
+  // Kelas yang murid-muridnya sudah campur IPA & IPS (mis. kelas 11/XI
+  // sebelum benar-benar dipecah jadi 2 folder terpisah) butuh 2 wali
+  // sekaligus. Default checkbox ini otomatis ON kalau kelas SUDAH pernah
+  // diisi salah satu wali jurusan sebelumnya, supaya tidak "reset" ke mode
+  // 1-wali cuma karena reload halaman.
+  const [splitWali, setSplitWali] = useState(
+    Boolean(kelas.waliIpaId || kelas.waliIpsId)
+  );
+
   async function removeClass() {
     if (!confirm(`Hapus kelas "${kelas.name}" beserta semua muridnya?`)) return;
     await fetch(`/api/kelas/classes/${kelas.id}`, { method: "DELETE" });
@@ -1355,11 +1364,62 @@ function ClassBlock({
         </div>
 
         <div>
-          <p className="text-xs uppercase tracking-wide text-ink/50 mono mb-1.5">
-            Wali kelas untuk <span className="text-ink font-semibold">{kelas.name || "(kelas belum diberi nama)"}</span>
-          </p>
+          <div className="flex items-center justify-between flex-wrap gap-2 mb-1.5">
+            <p className="text-xs uppercase tracking-wide text-ink/50 mono">
+              Wali kelas untuk <span className="text-ink font-semibold">{kelas.name || "(kelas belum diberi nama)"}</span>
+            </p>
+            <label className="flex items-center gap-1.5 text-[11px] mono text-ink/60">
+              <input
+                type="checkbox"
+                checked={splitWali}
+                onChange={(e) => {
+                  setSplitWali(e.target.checked);
+                  if (!e.target.checked) {
+                    // Balik ke mode 1 wali: kosongkan wali IPA/IPS supaya
+                    // tidak ada data "nyantol" yang bingung dibaca nanti.
+                    patch({ waliIpaId: null, waliIpsId: null });
+                  }
+                }}
+              />
+              Kelas ini campur IPA &amp; IPS
+            </label>
+          </div>
+
           {teachers.length === 0 ? (
             <span className="text-xs text-ink/40">Belum ada data guru.</span>
+          ) : splitWali ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div>
+                <p className="text-[10px] uppercase mono text-ink/40 mb-1">Wali Kelas (IPA)</p>
+                <select
+                  className="field text-sm w-full"
+                  value={kelas.waliIpaId || ""}
+                  onChange={(e) => patch({ waliIpaId: e.target.value || null })}
+                >
+                  <option value="">— Belum ada wali —</option>
+                  {teachers.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <p className="text-[10px] uppercase mono text-ink/40 mb-1">Wali Kelas (IPS)</p>
+                <select
+                  className="field text-sm w-full"
+                  value={kelas.waliIpsId || ""}
+                  onChange={(e) => patch({ waliIpsId: e.target.value || null })}
+                >
+                  <option value="">— Belum ada wali —</option>
+                  {teachers.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
           ) : (
             <select
               className="field text-sm"

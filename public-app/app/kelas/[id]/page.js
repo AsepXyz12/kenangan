@@ -17,6 +17,9 @@ export default async function KelasDetailPage({ params }) {
   const wali = (kelas.waliKelasIds || [])
     .map((id) => teachers.find((t) => t.id === id))
     .filter(Boolean);
+  const hasSplitWali = Boolean(kelas.waliIpaId || kelas.waliIpsId);
+  const waliIpa = teachers.find((t) => t.id === kelas.waliIpaId);
+  const waliIps = teachers.find((t) => t.id === kelas.waliIpsId);
 
   return (
     <main>
@@ -27,10 +30,17 @@ export default async function KelasDetailPage({ params }) {
         <h1 className="font-display italic text-5xl sm:text-6xl mt-3 text-emerald leading-[1.05]">
           {kelas.name}
         </h1>
-        {wali.length > 0 && (
-          <p className="mt-3 font-stamp text-xs uppercase tracking-wide text-ink/50">
-            Wali kelas: {wali.map((w) => w.name).join(" & ")}
+        {hasSplitWali ? (
+          <p className="mt-3 font-stamp text-xs uppercase tracking-wide text-ink/50 space-x-3">
+            {waliIpa && <span>Wali IPA: {waliIpa.name}</span>}
+            {waliIps && <span>Wali IPS: {waliIps.name}</span>}
           </p>
+        ) : (
+          wali.length > 0 && (
+            <p className="mt-3 font-stamp text-xs uppercase tracking-wide text-ink/50">
+              Wali kelas: {wali.map((w) => w.name).join(" & ")}
+            </p>
+          )
         )}
         <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2">
           <Link
@@ -67,7 +77,12 @@ export default async function KelasDetailPage({ params }) {
           </div>
         )}
 
-        <StudentSearch students={kelas.students} />
+        <StudentSearch
+          students={kelas.students}
+          hasSplitWali={hasSplitWali}
+          waliIpaName={waliIpa?.name}
+          waliIpsName={waliIps?.name}
+        />
       </div>
 
       <footer className="max-w-5xl mx-auto px-6 py-10 text-center">

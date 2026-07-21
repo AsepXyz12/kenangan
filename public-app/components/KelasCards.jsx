@@ -114,19 +114,86 @@ export function ClassSection({ kelas, teachers }) {
     .map((id) => teachers.find((t) => t.id === id))
     .filter(Boolean);
 
+  const hasSplitWali = Boolean(kelas.waliIpaId || kelas.waliIpsId);
+  const waliIpa = teachers.find((t) => t.id === kelas.waliIpaId);
+  const waliIps = teachers.find((t) => t.id === kelas.waliIpsId);
+
+  // Kelas yang wali-nya sudah displit per jurusan (lihat hasSplitWali)
+  // ditampilkan sebagai DUA kelompok murid dalam satu album/folder yang
+  // sama — bukan dua folder terpisah — supaya publik tetap lihat satu
+  // "Kelas 2 (11/XI)" utuh, tapi jelas mana wali IPA dan mana wali IPS
+  // begitu scroll ke bawah.
+  const ipaStudents = kelas.students.filter((s) => s.jurusan === "IPA");
+  const ipsStudents = kelas.students.filter((s) => s.jurusan === "IPS");
+  const belumJurusan = kelas.students.filter(
+    (s) => s.jurusan !== "IPA" && s.jurusan !== "IPS"
+  );
+
   return (
     <section className="mb-16">
       <h2 className="font-display italic text-3xl sm:text-4xl text-emerald">
         {kelas.name}
       </h2>
-      {wali.length > 0 && (
+      {!hasSplitWali && wali.length > 0 && (
         <p className="mt-2 font-stamp text-xs uppercase tracking-wide text-ink/50">
           Wali kelas: {wali.map((w) => w.name).join(" & ")}
         </p>
       )}
       <hr className="thread mt-5 mb-7" />
+
       {kelas.students.length === 0 ? (
         <p className="text-sm text-ink/40">Belum ada data murid.</p>
+      ) : hasSplitWali ? (
+        <div className="space-y-12">
+          {ipaStudents.length > 0 && (
+            <div>
+              <h3 className="font-stamp text-sm uppercase tracking-wide text-emerald">
+                IPA
+              </h3>
+              {waliIpa && (
+                <p className="mt-1 font-stamp text-xs uppercase tracking-wide text-ink/50">
+                  Wali kelas: {waliIpa.name}
+                </p>
+              )}
+              <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-x-4 gap-y-8">
+                {ipaStudents.map((s, i) => (
+                  <StudentCard key={s.id} student={s} tape={TAPES[i % TAPES.length]} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {ipsStudents.length > 0 && (
+            <div>
+              <h3 className="font-stamp text-sm uppercase tracking-wide text-clay">
+                IPS
+              </h3>
+              {waliIps && (
+                <p className="mt-1 font-stamp text-xs uppercase tracking-wide text-ink/50">
+                  Wali kelas: {waliIps.name}
+                </p>
+              )}
+              <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-x-4 gap-y-8">
+                {ipsStudents.map((s, i) => (
+                  <StudentCard key={s.id} student={s} tape={TAPES[i % TAPES.length]} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {belumJurusan.length > 0 && (
+            <div>
+              <h3 className="font-stamp text-sm uppercase tracking-wide text-ink/40">
+                Belum ada jurusan
+              </h3>
+              <div className="mt-5 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-x-4 gap-y-8">
+                {belumJurusan.map((s, i) => (
+                  <StudentCard key={s.id} student={s} tape={TAPES[i % TAPES.length]} />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-x-4 gap-y-8">
           {sortByJurusan(kelas.students).map((s, i) => (

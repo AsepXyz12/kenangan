@@ -25,6 +25,14 @@ export default function KelasFolders({ classes, teachers }) {
         const wali = (kelas.waliKelasIds || [])
           .map((id) => teachers.find((t) => t.id === id))
           .filter(Boolean);
+        const waliIpa = teachers.find((t) => t.id === kelas.waliIpaId);
+        const waliIps = teachers.find((t) => t.id === kelas.waliIpsId);
+        const hasSplitWali = Boolean(waliIpa || waliIps);
+        const waliLabel = hasSplitWali
+          ? [waliIpa && `${waliIpa.name} (IPA)`, waliIps && `${waliIps.name} (IPS)`]
+              .filter(Boolean)
+              .join(" · ")
+          : wali.map((w) => w.name).join(" & ");
 
         return (
           <Link
@@ -60,9 +68,9 @@ export default function KelasFolders({ classes, teachers }) {
             <p className="mt-2 text-center font-display italic text-base text-emerald truncate">
               {kelas.name}
             </p>
-            {wali.length > 0 && (
+            {waliLabel && (
               <p className="text-center font-stamp text-[9px] uppercase tracking-wide text-ink/50 mt-0.5 truncate">
-                Wali: {wali.map((w) => w.name).join(" & ")}
+                Wali: {waliLabel}
               </p>
             )}
           </Link>

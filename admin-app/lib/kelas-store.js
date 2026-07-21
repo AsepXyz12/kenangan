@@ -585,6 +585,19 @@ export async function updateClass(id, patch) {
     // tanpa dipotong. Defaultnya "cover" kalau field ini belum pernah diisi.
     kelas.groupPhotoFit = patch.groupPhotoFit;
   }
+  // Wali kelas KHUSUS untuk kelas yang murid-muridnya sudah tercampur IPA &
+  // IPS dalam satu kelas yang sama (mis. "Kelas 2 (11/XI)" berisi murid IPA
+  // dan IPS sekaligus). Kalau salah satu field ini diisi, halaman publik
+  // menampilkan murid dikelompokkan per jurusan dengan wali masing-masing,
+  // BUKAN memakai waliKelasIds tunggal. Kelas yang belum di-split (mis.
+  // kelas X) tidak perlu mengisi field ini sama sekali — tetap pakai
+  // waliKelasIds seperti biasa.
+  if (patch.waliIpaId === null || typeof patch.waliIpaId === "string") {
+    kelas.waliIpaId = patch.waliIpaId || null;
+  }
+  if (patch.waliIpsId === null || typeof patch.waliIpsId === "string") {
+    kelas.waliIpsId = patch.waliIpsId || null;
+  }
   await writeKelas(data);
   return kelas;
 }
