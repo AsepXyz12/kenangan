@@ -1,6 +1,7 @@
 import { Fraunces, Karla, Space_Mono } from "next/font/google";
 import { readSettings } from "@/lib/store";
 import EnhancedModeToggle from "@/components/EnhancedModeToggle";
+import SplashScreen from "@/components/SplashScreen";
 import "./globals.css";
 import "highlight.js/styles/atom-one-dark.css";
 
@@ -34,12 +35,16 @@ export async function generateMetadata() {
   };
 }
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const settings = await readSettings();
+  const siteName = settings.siteName || "Galeri Kenangan MA";
+
   return (
     <html lang="id">
       <body
         className={`${display.variable} ${body.variable} ${stamp.variable} font-body bg-parchment text-ink`}
       >
+        <SplashScreen siteName={siteName} logoUrl={settings.logoUrl || null} />
         {children}
         <EnhancedModeToggle />
       </body>
