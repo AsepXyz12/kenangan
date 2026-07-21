@@ -95,7 +95,8 @@ export default function Gallery({ photos: initialPhotos, years: initialYears }) 
       const matchesQuery =
         !q ||
         p.title?.toLowerCase().includes(q) ||
-        p.caption?.toLowerCase().includes(q);
+        p.caption?.toLowerCase().includes(q) ||
+        p.uploader?.toLowerCase().includes(q);
       return matchesYear && matchesQuery;
     });
   }, [photos, year, query]);
@@ -128,13 +129,34 @@ export default function Gallery({ photos: initialPhotos, years: initialYears }) 
         </div>
       )}
       <div className="flex flex-wrap items-center gap-3 mb-10">
-        <input
-          type="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Cari judul kenangan..."
-          className="font-body text-sm bg-white/70 border border-emerald/20 px-3 py-2 flex-1 min-w-[200px] focus:bg-white transition-colors"
-        />
+        <div className="relative flex-1 min-w-[200px]">
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 20 20"
+            fill="none"
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-emerald/40 pointer-events-none"
+          >
+            <circle cx="9" cy="9" r="6.5" stroke="currentColor" strokeWidth="1.6" />
+            <path d="M14 14L17.5 17.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          </svg>
+          <input
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Cari nama atau judul kenangan..."
+            className="font-body text-sm bg-white/70 border border-emerald/20 pl-9 pr-8 py-2 w-full focus:bg-white transition-colors"
+          />
+          {query && (
+            <button
+              type="button"
+              onClick={() => setQuery("")}
+              aria-label="Hapus pencarian"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center rounded-full text-emerald/50 hover:text-emerald hover:bg-emerald/10 transition-colors"
+            >
+              ×
+            </button>
+          )}
+        </div>
         <select
           value={year}
           onChange={(e) => setYear(e.target.value)}
