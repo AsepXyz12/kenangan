@@ -26,11 +26,28 @@ const stamp = Space_Mono({
 export async function generateMetadata() {
   const settings = await readSettings();
   const siteName = settings.siteName || "Galeri Kenangan MA";
+  const description =
+    "Album digital kenangan Madrasah Aliyah — kumpulan foto, video, cerita, dan jejak kebersamaan.";
+
   return {
     title: siteName,
-    description:
-      "Album digital kenangan Madrasah Aliyah — kumpulan foto, video, cerita, dan jejak kebersamaan.",
+    description,
     icons: settings.logoUrl ? { icon: settings.logoUrl } : undefined,
+    // OG/Twitter card supaya preview link (WhatsApp, grup, dsb) tampil rapi
+    // dengan judul + logo, bukan cuma teks polos tanpa gambar.
+    openGraph: {
+      title: siteName,
+      description,
+      type: "website",
+      locale: "id_ID",
+      images: settings.logoUrl ? [{ url: settings.logoUrl }] : undefined,
+    },
+    twitter: {
+      card: "summary",
+      title: siteName,
+      description,
+      images: settings.logoUrl ? [settings.logoUrl] : undefined,
+    },
   };
 }
 
