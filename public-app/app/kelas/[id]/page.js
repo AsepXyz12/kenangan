@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { readKelas } from "@/lib/kelas-store";
 import { readSettings } from "@/lib/store";
-import { StudentCard, TAPES, sortByJurusan } from "@/components/KelasCards";
+import StudentSearch from "@/components/StudentSearch";
 
 export const dynamic = "force-dynamic";
 
@@ -67,15 +67,7 @@ export default async function KelasDetailPage({ params }) {
           </div>
         )}
 
-        {kelas.students.length === 0 ? (
-          <p className="text-sm text-ink/40 text-center">Belum ada data murid.</p>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-x-4 gap-y-8">
-            {sortByJurusan(kelas.students).map((s, i) => (
-              <StudentCard key={s.id} student={s} tape={TAPES[i % TAPES.length]} />
-            ))}
-          </div>
-        )}
+        <StudentSearch students={kelas.students} />
       </div>
 
       <footer className="max-w-5xl mx-auto px-6 py-10 text-center">

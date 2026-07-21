@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { readKelas } from "@/lib/kelas-store";
 import { readSettings } from "@/lib/store";
-import { TAPES, initials } from "@/components/KelasCards";
+import GuruSearch from "@/components/GuruSearch";
 
 export const dynamic = "force-dynamic";
 
@@ -31,43 +31,7 @@ export default async function GuruPage() {
       </header>
 
       <div className="max-w-5xl mx-auto px-6 py-10">
-        {teachers.length === 0 ? (
-          <p className="text-sm text-ink/40 text-center">Belum ada data guru.</p>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-x-4 gap-y-8">
-            {teachers.map((t, i) => (
-              <div
-                key={t.id}
-                data-tape={TAPES[i % TAPES.length]}
-                className="polaroid relative w-full max-w-[150px] mx-auto"
-              >
-                <span className="stamp-tape" />
-                <div
-                  className={`w-full bg-parchment2 flex items-center justify-center overflow-hidden ${
-                    t.photoUrl ? "" : "aspect-square"
-                  }`}
-                >
-                  {t.photoUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={t.photoUrl}
-                      alt={t.name}
-                      className="w-full h-auto block"
-                    />
-                  ) : (
-                    <span className="font-stamp text-2xl text-emerald/30">{initials(t.name)}</span>
-                  )}
-                </div>
-                <p className="mt-2 text-center font-stamp text-xs uppercase tracking-wide text-ink/70">
-                  {t.name}
-                </p>
-                <p className="text-center text-[10px] text-ink/40 mt-0.5 leading-tight">
-                  {(t.subjects || []).join(", ")}
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
+        <GuruSearch teachers={teachers} />
       </div>
 
       <footer className="max-w-5xl mx-auto px-6 py-10 text-center">

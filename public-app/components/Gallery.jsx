@@ -95,8 +95,7 @@ export default function Gallery({ photos: initialPhotos, years: initialYears }) 
       const matchesQuery =
         !q ||
         p.title?.toLowerCase().includes(q) ||
-        p.caption?.toLowerCase().includes(q) ||
-        p.uploader?.toLowerCase().includes(q);
+        p.caption?.toLowerCase().includes(q);
       return matchesYear && matchesQuery;
     });
   }, [photos, year, query]);
@@ -143,7 +142,7 @@ export default function Gallery({ photos: initialPhotos, years: initialYears }) 
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Cari nama atau judul kenangan..."
+            placeholder="Cari judul kenangan..."
             className="font-body text-sm bg-white/70 border border-emerald/20 pl-9 pr-8 py-2 w-full focus:bg-white transition-colors"
           />
           {query && (
