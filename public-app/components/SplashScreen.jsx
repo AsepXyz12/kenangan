@@ -2,40 +2,20 @@
 
 import { useEffect, useState } from "react";
 
-const SESSION_KEY = "splashShown";
-const VISIBLE_MS = 1800; // berapa lama splash full terlihat sebelum mulai fade
-const FADE_MS = 600; // durasi animasi fade out
+const VISIBLE_MS = 1600; // berapa lama splash terlihat sebelum mulai fade
+const FADE_MS = 500; // durasi animasi fade out
 
-// Splash screen full-layar yang muncul SEKALI per sesi browser (pakai
-// sessionStorage, bukan localStorage — supaya splash muncul lagi tiap buka
-// tab/sesi browser baru, tapi tidak berulang tiap pindah halaman dalam sesi
-// yang sama). Kalau logo belum diset admin, splash tetap tampil dengan nama
-// situs saja (tanpa gambar).
+// Splash card kecil di tengah layar (bukan full-screen — sisa layar di
+// belakangnya tetap terlihat, cuma diredupkan tipis) yang muncul tiap kali
+// komponen ini di-mount, yaitu tiap kali halaman yang memakainya (home,
+// kelas, alumni) di-load/dibuka. Tidak pakai sessionStorage sama sekali,
+// supaya konsisten muncul tiap pindah/refresh halaman, bukan cuma sekali per
+// sesi browser.
 export default function SplashScreen({ siteName, logoUrl }) {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
   const [fading, setFading] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    let alreadyShown = false;
-    try {
-      alreadyShown = sessionStorage.getItem(SESSION_KEY) === "1";
-    } catch {
-      // sessionStorage tidak tersedia (mode privat ketat dst) — anggap
-      // belum pernah tampil, splash tetap jalan sekali untuk load ini.
-    }
-
-    if (alreadyShown) return;
-
-    setVisible(true);
-    try {
-      sessionStorage.setItem(SESSION_KEY, "1");
-    } catch {
-      // Diamkan — kalaupun gagal disimpan, splash cuma akan muncul lagi di
-      // load berikutnya, bukan masalah besar.
-    }
-
     const fadeTimer = setTimeout(() => setFading(true), VISIBLE_MS);
     const removeTimer = setTimeout(() => setVisible(false), VISIBLE_MS + FADE_MS);
     return () => {
@@ -44,15 +24,13 @@ export default function SplashScreen({ siteName, logoUrl }) {
     };
   }, []);
 
-  // Belum mounted (render pertama di server) atau splash tidak perlu tampil
-  // -> tidak render apa-apa, supaya tidak flash konten kosong.
-  if (!mounted || !visible) return null;
+  if (!visible) return null;
 
   return (
     <div
       role="status"
       aria-live="polite"
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-emerald transition-opacity"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-ink/30 backdrop-blur-[2px] transition-opacity"
       style={{
         opacity: fading ? 0 : 1,
         transitionDuration: `${FADE_MS}ms`,
@@ -60,9 +38,9 @@ export default function SplashScreen({ siteName, logoUrl }) {
       }}
     >
       <div
-        className="flex flex-col items-center px-6 text-center"
+        className="flex flex-col items-center px-8 py-9 mx-6 bg-emerald shadow-2xl"
         style={{
-          animation: "splash-rise 700ms cubic-bezier(0.22, 1, 0.36, 1) both",
+          animation: "splash-rise 550ms cubic-bezier(0.22, 1, 0.36, 1) both",
         }}
       >
         {logoUrl ? (
@@ -70,15 +48,15 @@ export default function SplashScreen({ siteName, logoUrl }) {
           <img
             src={logoUrl}
             alt={siteName}
-            className="h-20 sm:h-24 w-auto max-w-[220px] object-contain mb-6 drop-shadow-lg"
+            className="h-16 sm:h-20 w-auto max-w-[180px] object-contain mb-5 drop-shadow-lg"
           />
         ) : (
-          <div className="w-16 h-16 rounded-full border-2 border-parchment/40 mb-6" />
+          <div className="w-14 h-14 rounded-full border-2 border-parchment/40 mb-5" />
         )}
-        <p className="font-stamp text-[10px] sm:text-xs tracking-[0.3em] uppercase text-parchment/60">
+        <p className="font-stamp text-[9px] sm:text-[10px] tracking-[0.3em] uppercase text-parchment/60">
           Selamat Datang di Website
         </p>
-        <h1 className="font-display italic text-3xl sm:text-4xl mt-2 text-parchment leading-tight">
+        <h1 className="font-display italic text-2xl sm:text-3xl mt-2 text-parchment leading-tight text-center">
           {siteName}
         </h1>
       </div>
@@ -87,11 +65,11 @@ export default function SplashScreen({ siteName, logoUrl }) {
         @keyframes splash-rise {
           from {
             opacity: 0;
-            transform: translateY(14px);
+            transform: translateY(10px) scale(0.97);
           }
           to {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
           }
         }
       `}</style>

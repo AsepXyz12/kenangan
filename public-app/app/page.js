@@ -1,5 +1,6 @@
 import { readPhotos, readSettings } from "@/lib/store";
 import Gallery from "@/components/Gallery";
+import SplashScreen from "@/components/SplashScreen";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +18,7 @@ export default async function HomePage() {
 
   return (
     <main>
+      <SplashScreen siteName={siteName} logoUrl={settings.logoUrl || null} />
       <header className="relative overflow-hidden border-b border-emerald/10">
         <div className="max-w-5xl mx-auto px-6 pt-14 pb-16">
           {settings.logoUrl && (

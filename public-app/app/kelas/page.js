@@ -1,6 +1,7 @@
 import { readKelas } from "@/lib/kelas-store";
 import { readSettings } from "@/lib/store";
 import KelasFolders from "@/components/KelasFolders";
+import SplashScreen from "@/components/SplashScreen";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +20,7 @@ export default async function KelasPage() {
 
   return (
     <main>
+      <SplashScreen siteName={siteName} logoUrl={settings.logoUrl || null} />
       <header className="max-w-5xl mx-auto px-6 pt-14 pb-4">
         <p className="font-stamp text-xs tracking-[0.25em] uppercase text-emerald-light">
           {siteName}
