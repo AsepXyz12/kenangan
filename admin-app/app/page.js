@@ -5,6 +5,8 @@ import UploadForm from "@/components/UploadForm";
 import LogoutButton from "@/components/LogoutButton";
 import PhotoList from "@/components/PhotoList";
 import LogoSettings from "@/components/LogoSettings";
+import ChangePasswordForm from "@/components/ChangePasswordForm";
+import BackupButton from "@/components/BackupButton";
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +36,10 @@ export default async function AdminPage() {
             <a href="/cetak" className="text-xs uppercase mono text-accent underline">
               Cetak / Unduh PDF
             </a>
+            <a href="/panduan" className="text-xs uppercase mono text-accent underline">
+              Panduan Admin
+            </a>
+            <ChangePasswordForm />
             <LogoutButton />
           </div>
         )}
@@ -53,6 +59,17 @@ export default async function AdminPage() {
               Pengaturan situs
             </h2>
             <LogoSettings initialSettings={settings} />
+          </section>
+
+          <section className="mt-8">
+            <h2 className="text-xs uppercase tracking-wide text-ink/50 mono mb-2">
+              Backup data
+            </h2>
+            <p className="text-sm text-ink/60 mb-3">
+              Simpan salinan semua data (foto, kelas, murid, guru, pengaturan)
+              sesekali sebagai jaga-jaga.
+            </p>
+            <BackupButton />
           </section>
 
           <section className="mt-8">
