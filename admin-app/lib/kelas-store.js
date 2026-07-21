@@ -10,11 +10,12 @@ const KELAS_PATH = "data/kelas.json";
 // sama sekali. Begitu ada perubahan pertama (tambah/edit apa pun), data ini
 // otomatis tersimpan permanen ke Blob lewat writeKelas().
 function seedKelas() {
-  const teacher = (name, subjects) => ({
+  const teacher = (name, subjects, roles = []) => ({
     id: randomUUID(),
     name,
     subjects,
     photoUrl: null,
+    roles,
   });
 
   const t = {
@@ -509,13 +510,14 @@ export async function updateGuruFolder(patch) {
 
 // ---------- Guru ----------
 
-export async function addTeacher({ name, subjects, photoUrl }) {
+export async function addTeacher({ name, subjects, photoUrl, roles }) {
   const data = await readKelasRaw();
   const teacher = {
     id: randomUUID(),
     name: name || "",
     subjects: Array.isArray(subjects) ? subjects : [],
     photoUrl: photoUrl || null,
+    roles: Array.isArray(roles) ? roles.filter(Boolean) : [],
   };
   data.teachers.push(teacher);
   await writeKelas(data);
@@ -529,6 +531,7 @@ export async function updateTeacher(id, patch) {
   if (typeof patch.name === "string") teacher.name = patch.name;
   if (Array.isArray(patch.subjects)) teacher.subjects = patch.subjects;
   if (patch.photoUrl !== undefined) teacher.photoUrl = patch.photoUrl;
+  if (Array.isArray(patch.roles)) teacher.roles = patch.roles.filter(Boolean);
   await writeKelas(data);
   return teacher;
 }

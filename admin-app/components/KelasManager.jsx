@@ -136,6 +136,7 @@ function PhotoButton({ label, onPicked, busy }) {
 function TeacherRow({ teacher, onChanged, onDeleted }) {
   const [name, setName] = useState(teacher.name);
   const [subjects, setSubjects] = useState((teacher.subjects || []).join(", "));
+  const [roles, setRoles] = useState((teacher.roles || []).join(", "));
   const [busy, setBusy] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
@@ -151,6 +152,7 @@ function TeacherRow({ teacher, onChanged, onDeleted }) {
         body: JSON.stringify({
           name,
           subjects: subjects.split(",").map((s) => s.trim()).filter(Boolean),
+          roles: roles.split(",").map((s) => s.trim()).filter(Boolean),
         }),
       });
       if (res.ok) {
@@ -211,6 +213,12 @@ function TeacherRow({ teacher, onChanged, onDeleted }) {
           onChange={(e) => setSubjects(e.target.value)}
           placeholder="Mapel, dipisah koma"
         />
+        <input
+          className="field flex-[2] min-w-[180px]"
+          value={roles}
+          onChange={(e) => setRoles(e.target.value)}
+          placeholder="Jabatan, dipisah koma (mis. Kepala Sekolah)"
+        />
         <div className="flex items-center gap-2">
           <PhotoButton label="Foto" busy={uploading} onPicked={setCropFile} />
           {cropFile && (
@@ -248,6 +256,7 @@ function TeacherRow({ teacher, onChanged, onDeleted }) {
 function AddTeacher({ onAdded }) {
   const [name, setName] = useState("");
   const [subjects, setSubjects] = useState("");
+  const [roles, setRoles] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
@@ -263,12 +272,14 @@ function AddTeacher({ onAdded }) {
         body: JSON.stringify({
           name,
           subjects: subjects.split(",").map((s) => s.trim()).filter(Boolean),
+          roles: roles.split(",").map((s) => s.trim()).filter(Boolean),
         }),
       });
       if (res.ok) {
         onAdded(await res.json());
         setName("");
         setSubjects("");
+        setRoles("");
       } else {
         const data = await res.json().catch(() => ({}));
         setError(data.error || "Gagal menambah guru.");
@@ -294,6 +305,12 @@ function AddTeacher({ onAdded }) {
           value={subjects}
           onChange={(e) => setSubjects(e.target.value)}
           placeholder="Mapel, dipisah koma"
+        />
+        <input
+          className="field flex-[2] min-w-[180px]"
+          value={roles}
+          onChange={(e) => setRoles(e.target.value)}
+          placeholder="Jabatan, dipisah koma (opsional)"
         />
         <button disabled={busy} className="btn text-[11px] uppercase mono px-3 py-1.5">
           + Tambah guru

@@ -14,7 +14,12 @@ export default function GuruSearch({ teachers }) {
     if (!q) return teachers;
     return teachers.filter((t) => {
       const subjects = (t.subjects || []).join(" ").toLowerCase();
-      return t.name?.toLowerCase().includes(q) || subjects.includes(q);
+      const roles = (t.roles || []).join(" ").toLowerCase();
+      return (
+        t.name?.toLowerCase().includes(q) ||
+        subjects.includes(q) ||
+        roles.includes(q)
+      );
     });
   }, [teachers, query]);
 
@@ -34,7 +39,7 @@ export default function GuruSearch({ teachers }) {
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Cari nama guru atau mata pelajaran..."
+          placeholder="Cari nama, jabatan, atau mata pelajaran..."
           className="font-body text-sm bg-white/70 border border-emerald/20 pl-9 pr-8 py-2 w-full focus:bg-white transition-colors"
         />
         {query && (
@@ -63,7 +68,7 @@ export default function GuruSearch({ teachers }) {
             >
               <span className="stamp-tape" />
               <div
-                className={`w-full bg-parchment2 flex items-center justify-center overflow-hidden ${
+                className={`w-full bg-parchment2 flex items-center justify-center overflow-hidden relative ${
                   t.photoUrl ? "" : "aspect-square"
                 }`}
               >
@@ -73,6 +78,14 @@ export default function GuruSearch({ teachers }) {
                 ) : (
                   <span className="font-stamp text-2xl text-emerald/30">{initials(t.name)}</span>
                 )}
+                {t.roles && t.roles.length > 0 && (
+                  // Sama gayanya kayak badge jabatan di kartu murid: cuma
+                  // nampilin jabatan PERTAMA biar gak penuh kalau lebih dari
+                  // satu, nempel pojok kiri bawah foto.
+                  <span className="absolute bottom-1 left-1 font-stamp text-[7px] uppercase tracking-wide bg-gold text-parchment px-1.5 py-0.5 leading-none shadow-sm">
+                    {t.roles[0]}
+                  </span>
+                )}
               </div>
               <p className="mt-2 text-center font-stamp text-xs uppercase tracking-wide text-ink/70">
                 {t.name}
@@ -80,6 +93,11 @@ export default function GuruSearch({ teachers }) {
               <p className="text-center text-[10px] text-ink/40 mt-0.5 leading-tight">
                 {(t.subjects || []).join(", ")}
               </p>
+              {t.roles && t.roles.length > 1 && (
+                <p className="mt-0.5 text-center text-[8px] uppercase tracking-[0.15em] text-gold/80 leading-snug line-clamp-2 px-1">
+                  {t.roles.join(" · ")}
+                </p>
+              )}
             </div>
           ))}
         </div>

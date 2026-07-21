@@ -24,6 +24,7 @@ export async function POST(request) {
     name: body.name,
     subjects: body.subjects,
     photoUrl: body.photoUrl,
+    roles: body.roles,
   });
   return NextResponse.json(teacher);
 }
