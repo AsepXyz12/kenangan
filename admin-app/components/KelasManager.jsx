@@ -1357,7 +1357,7 @@ function ClassBlock({
 
         <div>
           <p className="text-xs uppercase tracking-wide text-ink/50 mono mb-1.5">
-            Wali kelas
+            Wali kelas untuk <span className="text-ink font-semibold">{kelas.name || "(kelas belum diberi nama)"}</span>
           </p>
           <div className="flex flex-wrap gap-1.5">
             {teachers.length === 0 && (
