@@ -4,7 +4,9 @@ import SurahReader from "@/components/SurahReader";
 import { getSurahDetail } from "@/lib/quran-api";
 import { notFound } from "next/navigation";
 
-export const dynamic = "force-dynamic";
+export function generateStaticParams() {
+  return Array.from({ length: 114 }).map((_, i) => ({ nomor: String(i + 1) }));
+}
 
 export async function generateMetadata({
   params,

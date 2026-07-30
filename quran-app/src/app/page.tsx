@@ -12,20 +12,27 @@ const MENU = [
       "Baca lengkap 114 surat dan 30 juz, teks Arab berharakat, transliterasi, dan terjemahan Indonesia.",
   },
   {
-    href: "/rukun-islam",
+    href: "/hadits",
     nomor: 2,
+    judul: "Hadits 9 Imam",
+    deskripsi:
+      "62.169 hadits dari sembilan kitab induk, teks Arab dan terjemahan Indonesia, tersimpan langsung di situs ini.",
+  },
+  {
+    href: "/rukun-islam",
+    nomor: 3,
     judul: "Rukun Islam",
     deskripsi: "Lima pondasi amal seorang muslim, lengkap dengan dalil dan penjelasannya.",
   },
   {
     href: "/rukun-iman",
-    nomor: 3,
+    nomor: 4,
     judul: "Rukun Iman",
     deskripsi: "Enam pokok keyakinan yang menjadi dasar akidah seorang mukmin.",
   },
   {
     href: "/malam-jumat",
-    nomor: 4,
+    nomor: 5,
     judul: "Amalan Malam Jumat",
     deskripsi:
       "Keutamaan malam Jumat, amalan yang dianjurkan, serta bacaan lengkap Surat Yasin dan Al-Kahf.",
@@ -76,23 +83,6 @@ export default function Home() {
               </Link>
             ))}
           </div>
-
-          <a
-            href="https://www.carihadits.id/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-5 flex items-center justify-between rounded-sm border border-[var(--teal)] bg-[var(--teal)] px-6 py-5 text-[var(--parchment)] hover:bg-[var(--teal-deep)] transition-colors"
-          >
-            <span>
-              <span className="block font-display text-lg">
-                Ensiklopedia Hadits 9 Imam
-              </span>
-              <span className="block text-sm text-[var(--parchment)]/80 mt-1">
-                Ribuan hadits Bukhari, Muslim, dan tujuh kitab lainnya, lengkap dengan sanad dan terjemahan.
-              </span>
-            </span>
-            <span className="font-display text-2xl shrink-0 ml-4">↗</span>
-          </a>
         </section>
       </main>
       <Footer />

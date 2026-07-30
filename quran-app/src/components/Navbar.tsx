@@ -2,6 +2,7 @@ import Link from "next/link";
 
 const NAV_ITEMS = [
   { href: "/quran", label: "Al-Qur'an" },
+  { href: "/hadits", label: "Hadits" },
   { href: "/rukun-islam", label: "Rukun Islam" },
   { href: "/rukun-iman", label: "Rukun Iman" },
   { href: "/malam-jumat", label: "Amalan Malam" },
@@ -26,14 +27,6 @@ export default function Navbar() {
               {item.label}
             </Link>
           ))}
-          <a
-            href="https://www.carihadits.id/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm md:text-[15px] px-3 py-2 rounded-full bg-[var(--teal)] text-[var(--parchment)] hover:bg-[var(--teal-deep)] transition-colors whitespace-nowrap"
-          >
-            Hadits ↗
-          </a>
         </nav>
       </div>
     </header>

@@ -7,8 +7,6 @@ export const metadata = {
   title: "Al-Qur'an 30 Juz — Mushaf",
 };
 
-export const dynamic = "force-dynamic";
-
 export default async function QuranIndexPage() {
   const surahList = await getSurahList();
 

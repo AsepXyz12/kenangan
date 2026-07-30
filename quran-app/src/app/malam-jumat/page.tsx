@@ -6,8 +6,6 @@ import { getSurahDetail } from "@/lib/quran-api";
 
 export const metadata = { title: "Amalan Malam Jumat — Mushaf" };
 
-export const dynamic = "force-dynamic";
-
 const AMALAN = [
   {
     judul: "Memperbanyak sholawat",

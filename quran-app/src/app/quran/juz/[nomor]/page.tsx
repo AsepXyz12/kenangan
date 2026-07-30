@@ -6,7 +6,9 @@ import { getSurahDetail } from "@/lib/quran-api";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
-export const dynamic = "force-dynamic";
+export function generateStaticParams() {
+  return Array.from({ length: 30 }).map((_, i) => ({ nomor: String(i + 1) }));
+}
 
 export async function generateMetadata({
   params,
