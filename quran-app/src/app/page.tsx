@@ -2,6 +2,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Roundel from "@/components/Roundel";
+import LiveStrip from "@/components/LiveStrip";
 import { getAyatHariIni } from "@/lib/quran-api";
 
 export const revalidate = 3600;
@@ -79,6 +80,8 @@ export default async function Home() {
             hadits sembilan imam.
           </p>
         </section>
+
+        <LiveStrip />
 
         <section
           className="max-w-3xl mx-auto px-5 md:px-8 pb-16 animate-fade-up"
