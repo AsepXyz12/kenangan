@@ -278,3 +278,45 @@ export async function getSurahDetail(nomor: number): Promise<SurahDetail> {
 }
 
 export const TIDAK_ADA_BASMALAH = new Set([1, 9]);
+
+export type AyatHarian = {
+  ayat: Ayat;
+  surahNomor: number;
+  namaLatin: string;
+  tema: string;
+};
+
+const AYAT_PILIHAN: { surah: number; ayat: number; tema: string }[] = [
+  { surah: 94, ayat: 5, tema: "Kemudahan" },
+  { surah: 2, ayat: 153, tema: "Sabar" },
+  { surah: 2, ayat: 186, tema: "Dikabulkannya Doa" },
+  { surah: 3, ayat: 139, tema: "Jangan Lemah" },
+  { surah: 13, ayat: 28, tema: "Ketenangan Hati" },
+  { surah: 16, ayat: 97, tema: "Kehidupan yang Baik" },
+  { surah: 39, ayat: 53, tema: "Jangan Berputus Asa" },
+  { surah: 65, ayat: 3, tema: "Tawakal" },
+  { surah: 2, ayat: 216, tema: "Kebaikan di Balik Takdir" },
+  { surah: 3, ayat: 159, tema: "Lemah Lembut" },
+  { surah: 49, ayat: 13, tema: "Persaudaraan" },
+  { surah: 17, ayat: 23, tema: "Berbakti pada Orang Tua" },
+  { surah: 31, ayat: 14, tema: "Ibu dan Bapak" },
+  { surah: 9, ayat: 40, tema: "Jangan Bersedih" },
+  { surah: 2, ayat: 45, tema: "Sabar dan Sholat" },
+  { surah: 3, ayat: 200, tema: "Kesabaran" },
+  { surah: 55, ayat: 13, tema: "Nikmat Allah" },
+];
+
+export async function getAyatHariIni(): Promise<AyatHarian> {
+  const now = new Date();
+  const start = Date.UTC(now.getUTCFullYear(), 0, 0);
+  const dayOfYear = Math.floor((now.getTime() - start) / 86400000);
+  const pilihan = AYAT_PILIHAN[dayOfYear % AYAT_PILIHAN.length];
+  const surah = SURAH_MAP[pilihan.surah];
+  const ayat = surah.ayat.find((a) => a.nomorAyat === pilihan.ayat)!;
+  return {
+    ayat,
+    surahNomor: pilihan.surah,
+    namaLatin: surah.namaLatin,
+    tema: pilihan.tema,
+  };
+}
