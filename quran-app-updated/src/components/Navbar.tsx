@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+// Catatan: daftar href di sini juga di-precache untuk offline di public/sw.js
+// (APP_SHELL). Kalau nambah/hapus menu di sini, update juga di sw.js.
 const NAV_ITEMS = [
   { href: "/quran", label: "Al-Qur'an" },
   { href: "/hadits", label: "Hadits" },

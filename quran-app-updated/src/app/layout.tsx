@@ -5,6 +5,7 @@ import { AudioPlayerProvider } from "@/components/AudioPlayerContext";
 import { FontSizeProvider } from "@/components/FontSizeContext";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import InstallPrompt from "@/components/InstallPrompt";
+import OfflineBanner from "@/components/OfflineBanner";
 
 const arabic = Scheherazade_New({
   subsets: ["arabic"],
@@ -117,6 +118,7 @@ export default function RootLayout({
   return (
     <html lang="id">
       <body className={`${arabic.variable} ${display.variable} ${body.variable}`}>
+        <OfflineBanner />
         <FontSizeProvider>
           <AudioPlayerProvider>
             {children}
