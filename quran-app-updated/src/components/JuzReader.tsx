@@ -3,6 +3,8 @@
 import { useState } from "react";
 import SurahHeader from "./SurahHeader";
 import AyatBlock from "./AyatBlock";
+import SurahAudioBar from "./SurahAudioBar";
+import FontSizeControl from "./FontSizeControl";
 import type { SurahDetail } from "@/lib/quran-api";
 
 export type JuzSegment = {
@@ -16,7 +18,8 @@ export default function JuzReader({ segments }: { segments: JuzSegment[] }) {
 
   return (
     <div>
-      <div className="flex justify-end mb-2">
+      <div className="flex items-center justify-between gap-2 mb-6 flex-wrap">
+        <FontSizeControl />
         <button
           onClick={() => setTampilkanLatin((v) => !v)}
           className="text-xs px-3 py-1.5 rounded-full border border-[var(--parchment-line)] text-[var(--ink-soft)] hover:border-[var(--teal)] hover:text-[var(--teal-deep)] transition-colors"
@@ -45,9 +48,15 @@ export default function JuzReader({ segments }: { segments: JuzSegment[] }) {
                 {surah.namaLatin} &middot; lanjutan dari ayat {ayatMulai}
               </p>
             )}
+            <SurahAudioBar
+              surahNomor={surah.nomor}
+              namaLatin={surah.namaLatin}
+              ayatNomors={ayatDitampilkan.map((a) => a.nomorAyat)}
+            />
             {ayatDitampilkan.map((a) => (
               <AyatBlock
                 key={a.nomorAyat}
+                surahNomor={surah.nomor}
                 nomorAyat={a.nomorAyat}
                 teksArab={a.teksArab}
                 teksLatin={a.teksLatin}

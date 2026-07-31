@@ -1,0 +1,45 @@
+{
+  "name": "Mushaf — Al-Qur'an, Hadits, Rukun Islam & Iman",
+  "short_name": "Mushaf",
+  "description": "Baca Al-Qur'an 30 juz lengkap dengan murottal audio, terjemahan, hadits, Rukun Islam & Iman. Bisa dipakai offline — cocok untuk anak-anak yang belum punya mushaf sendiri.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f4eeda",
+  "theme_color": "#24463d",
+  "lang": "id",
+  "categories": ["books", "education", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Baca Al-Qur'an",
+      "url": "/quran",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Lanjutkan Bacaan",
+      "url": "/quran?lanjut=1",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

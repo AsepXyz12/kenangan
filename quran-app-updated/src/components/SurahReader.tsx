@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Bookmark, BookmarkCheck } from "lucide-react";
 import SurahHeader from "./SurahHeader";
 import AyatBlock from "./AyatBlock";
+import SurahAudioBar from "./SurahAudioBar";
+import FontSizeControl from "./FontSizeControl";
+import { setLastRead } from "@/lib/bookmark";
 import type { SurahDetail } from "@/lib/quran-api";
 
 type SurahReaderProps = {
@@ -20,12 +24,33 @@ export default function SurahReader({
   tampilkanNavigasiSurat = true,
 }: SurahReaderProps) {
   const [tampilkanLatin, setTampilkanLatin] = useState(true);
+  const [tersimpan, setTersimpan] = useState(false);
 
   const ayatDitampilkan = surah.ayat.filter((a) => {
     if (ayatMulai && a.nomorAyat < ayatMulai) return false;
     if (ayatSelesai && a.nomorAyat > ayatSelesai) return false;
     return true;
   });
+
+  // Tandai surat ini sebagai posisi bacaan terakhir saat halaman dibuka.
+  useEffect(() => {
+    setLastRead({
+      surahNomor: surah.nomor,
+      namaLatin: surah.namaLatin,
+      ayatNomor: ayatMulai ?? 1,
+    });
+  }, [surah.nomor, surah.namaLatin, ayatMulai]);
+
+  const handleTandai = () => {
+    const ayatTengah = ayatDitampilkan[0]?.nomorAyat ?? 1;
+    setLastRead({
+      surahNomor: surah.nomor,
+      namaLatin: surah.namaLatin,
+      ayatNomor: ayatTengah,
+    });
+    setTersimpan(true);
+    setTimeout(() => setTersimpan(false), 1800);
+  };
 
   return (
     <div>
@@ -45,7 +70,31 @@ export default function SurahReader({
         </p>
       )}
 
-      <div className="flex justify-end mb-2">
+      <SurahAudioBar
+        surahNomor={surah.nomor}
+        namaLatin={surah.namaLatin}
+        ayatNomors={ayatDitampilkan.map((a) => a.nomorAyat)}
+      />
+
+      <div className="flex items-center justify-between gap-2 mb-4 flex-wrap">
+        <div className="flex items-center gap-2">
+          <FontSizeControl />
+          <button
+            onClick={handleTandai}
+            aria-label="Tandai posisi bacaan di sini"
+            className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border border-[var(--parchment-line)] text-[var(--ink-soft)] hover:border-[var(--gold)] hover:text-[var(--gold)] transition-colors"
+          >
+            {tersimpan ? (
+              <>
+                <BookmarkCheck size={13} /> Tersimpan
+              </>
+            ) : (
+              <>
+                <Bookmark size={13} /> Tandai
+              </>
+            )}
+          </button>
+        </div>
         <button
           onClick={() => setTampilkanLatin((v) => !v)}
           className="text-xs px-3 py-1.5 rounded-full border border-[var(--parchment-line)] text-[var(--ink-soft)] hover:border-[var(--teal)] hover:text-[var(--teal-deep)] transition-colors"
@@ -58,6 +107,7 @@ export default function SurahReader({
         {ayatDitampilkan.map((a) => (
           <AyatBlock
             key={a.nomorAyat}
+            surahNomor={surah.nomor}
             nomorAyat={a.nomorAyat}
             teksArab={a.teksArab}
             teksLatin={a.teksLatin}

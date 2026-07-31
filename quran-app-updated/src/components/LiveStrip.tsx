@@ -52,10 +52,14 @@ function getJumatCountdown(now: Date) {
 }
 
 export default function LiveStrip() {
-  const [now, setNow] = useState<Date | null>(null);
+  // Lazy-init: null di server (hindari mismatch hydration), lalu di client
+  // nilai awal langsung diisi Date sekali saat komponen pertama dibuat —
+  // ini bukan "setState di effect", jadi lolos aturan react-hooks/set-state-in-effect.
+  const [now, setNow] = useState<Date | null>(() =>
+    typeof window === "undefined" ? null : new Date()
+  );
 
   useEffect(() => {
-    setNow(new Date());
     const id = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(id);
   }, []);

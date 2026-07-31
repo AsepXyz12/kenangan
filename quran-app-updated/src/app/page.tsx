@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import Roundel from "@/components/Roundel";
 import LiveStrip from "@/components/LiveStrip";
 import VisitorCounter from "@/components/VisitorCounter";
+import ContinueReadingCard from "@/components/ContinueReadingCard";
 import { getAyatHariIni } from "@/lib/quran-api";
 
 export const revalidate = 3600;
@@ -87,6 +88,8 @@ export default async function Home() {
             <VisitorCounter />
           </div>
         </section>
+
+        <ContinueReadingCard />
 
         <LiveStrip />
 
