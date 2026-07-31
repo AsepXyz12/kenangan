@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Roundel from "@/components/Roundel";
+import GerakanIllustration from "@/components/GerakanIllustration";
 
 export const metadata = { title: "Panduan Sholat Lengkap — Mushaf" };
 
@@ -14,6 +15,16 @@ type Bacaan = {
 type Gerakan = {
   nomor: number;
   judul: string;
+  pose:
+    | "berdiri"
+    | "takbir"
+    | "bersedekap"
+    | "ruku"
+    | "itidal"
+    | "sujud"
+    | "duduk-iftirasy"
+    | "duduk-tawarruk"
+    | "salam";
   deskripsiGerakan: string;
   bacaan?: Bacaan[];
 };
@@ -74,12 +85,14 @@ const GERAKAN: Gerakan[] = [
   {
     nomor: 1,
     judul: "Berdiri Tegak Menghadap Kiblat",
+    pose: "berdiri",
     deskripsiGerakan:
       "Berdiri tegak bagi yang mampu, pandangan ke arah tempat sujud, badan menghadap kiblat. Niat sholat dilafalkan dalam hati sesuai sholat yang akan dikerjakan.",
   },
   {
     nomor: 2,
     judul: "Takbiratul Ihram",
+    pose: "takbir",
     deskripsiGerakan:
       "Mengangkat kedua tangan sejajar telinga atau bahu, telapak tangan menghadap kiblat, sambil mengucapkan takbir. Sejak takbir ini, sholat dimulai dan segala perkara duniawi tertinggal.",
     bacaan: [
@@ -89,6 +102,7 @@ const GERAKAN: Gerakan[] = [
   {
     nomor: 3,
     judul: "Bersedekap (Tangan di Dada)",
+    pose: "bersedekap",
     deskripsiGerakan:
       "Tangan kanan diletakkan di atas pergelangan tangan kiri, keduanya diletakkan di dada. Lalu membaca doa iftitah, dilanjutkan Surat Al-Fatihah.",
     bacaan: [
@@ -121,6 +135,7 @@ const GERAKAN: Gerakan[] = [
   {
     nomor: 4,
     judul: "Ruku'",
+    pose: "ruku",
     deskripsiGerakan:
       "Mengangkat kedua tangan sambil bertakbir, lalu membungkukkan badan hingga punggung dan kepala rata (sejajar), kedua tangan memegang lutut dengan jari-jari terbuka, pandangan ke tempat sujud.",
     bacaan: [
@@ -136,6 +151,7 @@ const GERAKAN: Gerakan[] = [
   {
     nomor: 5,
     judul: "I'tidal (Bangkit dari Ruku')",
+    pose: "itidal",
     deskripsiGerakan:
       "Bangkit dari ruku' hingga berdiri tegak kembali, mengangkat kedua tangan sejajar telinga, lalu tangan diturunkan lurus di samping badan.",
     bacaan: [
@@ -151,6 +167,7 @@ const GERAKAN: Gerakan[] = [
   {
     nomor: 6,
     judul: "Sujud Pertama",
+    pose: "sujud",
     deskripsiGerakan:
       "Turun ke posisi sujud sambil bertakbir: dahi, hidung, kedua telapak tangan, kedua lutut, dan ujung jari kedua kaki menempel di tempat sholat. Jari-jari tangan dan kaki menghadap kiblat.",
     bacaan: [
@@ -166,6 +183,7 @@ const GERAKAN: Gerakan[] = [
   {
     nomor: 7,
     judul: "Duduk di Antara Dua Sujud",
+    pose: "duduk-iftirasy",
     deskripsiGerakan:
       "Bangkit dari sujud sambil bertakbir, duduk iftirasy: pantat di atas kaki kiri yang dilipat, kaki kanan ditegakkan, kedua tangan di atas paha.",
     bacaan: [
@@ -180,6 +198,7 @@ const GERAKAN: Gerakan[] = [
   {
     nomor: 8,
     judul: "Sujud Kedua",
+    pose: "sujud",
     deskripsiGerakan:
       "Kembali sujud dengan tata cara yang sama seperti sujud pertama, sambil bertakbir saat turun.",
     bacaan: [
@@ -195,6 +214,7 @@ const GERAKAN: Gerakan[] = [
   {
     nomor: 9,
     judul: "Duduk Tasyahud Awal",
+    pose: "duduk-iftirasy",
     deskripsiGerakan:
       "Dilakukan pada rakaat kedua sholat yang berjumlah tiga atau empat rakaat. Duduk iftirasy, jari telunjuk kanan diangkat sedikit saat mengucap 'illallah' sebagai isyarat tauhid.",
     bacaan: [
@@ -212,6 +232,7 @@ const GERAKAN: Gerakan[] = [
   {
     nomor: 10,
     judul: "Duduk Tasyahud Akhir",
+    pose: "duduk-tawarruk",
     deskripsiGerakan:
       "Dilakukan pada rakaat terakhir. Duduk tawarruk: pantat menyentuh lantai, kaki kiri diselipkan di bawah kaki kanan, kaki kanan tegak, ujung jari menghadap kiblat.",
     bacaan: [
@@ -246,6 +267,7 @@ const GERAKAN: Gerakan[] = [
   {
     nomor: 11,
     judul: "Salam",
+    pose: "salam",
     deskripsiGerakan:
       "Menoleh ke kanan hingga pipi kanan terlihat dari belakang, mengucap salam, lalu menoleh ke kiri dengan bacaan yang sama. Salam menandai berakhirnya sholat.",
     bacaan: [
@@ -300,6 +322,75 @@ const SUJUD_SAHWI = {
     arti: "Mahasuci Zat yang tidak tidur dan tidak lupa.",
   },
 };
+
+const NIAT_SHOLAT_SUNNAH: { nama: string; arab: string; latin: string; arti: string }[] = [
+  {
+    nama: "Qabliyah Subuh (2 rakaat)",
+    arab: "أُصَلِّي سُنَّةَ الصُّبْحِ رَكْعَتَيْنِ لِلَّهِ تَعَالَى",
+    latin: "Ushallii sunnatash shubhi rak'ataini lillaahi ta'aalaa",
+    arti: "Aku niat sholat sunnah Subuh dua rakaat karena Allah Ta'ala.",
+  },
+  {
+    nama: "Qabliyah Zuhur (2 rakaat)",
+    arab: "أُصَلِّي سُنَّةَ الظُّهْرِ رَكْعَتَيْنِ قَبْلِيَّةً لِلَّهِ تَعَالَى",
+    latin: "Ushallii sunnatazh zhuhri rak'ataini qabliyyatan lillaahi ta'aalaa",
+    arti: "Aku niat sholat sunnah sebelum Zuhur dua rakaat karena Allah Ta'ala.",
+  },
+  {
+    nama: "Ba'diyah Zuhur (2 rakaat)",
+    arab: "أُصَلِّي سُنَّةَ الظُّهْرِ رَكْعَتَيْنِ بَعْدِيَّةً لِلَّهِ تَعَالَى",
+    latin: "Ushallii sunnatazh zhuhri rak'ataini ba'diyyatan lillaahi ta'aalaa",
+    arti: "Aku niat sholat sunnah sesudah Zuhur dua rakaat karena Allah Ta'ala.",
+  },
+  {
+    nama: "Ba'diyah Maghrib (2 rakaat)",
+    arab: "أُصَلِّي سُنَّةَ الْمَغْرِبِ رَكْعَتَيْنِ بَعْدِيَّةً لِلَّهِ تَعَالَى",
+    latin: "Ushallii sunnatal maghribi rak'ataini ba'diyyatan lillaahi ta'aalaa",
+    arti: "Aku niat sholat sunnah sesudah Maghrib dua rakaat karena Allah Ta'ala.",
+  },
+  {
+    nama: "Ba'diyah Isya (2 rakaat)",
+    arab: "أُصَلِّي سُنَّةَ الْعِشَاءِ رَكْعَتَيْنِ بَعْدِيَّةً لِلَّهِ تَعَالَى",
+    latin: "Ushallii sunnatal 'isyaa-i rak'ataini ba'diyyatan lillaahi ta'aalaa",
+    arti: "Aku niat sholat sunnah sesudah Isya dua rakaat karena Allah Ta'ala.",
+  },
+  {
+    nama: "Tahajud",
+    arab: "أُصَلِّي سُنَّةَ التَّهَجُّدِ رَكْعَتَيْنِ لِلَّهِ تَعَالَى",
+    latin: "Ushallii sunnatat tahajjudi rak'ataini lillaahi ta'aalaa",
+    arti: "Aku niat sholat sunnah Tahajud dua rakaat karena Allah Ta'ala.",
+  },
+  {
+    nama: "Witir (1 rakaat penutup)",
+    arab: "أُصَلِّي سُنَّةَ الْوِتْرِ رَكْعَةً لِلَّهِ تَعَالَى",
+    latin: "Ushallii sunnatal witri rak'atan lillaahi ta'aalaa",
+    arti: "Aku niat sholat sunnah Witir satu rakaat karena Allah Ta'ala.",
+  },
+  {
+    nama: "Dhuha (2 rakaat)",
+    arab: "أُصَلِّي سُنَّةَ الضُّحَى رَكْعَتَيْنِ لِلَّهِ تَعَالَى",
+    latin: "Ushallii sunnatadh dhuhaa rak'ataini lillaahi ta'aalaa",
+    arti: "Aku niat sholat sunnah Dhuha dua rakaat karena Allah Ta'ala.",
+  },
+  {
+    nama: "Tahiyatul Masjid (2 rakaat)",
+    arab: "أُصَلِّي سُنَّةَ تَحِيَّةِ الْمَسْجِدِ رَكْعَتَيْنِ لِلَّهِ تَعَالَى",
+    latin: "Ushallii sunnata tahiyyatil masjidi rak'ataini lillaahi ta'aalaa",
+    arti: "Aku niat sholat sunnah Tahiyatul Masjid dua rakaat karena Allah Ta'ala.",
+  },
+  {
+    nama: "Istikharah (2 rakaat)",
+    arab: "أُصَلِّي سُنَّةَ الِاسْتِخَارَةِ رَكْعَتَيْنِ لِلَّهِ تَعَالَى",
+    latin: "Ushallii sunnatal istikhaarati rak'ataini lillaahi ta'aalaa",
+    arti: "Aku niat sholat sunnah Istikharah dua rakaat karena Allah Ta'ala.",
+  },
+  {
+    nama: "Mutlak (sholat sunnah tanpa sebab khusus, 2 rakaat)",
+    arab: "أُصَلِّي سُنَّةً رَكْعَتَيْنِ لِلَّهِ تَعَالَى",
+    latin: "Ushallii sunnatan rak'ataini lillaahi ta'aalaa",
+    arti: "Aku niat sholat sunnah dua rakaat karena Allah Ta'ala.",
+  },
+];
 
 const PEMBATAL_SHOLAT = [
   "Berbicara dengan sengaja di luar bacaan sholat",
@@ -436,9 +527,14 @@ export default function PanduanSholatPage() {
                   <Roundel number={g.nomor} variant="teal" size={36} />
                   <h3 className="font-display text-lg text-[var(--ink)]">{g.judul}</h3>
                 </div>
-                <p className="text-sm text-[var(--ink-soft)] leading-relaxed mb-4">
-                  {g.deskripsiGerakan}
-                </p>
+                <div className="flex gap-4 items-start mb-4">
+                  <div className="shrink-0 rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment)] p-2">
+                    <GerakanIllustration pose={g.pose} size={84} />
+                  </div>
+                  <p className="text-sm text-[var(--ink-soft)] leading-relaxed">
+                    {g.deskripsiGerakan}
+                  </p>
+                </div>
                 {g.bacaan?.map((b, idx) => (
                   <div
                     key={idx}
@@ -474,6 +570,28 @@ export default function PanduanSholatPage() {
               >
                 <p className="text-sm font-semibold text-[var(--teal-deep)] mb-1">{s.nama}</p>
                 <p className="text-sm text-[var(--ink-soft)] leading-relaxed">{s.keterangan}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Niat sholat sunnah */}
+        <section className="mb-10">
+          <h2 className="font-display text-xl text-[var(--ink)] mb-4">
+            Niat Sholat Sunnah
+          </h2>
+          <div className="grid sm:grid-cols-2 gap-4">
+            {NIAT_SHOLAT_SUNNAH.map((n) => (
+              <div
+                key={n.nama}
+                className="rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment-deep)]/40 p-5"
+              >
+                <p className="text-sm font-semibold text-[var(--teal-deep)] mb-2">{n.nama}</p>
+                <p className="ayat-arabic text-lg md:text-xl text-[var(--ink)] mb-2" dir="rtl">
+                  {n.arab}
+                </p>
+                <p className="italic text-xs text-[var(--ink-soft)] mb-2">{n.latin}</p>
+                <p className="text-sm text-[var(--ink)]">&ldquo;{n.arti}&rdquo;</p>
               </div>
             ))}
           </div>

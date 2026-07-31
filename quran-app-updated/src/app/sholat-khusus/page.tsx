@@ -1,7 +1,41 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import GerakanIllustration from "@/components/GerakanIllustration";
 
 export const metadata = { title: "Sholat-Sholat Khusus — Mushaf" };
+
+type PoseKey =
+  | "berdiri"
+  | "takbir"
+  | "bersedekap"
+  | "ruku"
+  | "itidal"
+  | "sujud"
+  | "duduk-iftirasy"
+  | "duduk-tawarruk"
+  | "salam";
+
+function AlurGerakan({ steps }: { steps: { pose: PoseKey; label: string }[] }) {
+  return (
+    <div className="mt-3 flex flex-wrap gap-3">
+      {steps.map((s, i) => (
+        <div key={i} className="flex items-center gap-2">
+          <div className="flex flex-col items-center gap-1">
+            <div className="rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment)] p-1.5">
+              <GerakanIllustration pose={s.pose} size={52} />
+            </div>
+            <span className="text-[10px] text-[var(--ink-soft)] text-center max-w-[64px] leading-tight">
+              {s.label}
+            </span>
+          </div>
+          {i < steps.length - 1 && (
+            <span className="text-[var(--gold)] text-lg -mt-4">&rarr;</span>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 function Kartu({ children }: { children: React.ReactNode }) {
   return (
@@ -232,6 +266,19 @@ export default function SholatKhususPage() {
           <BacaanBlok {...NIAT_SHOLAT_JENAZAH_LAKI} />
           <h3 className="font-medium text-[var(--ink)] mt-6 mb-2">Urutan Pelaksanaan</h3>
           <OrderedKartu items={URUTAN_SHOLAT_JENAZAH} />
+          <h3 className="font-medium text-[var(--ink)] mt-6 mb-2">Alur Empat Takbir</h3>
+          <AlurGerakan
+            steps={[
+              { pose: "takbir", label: "Takbir 1 + Al-Fatihah" },
+              { pose: "berdiri", label: "Takbir 2 + Sholawat" },
+              { pose: "berdiri", label: "Takbir 3 + Doa Jenazah" },
+              { pose: "berdiri", label: "Takbir 4 + Doa" },
+              { pose: "salam", label: "Salam" },
+            ]}
+          />
+          <p className="text-xs text-[var(--ink-soft)] mt-2">
+            Seluruh takbir dan bacaan dilakukan sambil tetap berdiri, tanpa ruku' maupun sujud.
+          </p>
           <h3 className="font-medium text-[var(--ink)] mt-6 mb-2">Doa Setelah Takbir Ketiga</h3>
           <BacaanBlok {...DOA_JENAZAH} />
         </Seksi>
@@ -260,6 +307,19 @@ export default function SholatKhususPage() {
 
         <Seksi title="Sholat Idulfitri & Iduladha" desc="Sholat sunnah muakkad dua rakaat di hari raya.">
           <OrderedKartu items={TATA_CARA_SHOLAT_ID} />
+          <h3 className="font-medium text-[var(--ink)] mt-6 mb-2">Alur Takbir Zawa'id</h3>
+          <AlurGerakan
+            steps={[
+              { pose: "takbir", label: "Takbiratul ihram" },
+              { pose: "takbir", label: "7x takbir tambahan" },
+              { pose: "bersedekap", label: "Al-Fatihah + surat" },
+              { pose: "ruku", label: "Ruku'" },
+              { pose: "sujud", label: "Sujud" },
+              { pose: "takbir", label: "5x takbir tambahan (rakaat 2)" },
+              { pose: "bersedekap", label: "Al-Fatihah + surat" },
+              { pose: "salam", label: "Lanjut seperti biasa hingga salam" },
+            ]}
+          />
           <h3 className="font-medium text-[var(--ink)] mt-6 mb-2">Bacaan Takbir Hari Raya</h3>
           <BacaanBlok {...BACAAN_TAKBIR_ID} />
         </Seksi>
@@ -271,6 +331,19 @@ export default function SholatKhususPage() {
           <BacaanBlok {...NIAT_GERHANA} />
           <h3 className="font-medium text-[var(--ink)] mt-6 mb-2">Tata Cara Pelaksanaan</h3>
           <OrderedKartu items={TATA_CARA_GERHANA} />
+          <h3 className="font-medium text-[var(--ink)] mt-6 mb-2">Alur Satu Rakaat (Ciri Khasnya: Dua Kali Ruku')</h3>
+          <AlurGerakan
+            steps={[
+              { pose: "takbir", label: "Takbiratul ihram" },
+              { pose: "bersedekap", label: "Baca Al-Fatihah + surat (1)" },
+              { pose: "ruku", label: "Ruku' (1)" },
+              { pose: "itidal", label: "I'tidal, tanpa sujud" },
+              { pose: "bersedekap", label: "Baca Al-Fatihah + surat (2)" },
+              { pose: "ruku", label: "Ruku' (2)" },
+              { pose: "itidal", label: "I'tidal" },
+              { pose: "sujud", label: "Sujud 2x seperti biasa" },
+            ]}
+          />
         </Seksi>
 
         <Seksi title="Sholat Istisqa" desc="Sholat sunnah memohon hujan pada masa kekeringan.">
