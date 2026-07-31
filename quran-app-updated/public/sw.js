@@ -37,6 +37,9 @@ const APP_SHELL = [
   "/sirah-nabawiyah",
   "/rukun-islam",
   "/rukun-iman",
+  "/aqidah",
+  "/fiqih-madzhab",
+  "/sejarah-islam",
   "/malam-jumat",
 ];
 

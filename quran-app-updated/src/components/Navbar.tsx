@@ -17,6 +17,9 @@ const NAV_ITEMS = [
   { href: "/sirah-nabawiyah", label: "Sirah Nabawiyah" },
   { href: "/rukun-islam", label: "Rukun Islam" },
   { href: "/rukun-iman", label: "Rukun Iman" },
+  { href: "/aqidah", label: "Aqidah & Tauhid" },
+  { href: "/fiqih-madzhab", label: "Fiqih & Madzhab" },
+  { href: "/sejarah-islam", label: "Sejarah Islam" },
   { href: "/malam-jumat", label: "Amalan Malam" },
 ];
 

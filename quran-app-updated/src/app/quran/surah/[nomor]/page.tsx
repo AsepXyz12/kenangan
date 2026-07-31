@@ -40,6 +40,14 @@ export default async function SurahPage({
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 max-w-2xl mx-auto w-full px-5 md:px-8 py-12">
+        <div className="mb-4 text-right">
+          <a
+            href={`/quran/tafsir/${surah.nomor}`}
+            className="text-sm underline decoration-[var(--gold)] underline-offset-4 text-[var(--ink-soft)]"
+          >
+            Baca tafsir surat ini →
+          </a>
+        </div>
         <SurahReader surah={surah} />
       </main>
       <Footer />
