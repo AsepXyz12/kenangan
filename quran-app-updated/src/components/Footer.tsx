@@ -10,12 +10,12 @@ export default function Footer() {
             bagi siapa saja yang membangunnya.
           </p>
         </div>
-        <p className="text-xs text-[var(--ink-soft)] max-w-xs text-right">
-          Teks Al-Qur&apos;an dari The Noble Qur&apos;an Encyclopedia,
-          terjemahan Kemenag RI, disusun dari dataset quran-json (CC BY-SA
-          4.0). Basis data hadits disusun dari hadits-database oleh
-          Irsyadul Ibad, sumber carihadits.com (MIT License)
-        </p>
+        <a
+          href="/tentang"
+          className="text-xs text-[var(--ink-soft)] underline decoration-[var(--parchment-line)] underline-offset-4 hover:text-[var(--teal-deep)] transition-colors"
+        >
+          Tentang &amp; sumber data
+        </a>
       </div>
     </footer>
   );
