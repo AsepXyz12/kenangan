@@ -1,10 +1,16 @@
 // Service worker Mushaf — dibuat sesederhana mungkin agar mudah dirawat.
 // Strategi:
-//  - App shell (halaman, JS, CSS, font, ikon) -> cache-first, lalu update di background (stale-while-revalidate)
+//  - App shell (halaman, JS, CSS, font, ikon) -> network-first, fallback ke cache (biar nggak nyangkut ke build lama pas deploy baru)
 //  - Audio murottal (mp3 dari everyayah.com) -> cache-first, sekali didengar tersimpan untuk offline
 //  - Navigasi saat offline & belum pernah dibuka -> fallback ke halaman beranda dari cache
-
-const VERSION = "mushaf-v1";
+//
+// PENTING: BUILD_ID di bawah ini WAJIB diganti setiap kali deploy versi baru
+// (lihat script "postbuild" di package.json yang otomatis melakukan ini).
+// Kalau BUILD_ID tidak berubah, browser lama akan terus pakai cache SW lama
+// yang mereferensikan file JS/CSS build lama yang sudah tidak ada di server
+// -> muncul "This page couldn't load".
+const BUILD_ID = "__BUILD_ID__";
+const VERSION = `mushaf-${BUILD_ID}`;
 const SHELL_CACHE = `${VERSION}-shell`;
 const AUDIO_CACHE = `${VERSION}-audio`;
 const PAGE_CACHE = `${VERSION}-pages`;
@@ -16,6 +22,12 @@ self.addEventListener("install", (event) => {
     caches.open(SHELL_CACHE).then((cache) => cache.addAll(APP_SHELL)).catch(() => {})
   );
   self.skipWaiting();
+});
+
+self.addEventListener("message", (event) => {
+  if (event.data === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
 });
 
 self.addEventListener("activate", (event) => {
@@ -85,7 +97,9 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Aset statis (JS/CSS/font/gambar Next.js): stale-while-revalidate.
+  // Aset statis (JS/CSS/font/gambar Next.js): network-first, fallback ke cache.
+  // Dulu pakai stale-while-revalidate (langsung balikin cache lama sebelum cek network),
+  // itu penyebab utama chunk build lama nyangkut terus setelah deploy baru.
   if (
     request.destination === "script" ||
     request.destination === "style" ||
@@ -94,14 +108,14 @@ self.addEventListener("fetch", (event) => {
   ) {
     event.respondWith(
       caches.open(SHELL_CACHE).then(async (cache) => {
-        const cached = await cache.match(request);
-        const networkFetch = fetch(request)
-          .then((response) => {
-            if (response.ok) cache.put(request, response.clone());
-            return response;
-          })
-          .catch(() => cached);
-        return cached || networkFetch;
+        try {
+          const response = await fetch(request);
+          if (response.ok) cache.put(request, response.clone());
+          return response;
+        } catch {
+          const cached = await cache.match(request);
+          return cached || Response.error();
+        }
       })
     );
   }
