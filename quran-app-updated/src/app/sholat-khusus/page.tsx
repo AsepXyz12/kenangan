@@ -1,6 +1,5 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import GerakanIllustration from "@/components/GerakanIllustration";
 
 export const metadata = { title: "Sholat-Sholat Khusus — Mushaf" };
 
@@ -22,7 +21,14 @@ function AlurGerakan({ steps }: { steps: { pose: PoseKey; label: string }[] }) {
         <div key={i} className="flex items-center gap-2">
           <div className="flex flex-col items-center gap-1">
             <div className="rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment)] p-1.5">
-              <GerakanIllustration pose={s.pose} size={52} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`/images/gerakan/${s.pose}.png`}
+                alt={s.label}
+                width={52}
+                height={59}
+                className="block"
+              />
             </div>
             <span className="text-[10px] text-[var(--ink-soft)] text-center max-w-[64px] leading-tight">
               {s.label}

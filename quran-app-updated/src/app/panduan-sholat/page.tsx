@@ -1,7 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Roundel from "@/components/Roundel";
-import GerakanIllustration from "@/components/GerakanIllustration";
 
 export const metadata = { title: "Panduan Sholat Lengkap — Mushaf" };
 
@@ -571,7 +570,14 @@ export default function PanduanSholatPage() {
                 </div>
                 <div className="flex gap-4 items-start mb-4">
                   <div className="shrink-0 rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment)] p-2">
-                    <GerakanIllustration pose={g.pose} size={84} />
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`/images/gerakan/${g.pose}.png`}
+                      alt={g.judul}
+                      width={84}
+                      height={96}
+                      className="block"
+                    />
                   </div>
                   <p className="text-sm text-[var(--ink-soft)] leading-relaxed">
                     {g.deskripsiGerakan}
