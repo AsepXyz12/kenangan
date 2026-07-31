@@ -25,20 +25,41 @@ const MENU = [
       "62.169 hadits dari sembilan kitab induk, teks Arab dan terjemahan Indonesia, tersimpan langsung di situs ini.",
   },
   {
-    href: "/rukun-islam",
+    href: "/panduan-sholat",
     nomor: 3,
+    judul: "Panduan Sholat Lengkap",
+    deskripsi:
+      "Tata cara sholat fardu, gerakan langkah demi langkah, lengkap dengan bacaan Arab, Latin, dan terjemahan.",
+  },
+  {
+    href: "/kisah-nabi",
+    nomor: 4,
+    judul: "Kisah 25 Nabi dan Rasul",
+    deskripsi:
+      "Ringkasan kisah, hikmah, dan rujukan ayat dari Adam hingga Muhammad ﷺ.",
+  },
+  {
+    href: "/sirah-nabawiyah",
+    nomor: 5,
+    judul: "Sirah Nabawiyah",
+    deskripsi:
+      "Sejarah lengkap Nabi Muhammad ﷺ dan awal mula Islam, disusun kronologis dari Jazirah Arab sebelum kenabian hingga wafat beliau.",
+  },
+  {
+    href: "/rukun-islam",
+    nomor: 6,
     judul: "Rukun Islam",
     deskripsi: "Lima pondasi amal seorang muslim, lengkap dengan dalil dan penjelasannya.",
   },
   {
     href: "/rukun-iman",
-    nomor: 4,
+    nomor: 7,
     judul: "Rukun Iman",
     deskripsi: "Enam pokok keyakinan yang menjadi dasar akidah seorang mukmin.",
   },
   {
     href: "/malam-jumat",
-    nomor: 5,
+    nomor: 8,
     judul: "Amalan Malam Jumat",
     deskripsi:
       "Keutamaan malam Jumat, amalan yang dianjurkan, serta bacaan lengkap Surat Yasin dan Al-Kahf.",
