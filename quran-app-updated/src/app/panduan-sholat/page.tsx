@@ -385,6 +385,48 @@ const NIAT_SHOLAT_SUNNAH: { nama: string; arab: string; latin: string; arti: str
     arti: "Aku niat sholat sunnah Istikharah dua rakaat karena Allah Ta'ala.",
   },
   {
+    nama: "Qabliyah Ashar (2 rakaat)",
+    arab: "أُصَلِّي سُنَّةَ الْعَصْرِ رَكْعَتَيْنِ قَبْلِيَّةً لِلَّهِ تَعَالَى",
+    latin: "Ushallii sunnatal 'ashri rak'ataini qabliyyatan lillaahi ta'aalaa",
+    arti: "Aku niat sholat sunnah sebelum Ashar dua rakaat karena Allah Ta'ala.",
+  },
+  {
+    nama: "Qabliyah Isya (2 rakaat)",
+    arab: "أُصَلِّي سُنَّةَ الْعِشَاءِ رَكْعَتَيْنِ قَبْلِيَّةً لِلَّهِ تَعَالَى",
+    latin: "Ushallii sunnatal 'isyaa-i rak'ataini qabliyyatan lillaahi ta'aalaa",
+    arti: "Aku niat sholat sunnah sebelum Isya dua rakaat karena Allah Ta'ala.",
+  },
+  {
+    nama: "Tarawih (2 rakaat)",
+    arab: "أُصَلِّي سُنَّةَ التَّرَاوِيحِ رَكْعَتَيْنِ لِلَّهِ تَعَالَى",
+    latin: "Ushallii sunnatat taraawiihi rak'ataini lillaahi ta'aalaa",
+    arti: "Aku niat sholat sunnah Tarawih dua rakaat karena Allah Ta'ala.",
+  },
+  {
+    nama: "Taubat (2 rakaat)",
+    arab: "أُصَلِّي سُنَّةَ التَّوْبَةِ رَكْعَتَيْنِ لِلَّهِ تَعَالَى",
+    latin: "Ushallii sunnatat taubati rak'ataini lillaahi ta'aalaa",
+    arti: "Aku niat sholat sunnah Taubat dua rakaat karena Allah Ta'ala.",
+  },
+  {
+    nama: "Hajat (2 rakaat)",
+    arab: "أُصَلِّي سُنَّةَ الْحَاجَةِ رَكْعَتَيْنِ لِلَّهِ تَعَالَى",
+    latin: "Ushallii sunnatal haajati rak'ataini lillaahi ta'aalaa",
+    arti: "Aku niat sholat sunnah Hajat dua rakaat karena Allah Ta'ala.",
+  },
+  {
+    nama: "Idul Fitri (2 rakaat)",
+    arab: "أُصَلِّي سُنَّةَ عِيدِ الْفِطْرِ رَكْعَتَيْنِ لِلَّهِ تَعَالَى",
+    latin: "Ushallii sunnata 'iidil fithri rak'ataini lillaahi ta'aalaa",
+    arti: "Aku niat sholat sunnah Idul Fitri dua rakaat karena Allah Ta'ala.",
+  },
+  {
+    nama: "Idul Adha (2 rakaat)",
+    arab: "أُصَلِّي سُنَّةَ عِيدِ الْأَضْحَى رَكْعَتَيْنِ لِلَّهِ تَعَالَى",
+    latin: "Ushallii sunnata 'iidil adhaa rak'ataini lillaahi ta'aalaa",
+    arti: "Aku niat sholat sunnah Idul Adha dua rakaat karena Allah Ta'ala.",
+  },
+  {
     nama: "Mutlak (sholat sunnah tanpa sebab khusus, 2 rakaat)",
     arab: "أُصَلِّي سُنَّةً رَكْعَتَيْنِ لِلَّهِ تَعَالَى",
     latin: "Ushallii sunnatan rak'ataini lillaahi ta'aalaa",
