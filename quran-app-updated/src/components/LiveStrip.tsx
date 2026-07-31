@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { toHijri } from "@/lib/hijri";
 
 type ClockZone = {
   label: string;
@@ -67,12 +68,7 @@ export default function LiveStrip() {
     );
   }
 
-  const hijri = new Intl.DateTimeFormat("id-ID-u-ca-islamic-umalqura", {
-    timeZone: "Asia/Jakarta",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(now);
+  const hijri = toHijri(now).label;
 
   const { isJumat, days, hours, minutes, seconds } = getJumatCountdown(now);
 

@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Roundel from "@/components/Roundel";
 import LiveStrip from "@/components/LiveStrip";
+import VisitorCounter from "@/components/VisitorCounter";
 import { getAyatHariIni } from "@/lib/quran-api";
 
 export const revalidate = 3600;
@@ -79,6 +80,12 @@ export default async function Home() {
             dan syariat, amalan malam Jumat, serta akses ke ensiklopedia
             hadits sembilan imam.
           </p>
+          <div
+            className="mt-7 flex justify-center animate-fade-up"
+            style={{ animationDelay: "0.3s" }}
+          >
+            <VisitorCounter />
+          </div>
         </section>
 
         <LiveStrip />

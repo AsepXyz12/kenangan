@@ -24,9 +24,14 @@ export default function VisitorCounter() {
   if (count === null) return null;
 
   return (
-    <p className="flex items-center gap-1.5 text-xs text-[var(--ink-soft)]">
-      <Users size={13} strokeWidth={2} />
-      {count.toLocaleString("id-ID")} pengunjung
-    </p>
+    <div className="inline-flex items-center gap-2.5 rounded-full border border-[var(--gold)]/40 bg-[var(--parchment-deep)]/60 px-5 py-2.5">
+      <Users size={18} strokeWidth={2} className="text-[var(--gold-bright)]" />
+      <span className="font-display text-lg md:text-xl text-[var(--teal-deep)] tabular-nums">
+        {count.toLocaleString("id-ID")}
+      </span>
+      <span className="text-sm text-[var(--ink-soft)]">
+        orang telah membuka Mushaf ini
+      </span>
+    </div>
   );
 }
