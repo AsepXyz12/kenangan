@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Sparkle } from "lucide-react";
 import { toHijri } from "@/lib/hijri";
 
 type ClockZone = {
@@ -69,20 +70,44 @@ export default function LiveStrip() {
   }
 
   const hijri = toHijri(now).label;
+  const masehi = new Intl.DateTimeFormat("id-ID", {
+    timeZone: "Asia/Jakarta",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(now);
 
   const { isJumat, days, hours, minutes, seconds } = getJumatCountdown(now);
 
   return (
     <section className="max-w-4xl mx-auto px-5 md:px-8 pb-10 animate-fade-up" style={{ animationDelay: "0.36s" }}>
       <div className="ornament-border rounded-sm bg-[var(--parchment-deep)]/50 px-6 py-6 md:px-8">
-        <div className="flex items-center gap-2 mb-5">
+        <div className="relative flex items-center gap-2 mb-5">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--gold)] opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--gold)]" />
           </span>
           <span className="text-xs tracking-[0.25em] uppercase text-[var(--gold)]">
-            Live &middot; {hijri} H
+            Live &middot; {masehi} M &middot; {hijri} H
           </span>
+          <Sparkle
+            size={12}
+            className="text-[var(--gold-bright)] animate-twinkle"
+            style={{ animationDelay: "0s" }}
+            fill="currentColor"
+          />
+          <Sparkle
+            size={9}
+            className="text-[var(--gold)] animate-twinkle hidden sm:inline-block"
+            style={{ animationDelay: "0.9s" }}
+            fill="currentColor"
+          />
+          <Sparkle
+            size={10}
+            className="text-[var(--gold-bright)] animate-twinkle hidden md:inline-block"
+            style={{ animationDelay: "1.6s" }}
+            fill="currentColor"
+          />
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
