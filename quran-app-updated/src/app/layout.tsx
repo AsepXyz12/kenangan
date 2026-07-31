@@ -28,7 +28,7 @@ const body = Literata({
   display: "swap",
 });
 
-const BASE_URL = "https://al-quran-id-silk.vercel.app/";
+const BASE_URL = "https://al-quran-id-silk.vercel.app";
 const SITE_TITLE = "Mushaf — Al-Qur'an, Rukun Islam, Rukun Iman & Amalan Malam Jumat";
 const SITE_DESCRIPTION =
   "Baca Al-Qur'an 30 juz lengkap dengan harakat, terjemahan, dan murottal audio. Bisa dibaca offline — cocok untuk anak-anak yang belum punya mushaf sendiri.";

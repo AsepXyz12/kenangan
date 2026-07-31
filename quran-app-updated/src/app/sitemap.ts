@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getKitabList } from "@/lib/hadits-api";
 
-const BASE_URL = "https://al-quran-id-silk.vercel.app/";
+const BASE_URL = "https://al-quran-id-silk.vercel.app";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -10,7 +10,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "",
     "quran",
     "hadits",
-    "al-quran", 
     "doa-dzikir",
     "asmaul-husna",
     "rukun-islam",
