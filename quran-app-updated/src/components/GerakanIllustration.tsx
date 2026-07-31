@@ -1,5 +1,3 @@
-import type { ReactNode } from "react";
-
 type Pose =
   | "berdiri"
   | "takbir"
@@ -11,107 +9,142 @@ type Pose =
   | "duduk-tawarruk"
   | "salam";
 
-const OUTLINE = "var(--teal-deep)";
-const ROBE = "var(--teal-deep)";
-const SKIN = "#dcb98f";
-const TRIM = "var(--gold)";
+const PECI = "var(--teal-deep)";
+const KOKO = "var(--gold)";
+const KOKO_DK = "color-mix(in srgb, var(--gold) 70%, black)";
+const SARUNG = "var(--teal-deep)";
+const SKIN = "#f0c39a";
+const CHEEK = "#f2a48a";
+const OUTLINE = "#20303d";
 
 /**
- * Ilustrasi sosok berbadan (bukan foto, bukan diambil dari sumber lain, bukan
- * stik-garis) yang menggambarkan postur tubuh pada tiap gerakan sholat,
- * dilihat dari samping agar sudut punggung/lutut akurat. Digambar sebagai
- * figur bergamis netral (tanpa wajah spesifik/identitas), sopan menutup
- * aurat, dengan proporsi mengikuti postur baku pada panduan sholat cetak.
+ * Ilustrasi kartun (chibi) orisinal — bukan foto, bukan diambil dari sumber
+ * lain — bergaya panduan sholat anak: peci, baju koko, sarung, wajah
+ * sederhana tanpa identitas spesifik. Karakter didesain sendiri (bukan
+ * hasil tiru-persis karya pihak lain), hanya terinspirasi genre ilustrasi
+ * panduan ibadah yang umum dipakai di buku/poster cetak.
  */
 export default function GerakanIllustration({ pose, size = 96 }: { pose: Pose; size?: number }) {
-  const limb = {
-    fill: "none",
-    stroke: SKIN,
-    strokeWidth: 10,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-  };
-  const robeFill = { fill: ROBE, stroke: OUTLINE, strokeWidth: 2, strokeLinejoin: "round" as const, strokeLinecap: "round" as const };
-  const headFill = { fill: SKIN, stroke: OUTLINE, strokeWidth: 2 };
+  const face = (cx: number, cy: number, r = 20) => (
+    <>
+      <circle cx={cx} cy={cy} r={r} fill={SKIN} stroke={OUTLINE} strokeWidth={2} />
+      <circle cx={cx - r * 0.35} cy={cy - r * 0.05} r={r * 0.11} fill={OUTLINE} />
+      <circle cx={cx + r * 0.35} cy={cy - r * 0.05} r={r * 0.11} fill={OUTLINE} />
+      <path
+        d={`M${cx - r * 0.25},${cy + r * 0.4} Q${cx},${cy + r * 0.55} ${cx + r * 0.25},${cy + r * 0.4}`}
+        fill="none"
+        stroke={OUTLINE}
+        strokeWidth={1.6}
+        strokeLinecap="round"
+      />
+      <circle cx={cx - r * 0.65} cy={cy + r * 0.3} r={r * 0.16} fill={CHEEK} opacity={0.75} />
+      <circle cx={cx + r * 0.65} cy={cy + r * 0.3} r={r * 0.16} fill={CHEEK} opacity={0.75} />
+    </>
+  );
+
+  const peci = (cx: number, cy: number, r = 20) => (
+    <path
+      d={`M${cx - r - 1},${cy - 2} Q${cx},${cy - r - 10} ${cx + r + 1},${cy - 2} L${cx + r + 1},${cy - 8} Q${cx},${cy - r - 16} ${cx - r - 1},${cy - 8} Z`}
+      fill={PECI}
+      stroke={OUTLINE}
+      strokeWidth={2}
+      strokeLinejoin="round"
+    />
+  );
 
   const Ground = () => (
-    <line x1="8" y1="130" x2="132" y2="130" stroke={TRIM} strokeWidth="2.5" opacity={0.55} />
+    <line x1="6" y1="140" x2="134" y2="140" stroke="var(--gold)" strokeWidth="2.5" opacity={0.5} />
   );
 
-  const Head = ({ cx = 70, cy = 20, r = 12 }: { cx?: number; cy?: number; r?: number }) => (
-    <circle cx={cx} cy={cy} r={r} {...headFill} />
-  );
-
-  let body: ReactNode = null;
+  let body: React.ReactNode = null;
 
   switch (pose) {
     case "berdiri":
       body = (
         <>
-          <path d="M52,36 Q70,30 88,36 L96,126 Q70,134 44,126 Z" {...robeFill} />
-          <line x1="54" y1="46" x2="48" y2="88" {...limb} />
-          <line x1="86" y1="46" x2="92" y2="88" {...limb} />
-          <Head />
+          <path d="M50,58 Q70,50 90,58 L96,140 Q70,148 44,140 Z" fill={SARUNG} stroke={OUTLINE} strokeWidth={2} />
+          <path d="M52,58 Q70,44 88,58 L84,98 Q70,104 56,98 Z" fill={KOKO} stroke={OUTLINE} strokeWidth={2} />
+          <line x1="70" y1="60" x2="70" y2="98" stroke={KOKO_DK} strokeWidth={1.5} />
+          <line x1="52" y1="66" x2="46" y2="98" stroke={KOKO} strokeWidth={11} strokeLinecap="round" />
+          <line x1="88" y1="66" x2="94" y2="98" stroke={KOKO} strokeWidth={11} strokeLinecap="round" />
+          <line x1="46" y1="98" x2="42" y2="112" stroke={SKIN} strokeWidth={8} strokeLinecap="round" />
+          <line x1="94" y1="98" x2="98" y2="112" stroke={SKIN} strokeWidth={8} strokeLinecap="round" />
+          {peci(70, 30)}
+          {face(70, 30)}
         </>
       );
       break;
     case "takbir":
       body = (
         <>
-          <path d="M52,36 Q70,30 88,36 L96,126 Q70,134 44,126 Z" {...robeFill} />
-          <line x1="56" y1="42" x2="40" y2="14" {...limb} />
-          <line x1="84" y1="42" x2="100" y2="14" {...limb} />
-          <Head />
+          <path d="M50,58 Q70,50 90,58 L96,140 Q70,148 44,140 Z" fill={SARUNG} stroke={OUTLINE} strokeWidth={2} />
+          <path d="M52,58 Q70,44 88,58 L84,98 Q70,104 56,98 Z" fill={KOKO} stroke={OUTLINE} strokeWidth={2} />
+          <line x1="54" y1="62" x2="36" y2="34" stroke={KOKO} strokeWidth={11} strokeLinecap="round" />
+          <line x1="86" y1="62" x2="104" y2="34" stroke={KOKO} strokeWidth={11} strokeLinecap="round" />
+          <line x1="36" y1="34" x2="32" y2="20" stroke={SKIN} strokeWidth={8} strokeLinecap="round" />
+          <line x1="104" y1="34" x2="108" y2="20" stroke={SKIN} strokeWidth={8} strokeLinecap="round" />
+          {peci(70, 30)}
+          {face(70, 30)}
         </>
       );
       break;
     case "bersedekap":
       body = (
         <>
-          <path d="M52,36 Q70,30 88,36 L96,126 Q70,134 44,126 Z" {...robeFill} />
-          <line x1="55" y1="44" x2="52" y2="58" stroke={ROBE} strokeWidth={12} strokeLinecap="round" />
-          <line x1="85" y1="44" x2="88" y2="58" stroke={ROBE} strokeWidth={12} strokeLinecap="round" />
-          <path d="M50,58 Q70,70 90,58" {...limb} />
-          <Head />
+          <path d="M50,58 Q70,50 90,58 L96,140 Q70,148 44,140 Z" fill={SARUNG} stroke={OUTLINE} strokeWidth={2} />
+          <path d="M52,58 Q70,44 88,58 L84,98 Q70,104 56,98 Z" fill={KOKO} stroke={OUTLINE} strokeWidth={2} />
+          <line x1="54" y1="62" x2="52" y2="76" stroke={KOKO} strokeWidth={12} strokeLinecap="round" />
+          <line x1="86" y1="62" x2="88" y2="76" stroke={KOKO} strokeWidth={12} strokeLinecap="round" />
+          <path d="M48,78 Q70,90 92,78" fill="none" stroke={SKIN} strokeWidth={9} strokeLinecap="round" />
+          {peci(70, 30)}
+          {face(70, 30)}
         </>
       );
       break;
     case "ruku":
       body = (
         <>
-          <line x1="98" y1="88" x2="98" y2="126" {...limb} strokeWidth={12} />
-          <line x1="112" y1="88" x2="110" y2="126" {...limb} strokeWidth={12} />
+          <line x1="96" y1="96" x2="96" y2="140" stroke={SARUNG} strokeWidth={14} strokeLinecap="round" />
+          <line x1="112" y1="96" x2="110" y2="140" stroke={SARUNG} strokeWidth={14} strokeLinecap="round" />
           <path
-            d="M98,86 L38,80 Q30,79 30,86 L34,92 Q60,98 100,98 Q108,98 108,90 Z"
-            {...robeFill}
+            d="M98,92 L48,84 Q40,83 40,90 L44,98 Q68,106 100,106 Q110,106 110,96 Z"
+            fill={KOKO}
+            stroke={OUTLINE}
+            strokeWidth={2}
           />
-          <line x1="55" y1="86" x2="72" y2="100" {...limb} strokeWidth={9} />
-          <Head cx={24} cy={80} r={11} />
+          <line x1="58" y1="92" x2="76" y2="108" stroke={SKIN} strokeWidth={8} strokeLinecap="round" />
+          {peci(30, 84, 16)}
+          {face(30, 84, 16)}
         </>
       );
       break;
     case "itidal":
       body = (
         <>
-          <path d="M52,36 Q70,30 88,36 L96,126 Q70,134 44,126 Z" {...robeFill} />
-          <line x1="54" y1="46" x2="49" y2="80" {...limb} />
-          <line x1="86" y1="46" x2="91" y2="80" {...limb} />
-          <Head />
+          <path d="M50,58 Q70,50 90,58 L96,140 Q70,148 44,140 Z" fill={SARUNG} stroke={OUTLINE} strokeWidth={2} />
+          <path d="M52,58 Q70,44 88,58 L84,98 Q70,104 56,98 Z" fill={KOKO} stroke={OUTLINE} strokeWidth={2} />
+          <line x1="52" y1="66" x2="47" y2="92" stroke={KOKO} strokeWidth={11} strokeLinecap="round" />
+          <line x1="88" y1="66" x2="93" y2="92" stroke={KOKO} strokeWidth={11} strokeLinecap="round" />
+          {peci(70, 30)}
+          {face(70, 30)}
         </>
       );
       break;
     case "sujud":
       body = (
         <>
-          <line x1="96" y1="108" x2="96" y2="128" {...limb} strokeWidth={11} />
-          <path d="M96,110 Q114,116 122,128" {...limb} strokeWidth={9} />
+          <line x1="96" y1="118" x2="96" y2="140" stroke={SARUNG} strokeWidth={13} strokeLinecap="round" />
+          <path d="M96,120 Q114,126 122,140" fill="none" stroke={SARUNG} strokeWidth={11} strokeLinecap="round" />
           <path
-            d="M40,124 Q34,108 44,100 Q66,80 96,90 Q104,94 100,108 Q90,116 60,112 Q44,110 40,124 Z"
-            {...robeFill}
+            d="M40,136 Q34,118 46,110 Q68,90 98,100 Q108,104 102,120 Q92,128 60,124 Q44,122 40,136 Z"
+            fill={KOKO}
+            stroke={OUTLINE}
+            strokeWidth={2}
           />
-          <line x1="52" y1="100" x2="42" y2="120" {...limb} strokeWidth={9} />
-          <line x1="70" y1="90" x2="66" y2="118" {...limb} strokeWidth={9} />
-          <Head cx={26} cy={122} r={10} />
+          <line x1="54" y1="110" x2="44" y2="132" stroke={SKIN} strokeWidth={8} strokeLinecap="round" />
+          <line x1="72" y1="100" x2="68" y2="128" stroke={SKIN} strokeWidth={8} strokeLinecap="round" />
+          {peci(26, 132, 15)}
+          {face(26, 132, 15)}
         </>
       );
       break;
@@ -119,13 +152,17 @@ export default function GerakanIllustration({ pose, size = 96 }: { pose: Pose; s
       body = (
         <>
           <path
-            d="M52,36 Q70,30 88,36 L92,74 Q108,80 108,104 L38,104 Q34,82 48,74 Z"
-            {...robeFill}
+            d="M50,58 Q70,50 90,58 L94,94 Q112,100 112,120 L36,120 Q32,98 46,94 Z"
+            fill={SARUNG}
+            stroke={OUTLINE}
+            strokeWidth={2}
           />
-          <line x1="55" y1="44" x2="52" y2="70" {...limb} />
-          <line x1="85" y1="44" x2="88" y2="70" {...limb} />
-          <path d="M40,104 Q60,112 100,104" {...limb} strokeWidth={8} />
-          <Head />
+          <path d="M52,58 Q70,44 88,58 L84,98 Q70,104 56,98 Z" fill={KOKO} stroke={OUTLINE} strokeWidth={2} />
+          <line x1="52" y1="66" x2="48" y2="90" stroke={KOKO} strokeWidth={11} strokeLinecap="round" />
+          <line x1="88" y1="66" x2="92" y2="90" stroke={KOKO} strokeWidth={11} strokeLinecap="round" />
+          <path d="M38,120 Q70,130 110,120" fill="none" stroke={SKIN} strokeWidth={8} strokeLinecap="round" />
+          {peci(70, 30)}
+          {face(70, 30)}
         </>
       );
       break;
@@ -133,13 +170,17 @@ export default function GerakanIllustration({ pose, size = 96 }: { pose: Pose; s
       body = (
         <>
           <path
-            d="M54,36 Q70,30 86,36 L94,72 Q112,78 112,100 L34,100 Q28,80 46,72 Z"
-            {...robeFill}
+            d="M52,58 Q70,50 88,58 L96,92 Q116,98 116,118 L32,118 Q26,96 44,92 Z"
+            fill={SARUNG}
+            stroke={OUTLINE}
+            strokeWidth={2}
           />
-          <line x1="57" y1="44" x2="53" y2="68" {...limb} />
-          <line x1="83" y1="44" x2="86" y2="68" {...limb} />
-          <path d="M36,100 Q65,110 110,100" {...limb} strokeWidth={8} />
-          <Head />
+          <path d="M54,58 Q70,44 86,58 L82,98 Q70,104 58,98 Z" fill={KOKO} stroke={OUTLINE} strokeWidth={2} />
+          <line x1="55" y1="66" x2="51" y2="88" stroke={KOKO} strokeWidth={11} strokeLinecap="round" />
+          <line x1="85" y1="66" x2="89" y2="88" stroke={KOKO} strokeWidth={11} strokeLinecap="round" />
+          <path d="M34,118 Q70,128 114,118" fill="none" stroke={SKIN} strokeWidth={8} strokeLinecap="round" />
+          {peci(70, 30)}
+          {face(70, 30)}
         </>
       );
       break;
@@ -147,20 +188,24 @@ export default function GerakanIllustration({ pose, size = 96 }: { pose: Pose; s
       body = (
         <>
           <path
-            d="M52,36 Q70,30 88,36 L92,74 Q108,80 108,104 L38,104 Q34,82 48,74 Z"
-            {...robeFill}
+            d="M50,58 Q70,50 90,58 L94,94 Q112,100 112,120 L36,120 Q32,98 46,94 Z"
+            fill={SARUNG}
+            stroke={OUTLINE}
+            strokeWidth={2}
           />
-          <line x1="55" y1="44" x2="52" y2="70" {...limb} />
-          <line x1="85" y1="44" x2="88" y2="70" {...limb} />
-          <path d="M40,104 Q60,112 100,104" {...limb} strokeWidth={8} />
-          <Head cx={92} cy={22} r={12} />
+          <path d="M52,58 Q70,44 88,58 L84,98 Q70,104 56,98 Z" fill={KOKO} stroke={OUTLINE} strokeWidth={2} />
+          <line x1="52" y1="66" x2="48" y2="90" stroke={KOKO} strokeWidth={11} strokeLinecap="round" />
+          <line x1="88" y1="66" x2="92" y2="90" stroke={KOKO} strokeWidth={11} strokeLinecap="round" />
+          <path d="M38,120 Q70,130 110,120" fill="none" stroke={SKIN} strokeWidth={8} strokeLinecap="round" />
+          {peci(96, 30)}
+          {face(96, 30)}
         </>
       );
       break;
   }
 
   return (
-    <svg viewBox="0 0 140 140" width={size} height={size} aria-hidden="true">
+    <svg viewBox="0 0 140 150" width={size} height={(size * 150) / 140} aria-hidden="true">
       <Ground />
       {body}
     </svg>
