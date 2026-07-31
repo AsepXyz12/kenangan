@@ -1,3 +1,5 @@
+import VisitorCounter from "./VisitorCounter";
+
 export default function Footer() {
   return (
     <footer className="border-t border-[var(--parchment-line)] mt-20">
@@ -9,6 +11,9 @@ export default function Footer() {
             dalam satu tempat. Semoga bermanfaat dan menjadi ladang pahala
             bagi siapa saja yang membangunnya.
           </p>
+          <div className="mt-3">
+            <VisitorCounter />
+          </div>
         </div>
         <p className="text-xs text-[var(--ink-soft)] max-w-xs text-right">
           Teks Al-Qur&apos;an dari The Noble Qur&apos;an Encyclopedia,
