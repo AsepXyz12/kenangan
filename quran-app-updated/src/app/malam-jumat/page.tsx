@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import Roundel from "@/components/Roundel";
 import BacaanMalamJumat from "@/components/BacaanMalamJumat";
 import { getSurahDetail } from "@/lib/quran-api";
+import BackButton from "@/components/BackButton";
 
 export const metadata = { title: "Amalan Malam Jumat — Mushaf" };
 
@@ -36,6 +37,7 @@ export default async function MalamJumatPage() {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 max-w-2xl mx-auto w-full px-5 md:px-8 py-12">
+        <BackButton href="/" label="Beranda" />
         <div className="mb-10">
           <p className="text-xs tracking-[0.25em] uppercase text-[var(--gold)] mb-2">
             Amalan Pekanan

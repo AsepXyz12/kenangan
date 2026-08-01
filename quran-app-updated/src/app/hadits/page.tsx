@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Roundel from "@/components/Roundel";
 import { getKitabList } from "@/lib/hadits-api";
+import BackButton from "@/components/BackButton";
 
 export const metadata = { title: "Hadits 9 Imam — Mushaf" };
 
@@ -14,6 +15,7 @@ export default function HaditsIndexPage() {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 max-w-3xl mx-auto w-full px-5 md:px-8 py-12">
+        <BackButton href="/" label="Beranda" />
         <div className="mb-10">
           <p className="text-xs tracking-[0.25em] uppercase text-[var(--gold)] mb-2">
             Hadits 9 Imam

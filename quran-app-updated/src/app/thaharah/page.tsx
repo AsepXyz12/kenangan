@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BackButton from "@/components/BackButton";
 export const metadata = { title: "Thaharah — Panduan Bersuci — Mushaf" };
 
 type Langkah = {
@@ -132,6 +133,7 @@ export default function ThaharahPage() {
     <div className="min-h-screen flex flex-col bg-[var(--parchment)]">
       <Navbar />
       <main className="flex-1 max-w-3xl mx-auto px-5 md:px-8 py-10 md:py-14 w-full">
+        <BackButton href="/" label="Beranda" />
         <div className="flex items-center gap-3 mb-2">
           <span className="text-xs tracking-widest uppercase text-[var(--ink-soft)]">Fiqih Ibadah</span>
         </div>

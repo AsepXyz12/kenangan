@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Roundel from "@/components/Roundel";
+import BackButton from "@/components/BackButton";
 
 export const metadata = { title: "Kisah 25 Nabi dan Rasul — Mushaf" };
 
@@ -329,6 +330,7 @@ export default function KisahNabiPage() {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 max-w-2xl mx-auto w-full px-5 md:px-8 py-12">
+        <BackButton href="/" label="Beranda" />
         <div className="mb-10">
           <p className="text-xs tracking-[0.25em] uppercase text-[var(--gold)] mb-2">
             Teladan Umat

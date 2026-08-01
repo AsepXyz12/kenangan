@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BackButton from "@/components/BackButton";
 
 export const metadata = { title: "Asmaul Husna — Mushaf" };
 
@@ -112,6 +113,7 @@ export default function AsmaulHusnaPage() {
     <div className="min-h-screen flex flex-col bg-[var(--parchment)]">
       <Navbar />
       <main className="flex-1 max-w-4xl mx-auto px-5 md:px-8 py-10 md:py-14 w-full">
+        <BackButton href="/" label="Beranda" />
         <span className="text-xs tracking-widest uppercase text-[var(--ink-soft)]">Aqidah</span>
         <h1 className="font-display text-3xl md:text-4xl text-[var(--heading)] mt-1 mb-3">
           Asmaul Husna

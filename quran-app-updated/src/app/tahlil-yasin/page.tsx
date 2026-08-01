@@ -4,6 +4,7 @@ import Roundel from "@/components/Roundel";
 import BacaanTahlil from "@/components/BacaanTahlil";
 import { getSurahDetail } from "@/lib/quran-api";
 import { ACARA_LAINNYA } from "@/data/tahlil-yasin";
+import BackButton from "@/components/BackButton";
 
 export const metadata = { title: "Tahlil, Yasin & Acara Lainnya — Mushaf" };
 
@@ -21,6 +22,7 @@ export default async function TahlilYasinPage() {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 max-w-2xl mx-auto w-full px-5 md:px-8 py-12">
+        <BackButton href="/" label="Beranda" />
         <div className="mb-10">
           <p className="text-xs tracking-[0.25em] uppercase text-[var(--gold)] mb-2">
             Dzikir &amp; Majelis
