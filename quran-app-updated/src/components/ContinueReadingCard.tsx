@@ -26,7 +26,7 @@ export default function ContinueReadingCard() {
   return (
     <section className="max-w-3xl mx-auto px-5 md:px-8 pb-8 animate-fade-up">
       <Link
-        href={`/quran/surah/${lastRead.surahNomor}#ayat-${lastRead.ayatNomor}`}
+        href={`/quran/surah/${lastRead.surahNomor}?dari=beranda#ayat-${lastRead.ayatNomor}`}
         className="group flex items-center gap-4 rounded-sm border border-[var(--gold)]/50 bg-[var(--gold)]/[0.07] px-5 py-4 transition-colors hover:bg-[var(--gold)]/[0.13]"
       >
         <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[var(--teal)] text-[var(--text-on-dark)] shrink-0">

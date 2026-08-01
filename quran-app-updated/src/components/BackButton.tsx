@@ -1,6 +1,7 @@
 "use client";
 
-import { useRouter, usePathname } from "next/navigation";
+import { Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
 type BackButtonProps = {
@@ -11,49 +12,43 @@ type BackButtonProps = {
 /**
  * Tombol "kembali" di dalam aplikasi.
  *
- * Sebelumnya tombol ini SELALU pergi ke `href` tetap yang di-hardcode tiap
- * halaman (mis. halaman surat selalu balik ke "/quran"). Masalahnya: kalau
- * user datang dari tempat LAIN (mis. dari kartu "Ayat Pilihan Hari Ini" di
- * Beranda), klik "kembali" malah melempar mereka ke "/quran" — bukan ke
- * Beranda tempat mereka sebenarnya berasal. Membingungkan.
+ * RIWAYAT MASALAH:
+ * v1: SELALU pergi ke `href` tetap yang di-hardcode tiap halaman (mis.
+ *     halaman surat selalu balik ke "/quran"). Masalahnya: kalau user
+ *     datang dari tempat LAIN (mis. kartu "Ayat Pilihan Hari Ini" di
+ *     Beranda), klik "kembali" malah ke "/quran", bukan ke Beranda.
+ * v2: Ganti pakai `router.back()`. Ternyata LEBIH parah: router.back()
+ *     manggil history BROWSER asli (bukan riwayat navigasi di dalam app
+ *     ini saja). Kalau tab ini pernah membuka halaman lain sebelumnya
+ *     (mis. Juz 30) di sesi manapun, "kembali" bisa nyasar ke situ,
+ *     bahkan bisa mendarat di state cache yang rusak ("halaman tidak
+ *     bisa dimuat") karena back() browser kadang menyajikan versi
+ *     halaman yang sudah usang dari bfcache.
  *
- * Sekarang: coba `router.back()` dulu (balik ke halaman PERSIS yang user
- * datangi sebelumnya, apa pun itu). `href` cuma dipakai sebagai FALLBACK
- * kalau ternyata tidak ada riwayat untuk dikembalikan (mis. tab ini dibuka
- * langsung dari notifikasi/shortcut PWA, jadi halaman ini adalah entry
- * pertama) — di situ baru kita paksa ke tujuan default yang masuk akal.
+ * FIX (v3): jangan pernah tebak-tebak dari history browser. Sumber
+ * (kartu "Ayat Pilihan Hari Ini", "Lanjutkan Bacaan", dst di Beranda)
+ * secara EKSPLISIT menandai asalnya lewat query param `?dari=beranda`
+ * di link yang mereka pakai. Tombol ini tinggal baca penanda itu dan
+ * navigasi LANGSUNG (router.push) ke tujuan yang pasti benar — tidak
+ * pernah bergantung pada apa isi history tab sebelumnya.
  */
-export default function BackButton({ href, label = "Kembali" }: BackButtonProps) {
+function BackButtonInner({ href, label = "Kembali" }: BackButtonProps) {
   const router = useRouter();
-  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const dari = searchParams.get("dari");
+
+  // Peta penanda "dari" -> tujuan pasti. Tambah entri baru di sini kalau
+  // ada halaman lain yang perlu jadi titik asal eksplisit.
+  const target = dari === "beranda" ? "/" : href;
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-
-    // Gak ada riwayat sama sekali di tab ini (window.history.length === 1)
-    // -> jelas gak bisa "back", langsung ke fallback.
-    if (typeof window === "undefined" || window.history.length <= 1) {
-      router.push(href);
-      return;
-    }
-
-    const pathBeforeBack = pathname;
-    router.back();
-
-    // Jaga-jaga: kalau setelah dicoba path-nya TETAP sama (artinya back()
-    // gagal pindah ke mana pun, mis. history entry sebelumnya di luar situs
-    // dan navigasi diblokir, atau situasi lain yang gak terduga), paksa ke
-    // fallback supaya tombol ini gak pernah kelihatan "gak ngapa-ngapain".
-    window.setTimeout(() => {
-      if (window.location.pathname === pathBeforeBack) {
-        router.push(href);
-      }
-    }, 350);
+    router.push(target);
   };
 
   return (
     <a
-      href={href}
+      href={target}
       onClick={handleClick}
       className="inline-flex items-center gap-1.5 mb-5 text-sm font-medium text-[var(--ink)] hover:text-[var(--heading)] transition-colors group"
     >
@@ -62,5 +57,22 @@ export default function BackButton({ href, label = "Kembali" }: BackButtonProps)
       </span>
       {label}
     </a>
+  );
+}
+
+export default function BackButton(props: BackButtonProps) {
+  return (
+    <Suspense
+      fallback={
+        <span className="inline-flex items-center gap-1.5 mb-5 text-sm font-medium text-[var(--ink)] opacity-60">
+          <span className="flex items-center justify-center w-7 h-7 rounded-full border border-[var(--gold)]/50 bg-[var(--parchment-deep)]">
+            <ArrowLeft size={14} strokeWidth={2.6} />
+          </span>
+          {props.label ?? "Kembali"}
+        </span>
+      }
+    >
+      <BackButtonInner {...props} />
+    </Suspense>
   );
 }

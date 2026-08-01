@@ -38,6 +38,7 @@ type Hukum = {
   dalil?: string;
   poin: string[];
   catatan?: string;
+  konsekuensi?: string;
 };
 
 const HUKUM_PERGAULAN: Hukum[] = [
@@ -55,6 +56,8 @@ const HUKUM_PERGAULAN: Hukum[] = [
     ],
     catatan:
       "Sebagai alternatif, Islam mengenal konsep taaruf (saling mengenal dengan tujuan serius menuju pernikahan, biasanya didampingi wali/keluarga) dan khitbah (peminangan resmi), yang menjaga batas syar'i sambil tetap memberi ruang untuk saling mengenal calon pasangan.",
+    konsekuensi:
+      "Karena tergolong haram, pacaran (dengan bentuk-bentuk yang disebut di atas) berdosa jika dijalani — apa pun alasannya. Yang membedakan besar-kecilnya beban dosa di sisi Allah adalah TAHU atau TIDAK TAHU hukumnya: (1) Kalau seseorang mengerjakannya sebelum tahu status hukumnya (jahil/belum sampai ilmunya), ulama umumnya memandang ia belum berdosa atas ketidaktahuannya, TAPI begitu ia sudah tahu dan tetap melanjutkan, hukum haram itu berlaku penuh dan dicatat sebagai dosa; ketidaktahuan bukan izin untuk sengaja tidak mencari tahu. (2) Kalau dikerjakan dengan sadar-tahu, itu dosa yang harus ditaubati. Islam TIDAK mengajarkan bahwa satu dosa tertentu otomatis memastikan seseorang masuk 'lapisan neraka' tertentu — itu perkara gaib, hak Allah semata (lihat bagian 'Soal Neraka' di bawah). Yang diajarkan justru pintu keluarnya: taubat nasuha (berhenti total, menyesal, dan bertekad tidak mengulang) menghapus dosa itu, insyaAllah, seberapa pun besarnya (QS. Az-Zumar: 53).",
   },
   {
     judul: "Menundukkan pandangan & menutup aurat",
@@ -77,6 +80,8 @@ const HUKUM_PERGAULAN: Hukum[] = [
       "Islam memerintahkan untuk 'tidak mendekati' zina — mencakup segala perantara yang mengarah padanya, bukan hanya perbuatannya saja.",
       "Solusi yang dianjurkan syariat bagi yang mampu dan siap secara lahir-batin adalah menyegerakan pernikahan; bagi yang belum mampu, dianjurkan berpuasa untuk meredam syahwat (HR. Bukhari-Muslim).",
     ],
+    konsekuensi:
+      "Zina termasuk dosa besar (kabair) dengan ancaman tegas dalam Al-Qur'an dan hadits. Sekali lagi, faktor tahu/tidak tahu menentukan beban dosanya: yang benar-benar belum tahu status haramnya (kasus yang sangat jarang, karena keharaman zina termasuk hal yang ma'lum minad-din bidh-dharurah/diketahui otomatis oleh siapa pun yang mengaku muslim) berbeda posisinya dari yang tahu tapi tetap melakukan. Dalam akidah Ahlus Sunnah, pelaku dosa besar dari kalangan mukmin (selama tidak menghalalkannya/menganggapnya bukan dosa) TIDAK dianggap keluar dari Islam dan TIDAK dipastikan kekal di neraka — statusnya diserahkan pada kehendak Allah: bisa disiksa sesuai kadar dosanya lalu tetap masuk surga, atau langsung diampuni. Jalan keluarnya adalah taubat nasuha sesegera mungkin, bukan menunda-nunda.",
   },
   {
     judul: "Pernikahan beda agama",
@@ -162,6 +167,14 @@ function Bagian({ h }: { h: Hukum }) {
           {h.catatan}
         </p>
       )}
+      {h.konsekuensi && (
+        <div className="mt-3 border-t border-[var(--parchment-line)] pt-3">
+          <p className="text-xs font-medium text-[var(--heading)] mb-1">
+            Kalau tetap dilakukan — tahu atau tidak tahu:
+          </p>
+          <p className="text-xs text-[var(--ink-soft)] leading-relaxed">{h.konsekuensi}</p>
+        </div>
+      )}
     </div>
   );
 }
@@ -222,6 +235,59 @@ export default function HukumIslamPage() {
               <Bagian key={h.judul} h={h} />
             ))}
           </div>
+        </section>
+
+        <section className="mb-14 rounded-sm border border-[var(--gold)]/40 bg-[var(--parchment-deep)]/40 p-5 md:p-6">
+          <h2 className="font-display text-lg text-[var(--ink)] mb-3">
+            Soal Neraka: Kenapa Halaman Ini Tidak Memetakan &quot;Dosa Ini =
+            Lapisan Neraka Itu&quot;
+          </h2>
+          <p className="text-sm text-[var(--ink-soft)] leading-relaxed mb-3">
+            Al-Qur&apos;an (QS. Al-Hijr: 43-44) menyebut Jahannam punya tujuh
+            pintu/tingkatan. Dalam tafsir klasik (mis. Ibnu Katsir,
+            Al-Qurthubi), ketujuh nama itu — <em>Jahannam, Ladza, Huthamah,
+            Sa&apos;ir, Saqar, Jahim, Hawiyah</em> — umumnya dipahami sebagai
+            penggolongan menurut <strong>kelompok</strong> penghuninya
+            (misalnya orang musyrik, munafik, dsb.), <strong>bukan</strong>{" "}
+            daftar &quot;kalau berbuat dosa A maka masuk lapisan B&quot; untuk
+            setiap dosa yang dilakukan seorang muslim.
+          </p>
+          <p className="text-sm text-[var(--ink-soft)] leading-relaxed mb-3">
+            Dalam akidah Ahlus Sunnah wal Jama&apos;ah, seorang mukmin yang
+            melakukan dosa besar (selama ia tidak menghalalkannya / tidak
+            mengingkari bahwa itu dosa, dan tidak keluar dari keimanan)
+            statusnya di akhirat diserahkan sepenuhnya pada kehendak dan
+            keadilan Allah — bisa disiksa dahulu sesuai kadar dosanya lalu
+            tetap dimasukkan ke surga, atau langsung diampuni. Ini beda jauh
+            dengan status orang kafir yang kekal di neraka. Karena itu, tidak
+            ada dalil yang membenarkan klaim pasti &quot;pacaran/dosa X pasti
+            membuatmu masuk neraka lapisan Y&quot; — itu perkara gaib, bukan
+            wilayah manusia untuk memastikan.
+          </p>
+          <p className="text-sm text-[var(--ink-soft)] leading-relaxed">
+            Yang jelas diajarkan dan berlaku praktis untuk setiap hukum haram
+            di halaman ini:
+          </p>
+          <ul className="mt-2 space-y-1.5 text-sm text-[var(--ink-soft)]">
+            <li>
+              • <strong>Tidak tahu (jahil), lalu berhenti setelah tahu:</strong>{" "}
+              umumnya tidak dibebani dosa atas masa sebelum ia tahu, tapi wajib
+              berhenti begitu tahu — ketidaktahuan bukan alasan untuk terus
+              melanjutkan.
+            </li>
+            <li>
+              • <strong>Tahu tapi tetap dilakukan:</strong> tercatat sebagai
+              dosa (kecil atau besar tergantung jenis perbuatannya), dan wajib
+              ditaubati.
+            </li>
+            <li>
+              • <strong>Taubat nasuha</strong> (berhenti, menyesal sungguh-sungguh,
+              bertekad tidak mengulang, dan mengembalikan hak orang lain jika
+              ada yang dirugikan) menghapus dosa — sebesar apa pun — selama
+              dilakukan sebelum ajal atau sebelum matahari terbit dari barat
+              (QS. Az-Zumar: 53; HR. Muslim).
+            </li>
+          </ul>
         </section>
 
         <section className="mb-14">

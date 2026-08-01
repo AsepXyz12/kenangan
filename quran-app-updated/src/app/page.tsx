@@ -159,7 +159,7 @@ export default async function Home() {
           style={{ animationDelay: "0.32s" }}
         >
           <Link
-            href={`/quran/surah/${ayatHariIni.surahNomor}`}
+            href={`/quran/surah/${ayatHariIni.surahNomor}?dari=beranda`}
             className="group ornament-border ornament-corner block rounded-sm bg-[var(--parchment-deep)]/50 px-6 py-8 md:px-10 md:py-10 text-center transition-colors hover:bg-[var(--parchment-deep)]/80"
           >
             <span className="text-xs tracking-[0.25em] uppercase text-[var(--gold)]">
