@@ -42,8 +42,32 @@ body {
   color: var(--ink);
   font-family: var(--font-body), serif;
   background-image:
-    radial-gradient(circle at 1px 1px, rgba(33, 26, 16, 0.05) 1px, transparent 0);
-  background-size: 22px 22px;
+    radial-gradient(circle at 1px 1px, rgba(33, 26, 16, 0.07) 1px, transparent 0),
+    radial-gradient(ellipse 900px 500px at 50% -10%, rgba(36, 70, 61, 0.08), transparent 60%),
+    radial-gradient(ellipse 1000px 600px at 100% 0%, rgba(169, 126, 47, 0.06), transparent 55%),
+    radial-gradient(ellipse 1200px 900px at 0% 100%, rgba(33, 26, 16, 0.05), transparent 60%);
+  background-size: 22px 22px, 100% 100%, 100% 100%, 100% 100%;
+  background-repeat: repeat, no-repeat, no-repeat, no-repeat;
+}
+
+/* Kedalaman "elevation" untuk semua kartu/kotak berbingkai di seluruh situs.
+   Sebelumnya kartu cuma pakai garis tipis (hairline border) tanpa bayangan
+   sama sekali, jadi kelihatan datar/pucat di layar HP yang terang. Selector
+   ini menyasar SEMUA elemen yang classname-nya mengandung kombinasi
+   "rounded-*" + border parchment-line, tanpa perlu ubah tiap file halaman. */
+[class*="rounded"][class*="border-[var(--parchment-line)]"] {
+  box-shadow:
+    0 1px 2px rgba(33, 20, 8, 0.05),
+    0 16px 32px -22px rgba(20, 14, 6, 0.45);
+}
+
+/* Navbar & Footer: bayangan halus supaya nggak nempel rata sama konten */
+header.sticky {
+  box-shadow: 0 8px 24px -18px rgba(20, 14, 6, 0.5);
+}
+
+footer {
+  box-shadow: 0 -8px 24px -20px rgba(20, 14, 6, 0.35);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -81,7 +105,8 @@ body {
   border: 1px solid var(--gold);
   box-shadow:
     0 0 0 3px var(--parchment),
-    0 0 0 4px var(--parchment-line);
+    0 0 0 4px var(--parchment-line),
+    0 20px 40px -24px rgba(20, 14, 6, 0.5);
 }
 
 .ornament-corner::before,

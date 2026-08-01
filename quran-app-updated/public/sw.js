@@ -158,23 +158,55 @@ self.addEventListener("fetch", (event) => {
   // percobaan ulang (WiFi lemah sering cuma "kedip" sebentar, bukan mati total),
   // fallback ke cache, lalu ke beranda dari cache, dan kalau semua gagal
   // baru tampilkan halaman offline yang jelas (bukan network error mentah).
+  //
+  // PENTING: request.clone() dipakai di SETIAP pemanggilan fetch(). Request
+  // yang sama tidak boleh dipakai fetch() dua kali (misalnya untuk retry) —
+  // browser akan throw error "already used" yang tidak ketangkep .catch()
+  // biasa, dan itu bikin respondWith() reject mentah-mentah sehingga browser
+  // nampilin halaman error bawaannya sendiri ("This page couldn't load"),
+  // BUKAN halaman offline custom kita. Makanya seluruh langkah di bawah ini
+  // dibungkus try/catch berlapis supaya respondWith() dijamin selalu resolve
+  // ke sebuah Response, apa pun yang terjadi.
   if (isNavigationRequest(request)) {
     event.respondWith(
-      fetch(request)
-        .catch(() => fetch(request)) // retry sekali
-        .then((response) => {
-          const clone = response.clone();
-          caches.open(PAGE_CACHE).then((cache) => cache.put(request, clone));
-          return response;
-        })
-        .catch(async () => {
+      (async () => {
+        // Percobaan 1 & 2 (retry sekali kalau gagal)
+        for (let attempt = 0; attempt < 2; attempt++) {
+          try {
+            const response = await fetch(request.clone());
+            try {
+              const cache = await caches.open(PAGE_CACHE);
+              cache.put(request, response.clone());
+            } catch (err) {
+              console.error("[sw] gagal simpan cache halaman", err);
+            }
+            return response;
+          } catch {
+            // lanjut ke percobaan berikutnya, atau ke fallback di bawah
+          }
+        }
+
+        // Network gagal 2x -> cari di cache halaman yang pernah dibuka
+        try {
           const cache = await caches.open(PAGE_CACHE);
           const cached = await cache.match(request);
           if (cached) return cached;
+        } catch (err) {
+          console.error("[sw] gagal baca cache halaman", err);
+        }
+
+        // Tidak ada di cache -> fallback ke beranda dari precache
+        try {
           const shellCache = await caches.open(SHELL_CACHE);
           const fallback = await shellCache.match("/");
-          return fallback || offlineResponse();
-        })
+          if (fallback) return fallback;
+        } catch (err) {
+          console.error("[sw] gagal baca shell cache", err);
+        }
+
+        // Semua gagal -> halaman offline custom (bukan error bawaan browser)
+        return offlineResponse();
+      })()
     );
     return;
   }
