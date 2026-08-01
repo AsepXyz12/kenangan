@@ -89,6 +89,43 @@ function offlineResponse() {
   });
 }
 
+// PENTING (fix "This page couldn't load" setelah navigasi dalam/banyak):
+// cache.put() sebelumnya dipanggil TANPA await & TANPA .catch() di beberapa
+// tempat ("fire and forget"). Kalau gagal (paling sering QuotaExceededError
+// karena storage HP penuh setelah banyak halaman/audio ke-cache dalam satu
+// sesi), itu jadi unhandled promise rejection di dalam service worker.
+// Browser bisa mematikan/me-restart SW yang lagi banyak unhandled rejection,
+// dan begitu itu kejadian PAS di tengah request navigasi, hasilnya request
+// itu gagal total dengan error mentah dari Chrome ("This page couldn't
+// load"), bukan fallback offline custom kita. Fix: SELALU await + tangkap
+// errornya lewat helper ini, jangan biarkan cache.put() gagal diam-diam.
+async function safePut(cache, request, response) {
+  try {
+    await cache.put(request, response);
+  } catch (err) {
+    console.error("[sw] gagal simpan ke cache (kemungkinan quota penuh)", err);
+  }
+}
+
+// PENTING: PAGE_CACHE & AUDIO_CACHE dulu boleh membesar TANPA BATAS selama
+// versi build yang sama (baru dibersihkan pas ganti versi/deploy baru).
+// Kalau user buka banyak surat/juz/hadits/audio berturut-turut dalam satu
+// sesi (persis skenario "klik terlalu dalam"), cache ini bisa kepenuhan
+// storage quota browser -> lihat catatan di safePut() di atas. Fungsi ini
+// membuang entri PALING LAMA setiap kali cache sudah melebihi batas, supaya
+// ukurannya tetap terkendali walau dipakai baca lama tanpa reload.
+async function trimCache(cacheName, maxEntries) {
+  try {
+    const cache = await caches.open(cacheName);
+    const keys = await cache.keys();
+    if (keys.length <= maxEntries) return;
+    const toDelete = keys.slice(0, keys.length - maxEntries);
+    await Promise.all(toDelete.map((key) => cache.delete(key)));
+  } catch (err) {
+    console.error("[sw] gagal trim cache", cacheName, err);
+  }
+}
+
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(SHELL_CACHE).then((cache) =>
@@ -148,7 +185,10 @@ self.addEventListener("fetch", (event) => {
         if (cached) return cached;
         try {
           const response = await fetch(request);
-          if (response.ok) cache.put(request, response.clone());
+          if (response.ok) {
+            await safePut(cache, request, response.clone());
+            trimCache(AUDIO_CACHE, 80);
+          }
           return response;
         } catch (err) {
           if (cached) return cached;
@@ -193,7 +233,8 @@ self.addEventListener("fetch", (event) => {
             if (response.ok) {
               try {
                 const cache = await caches.open(PAGE_CACHE);
-                cache.put(request, response.clone());
+                await safePut(cache, request, response.clone());
+                trimCache(PAGE_CACHE, 60);
               } catch (err) {
                 console.error("[sw] gagal simpan cache halaman", err);
               }
@@ -247,7 +288,10 @@ self.addEventListener("fetch", (event) => {
       caches.open(PAGE_CACHE).then(async (cache) => {
         try {
           const response = await fetch(request);
-          if (response.ok) cache.put(request, response.clone());
+          if (response.ok) {
+            await safePut(cache, request, response.clone());
+            trimCache(PAGE_CACHE, 60);
+          }
           return response;
         } catch (err) {
           // Nggak ada di network -> coba cache dulu (kalau ada, walau URL
@@ -296,7 +340,7 @@ self.addEventListener("fetch", (event) => {
       caches.open(SHELL_CACHE).then(async (cache) => {
         try {
           const response = await fetch(request);
-          if (response.ok) cache.put(request, response.clone());
+          if (response.ok) await safePut(cache, request, response.clone());
           return response;
         } catch (err) {
           const cached = await cache.match(request);
