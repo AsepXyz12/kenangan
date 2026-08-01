@@ -64,6 +64,32 @@ const MENU = [
     deskripsi:
       "Keutamaan malam Jumat, amalan yang dianjurkan, serta bacaan lengkap Surat Yasin dan Al-Kahf.",
   },
+  {
+    href: "/akhlak-adab",
+    nomor: 9,
+    judul: "Akhlak & Adab",
+    deskripsi:
+      "Adab keseharian seorang muslim — makan, bertamu, kepada orang tua dan guru — beserta akhlak terpuji dan tercela.",
+  },
+  {
+    href: "/ilmu-tajwid",
+    nomor: 10,
+    judul: "Ilmu Tajwid",
+    deskripsi:
+      "Kaidah dasar membaca Al-Qur'an: hukum nun mati, mim mati, mad, qalqalah, dan tanda waqaf.",
+  },
+  {
+    href: "/sirah-sahabat",
+    nomor: 11,
+    judul: "Sirah Sahabat",
+    deskripsi: "Kisah sepuluh sahabat yang dijamin Rasulullah ﷺ masuk surga semasa hidup.",
+  },
+  {
+    href: "/wanita-dalam-islam",
+    nomor: 12,
+    judul: "Wanita dalam Islam",
+    deskripsi: "Kedudukan, hak-hak, dan kisah tokoh muslimah teladan sepanjang sejarah Islam.",
+  },
 ];
 
 export default async function Home() {

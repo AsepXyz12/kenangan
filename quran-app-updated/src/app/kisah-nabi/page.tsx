@@ -32,8 +32,8 @@ const NABI: Nabi[] = [
     nama: "Idris",
     arab: "إِدْرِيس",
     kisah:
-      "Idris dikenal sebagai salah satu nabi paling awal yang diberi hikmah dan ilmu, disebut dalam Al-Qur'an sebagai orang yang sangat sabar dan diangkat ke tempat yang tinggi (kedudukan mulia) oleh Allah. Ia dikenal tekun beribadah dan mengajarkan kebaikan kepada kaumnya.",
-    hikmah: "Ketekunan dalam ilmu dan ibadah mengangkat derajat seseorang di sisi Allah.",
+      "Idris hidup beberapa generasi setelah Nabi Adam dan Nabi Syits, pada masa manusia mulai banyak berselisih dan menyimpang. Ia dikenal sebagai orang pertama yang diberi kepandaian menulis dengan pena serta memiliki wawasan luas tentang perbintangan dan perhitungan, sehingga sebagian ulama menyebutnya guru bagi banyak ilmu di zamannya. Al-Qur'an menegaskan Idris sebagai sosok yang sangat jujur (shiddiq) dan sabar dalam berdakwah menyeru kaumnya kepada tauhid serta mengingatkan mereka agar menghentikan kezaliman dan kemaksiatan yang merajalela. Karena keteguhan ibadah dan ketaatannya, Allah menceritakannya sebagai hamba yang diangkat ke kedudukan yang tinggi dan mulia — sebuah kemuliaan istimewa yang disebutkan langsung dalam Al-Qur'an.",
+    hikmah: "Ketekunan dalam menuntut ilmu, kejujuran yang konsisten, dan kesabaran dalam berdakwah dapat mengangkat derajat seorang hamba ke kedudukan yang sangat mulia di sisi Allah.",
     dalil: "QS. Maryam: 56–57",
   },
   {
@@ -103,8 +103,8 @@ const NABI: Nabi[] = [
     nama: "Ishaq",
     arab: "إِسْحَاق",
     kisah:
-      "Ishaq adalah putra Nabi Ibrahim dari Sarah, lahir sebagai kabar gembira yang disampaikan malaikat kepada Ibrahim dan Sarah di usia senja mereka. Ishaq kemudian menjadi nabi yang meneruskan dakwah tauhid dan menjadi ayah dari Nabi Ya'qub.",
-    hikmah: "Kabar gembira dari Allah bisa datang di saat yang tidak terduga bagi hamba yang sabar dan terus berharap kepada-Nya.",
+      "Ishaq adalah putra Nabi Ibrahim dari Sarah, lahir sebagai kabar gembira yang disampaikan oleh para malaikat yang singgah bertamu kepada Ibrahim dalam perjalanan menuju kaum Luth. Sarah yang mendengar kabar itu awalnya tertawa keheranan karena ia dan Ibrahim sudah lanjut usia dan selama ini tidak dikaruniai anak, namun para malaikat menegaskan bahwa hal itu tidaklah sulit bagi Allah. Ishaq lahir dan tumbuh menjadi nabi yang saleh, mewarisi dakwah tauhid ayahnya di tanah Kan'an (Syam), menikah, dan dikaruniai putra kembar bernama Ya'qub dan Ishaw. Melalui Ya'qub, keturunan Ishaq kelak menurunkan Bani Israil serta banyak nabi setelahnya, menjadikannya mata rantai penting dalam silsilah kenabian.",
+    hikmah: "Kabar gembira dan karunia dari Allah bisa datang di saat yang tidak terduga bagi hamba yang sabar dan terus berharap kepada-Nya, sekalipun akal manusia memandangnya mustahil.",
     dalil: "QS. Hud: 71–73",
   },
   {
@@ -112,7 +112,7 @@ const NABI: Nabi[] = [
     nama: "Ya'qub",
     arab: "يَعْقُوب",
     kisah:
-      "Ya'qub, putra Nabi Ishaq, memiliki dua belas putra yang menurunkan Bani Israil. Ia sangat mencintai putranya, Yusuf, dan bersedih hingga matanya memutih karena menangis saat kehilangan Yusuf selama bertahun-tahun, namun tetap sabar dan tidak pernah putus asa dari rahmat Allah hingga akhirnya dipertemukan kembali dengan Yusuf.",
+      "Ya'qub, putra Nabi Ishaq, juga dikenal dengan nama Israil, dan memiliki dua belas putra yang kelak menurunkan dua belas suku Bani Israil. Ia sangat mencintai Yusuf, putra kesayangannya, melebihi saudara-saudaranya yang lain, sehingga menimbulkan kecemburuan di antara mereka hingga akhirnya Yusuf disingkirkan dan dikabarkan mati dimakan serigala. Ya'qub tidak sepenuhnya percaya kabar itu dan memilih bersabar dengan kesabaran yang indah (sabar jamil), meski kesedihannya begitu mendalam hingga matanya memutih karena terus-menerus menangis memikirkan Yusuf selama puluhan tahun. Ia tetap yakin dan berharap kepada rahmat Allah, bahkan mencium aroma Yusuf dari gamisnya yang dibawa dari Mesir jauh sebelum kabar itu sampai kepadanya secara resmi. Pada akhirnya Allah mempertemukan kembali Ya'qub dengan Yusuf di Mesir, dan seluruh keluarganya pun bersujud memberi hormat kepada Yusuf, sesuai dengan mimpi yang pernah diceritakan Yusuf semasa kecil.",
     hikmah: "Kesabaran yang indah (sabar jamil) mengajarkan untuk terus berbaik sangka kepada Allah dalam ujian yang panjang sekalipun.",
     dalil: "QS. Yusuf: 84–87",
   },
@@ -130,7 +130,7 @@ const NABI: Nabi[] = [
     nama: "Ayyub",
     arab: "أَيُّوب",
     kisah:
-      "Ayyub adalah hamba yang kaya raya dan sangat taat, lalu diuji Allah dengan kehilangan harta, anak-anak, dan penyakit berat selama bertahun-tahun. Meski demikian, ia tetap bersabar dan tidak pernah berhenti bersyukur dan berdoa, hingga Allah menyembuhkannya dan mengembalikan keluarga serta hartanya berlipat ganda.",
+      "Ayyub adalah hamba Allah yang kaya raya, memiliki banyak ternak dan lahan yang subur, tetapi tetap rendah hati, dermawan, dan sangat taat beribadah. Untuk mengangkat derajatnya, Allah mengujinya secara bertahap dan bertubi-tubi: seluruh hartanya musnah, anak-anaknya meninggal dunia, dan tubuhnya diserang penyakit kulit yang parah hingga bertahun-tahun lamanya, sampai orang-orang di sekitarnya menjauhinya kecuali istrinya yang setia merawatnya. Meski demikian, Ayyub tidak pernah mengeluh kepada manusia maupun berburuk sangka kepada Allah; ia tetap bersabar dan terus berzikir dalam kondisi paling berat sekalipun. Ketika kesabarannya telah mencapai puncaknya, ia memanjatkan doa dengan penuh kerendahan hati, mengadukan penderitaannya hanya kepada Allah semata. Allah pun mengabulkan doanya dengan memerintahkannya menghentakkan kaki hingga memancar mata air untuk mandi dan minum, yang menyembuhkan penyakitnya secara total, serta mengembalikan keluarga dan hartanya dengan jumlah yang berlipat ganda dari sebelumnya sebagai balasan atas kesabarannya.",
     hikmah: "Kesabaran dalam menghadapi ujian yang bertubi-tubi, disertai doa yang tulus, akan berbuah kelapangan dari Allah.",
     dalil: "QS. Al-Anbiya: 83–84, QS. Sad: 41–44",
   },
@@ -140,7 +140,7 @@ const NABI: Nabi[] = [
     arab: "شُعَيْب",
     kaum: "Kaum Madyan",
     kisah:
-      "Syu'aib diutus kepada penduduk Madyan yang terbiasa mengurangi takaran dan timbangan dalam berdagang. Ia mengajak mereka bertauhid dan berlaku jujur dalam muamalah, namun banyak yang menolak dan mengancamnya. Kaum yang ingkar akhirnya dibinasakan dengan gempa dan suara keras yang mengguncang negeri mereka.",
+      "Syu'aib diutus kepada penduduk Madyan, sebuah kaum pedagang yang terbiasa mengurangi takaran dan timbangan serta merugikan orang lain dalam jual beli, di samping juga menyembah selain Allah. Ia mengajak mereka kembali bertauhid dan menegakkan kejujuran dalam muamalah, mengingatkan bahwa harta yang halal dari timbangan yang adil jauh lebih baik daripada keuntungan curang. Para pembesar kaumnya justru mengancam akan mengusirnya dan pengikutnya dari negeri itu, bahkan mengejeknya dengan mengatakan bahwa ibadahnyalah yang menyuruhnya meninggalkan sesembahan nenek moyang mereka. Syu'aib tetap bersabar dan mengingatkan bahwa ia tidak bermaksud mendatangkan kerusakan, melainkan hanya ingin memperbaiki keadaan semampunya. Karena mereka tetap ingkar dan menentang, Allah membinasakan kaum Madyan dengan gempa dahsyat disertai suara keras yang menggelegar, sehingga mereka bergelimpangan mati di rumah masing-masing, sementara Syu'aib dan pengikutnya yang beriman diselamatkan.",
     hikmah: "Kejujuran dalam perdagangan dan muamalah adalah bagian dari ketakwaan; kecurangan ekonomi termasuk dosa besar di sisi Allah.",
     dalil: "QS. Al-A'raf: 85–93, QS. Hud: 84–95",
   },
@@ -160,7 +160,7 @@ const NABI: Nabi[] = [
     nama: "Harun",
     arab: "هَارُون",
     kisah:
-      "Harun adalah saudara Nabi Musa yang diutus mendampinginya berdakwah kepada Fir'aun, atas permohonan Musa kepada Allah karena Harun lebih fasih berbicara. Harun berperan besar membantu Musa memimpin Bani Israil, termasuk saat menjaga kaumnya ketika Musa munajat ke Bukit Tur.",
+      "Harun adalah saudara kandung Nabi Musa, diangkat menjadi nabi atas permohonan Musa sendiri kepada Allah agar diberi pendamping yang dapat menguatkan dakwahnya, karena Harun dikenal lebih fasih berbicara. Bersama-sama, keduanya diutus menghadap Fir'aun yang mengaku sebagai tuhan, menyampaikan seruan tauhid dengan lemah lembut meski penuh risiko, hingga akhirnya berhasil membawa Bani Israil keluar dari perbudakan Mesir. Ketika Musa naik ke Bukit Tur untuk bermunajat kepada Allah selama empat puluh malam, Harun ditinggalkan sebagai pemimpin dan penjaga Bani Israil. Namun dalam masa kepergian Musa itu, sebagian besar kaumnya tergoda oleh Samiri yang membuat patung anak sapi dari emas dan menyembahnya. Harun telah memperingatkan dan melarang mereka dengan tegas, tetapi kaumnya tetap bersikeras menyembah patung tersebut hingga Musa kembali dan sangat marah menyaksikan penyimpangan itu.",
     hikmah: "Kerja sama dan saling membantu antar-saudara dalam kebaikan dan dakwah adalah teladan penting dari kisah Musa dan Harun.",
     dalil: "QS. Ta-Ha: 29–36",
   },
@@ -169,7 +169,7 @@ const NABI: Nabi[] = [
     nama: "Dzulkifli",
     arab: "ذُو الْكِفْل",
     kisah:
-      "Dzulkifli disebut Al-Qur'an sebagai hamba yang sabar dan termasuk golongan orang-orang saleh. Ia dikenal teguh memegang janji dan konsisten menegakkan keadilan serta ibadah di tengah kaumnya.",
+      "Dzulkifli disebut dalam Al-Qur'an berdampingan dengan Nabi Ismail dan Nabi Idris sebagai hamba yang sabar dan termasuk golongan orang-orang pilihan yang saleh. Menurut penjelasan sebagian ulama tafsir, ia dijuluki Dzulkifli karena pernah berjanji untuk senantiasa berpuasa di siang hari, menegakkan salat malam, dan tidak pernah marah dalam memutuskan perkara di antara manusia, lalu ia benar-benar menepati janji tersebut secara konsisten sepanjang hidupnya. Karena keteguhan menjaga janji, ketekunan ibadah, dan keadilannya dalam memimpin serta menyelesaikan sengketa kaumnya, Allah mengangkatnya sebagai nabi dan menyebutnya dalam deretan hamba-hamba pilihan-Nya.",
     hikmah: "Konsistensi dalam kebaikan dan menepati janji adalah sifat mulia yang dipuji Allah dalam Al-Qur'an.",
     dalil: "QS. Al-Anbiya: 85–86, QS. Sad: 48",
   },
@@ -179,7 +179,7 @@ const NABI: Nabi[] = [
     arab: "دَاوُود",
     kaum: "Bani Israil",
     kisah:
-      "Daud mengalahkan raksasa Jalut (Goliath) semasa muda dan kemudian diangkat menjadi raja sekaligus nabi Bani Israil. Allah menganugerahkannya kitab Zabur, suara merdu saat melantunkan pujian sehingga gunung dan burung ikut bertasbih bersamanya, serta kemampuan melunakkan besi untuk membuat baju besi.",
+      "Daud, semasa muda, bergabung dalam pasukan Bani Israil yang dipimpin Thalut untuk melawan pasukan Jalut (Goliath) yang gagah perkasa dan ditakuti. Ketika para prajurit lain gentar, Daud yang masih belia maju dengan gagah berani menggunakan umban (ketapel batu) dan berhasil membunuh Jalut dengan izin Allah, sebuah kemenangan yang mengangkat namanya di tengah kaumnya. Setelahnya, Allah menganugerahkan kepadanya kerajaan sekaligus kenabian, kitab Zabur sebagai pedoman, serta suara yang sangat merdu ketika melantunkan tasbih sehingga gunung-gunung dan burung-burung ikut bertasbih bersamanya. Ia juga dianugerahi kemampuan istimewa melunakkan besi tanpa perlu ditempa dengan api, yang ia gunakan untuk membuat baju besi rantai — teknologi yang bermanfaat besar bagi kaumnya. Sebagai raja dan hakim, Daud dikenal sangat adil dan senantiasa berhati-hati dalam memutuskan setiap perkara, serta banyak beribadah termasuk berpuasa selang-seling sehari puasa sehari tidak, sebuah amalan puasa yang kelak disebut sebagai yang paling dicintai Allah.",
     hikmah: "Kekuasaan dan karunia besar hendaknya digunakan untuk terus bertasbih dan berbuat adil, bukan untuk kesombongan.",
     dalil: "QS. Sad: 17–26, QS. Al-Anbiya: 79–80",
   },
@@ -189,7 +189,7 @@ const NABI: Nabi[] = [
     arab: "سُلَيْمَان",
     kaum: "Bani Israil",
     kisah:
-      "Sulaiman, putra Nabi Daud, dianugerahi kerajaan yang sangat besar serta kemampuan memahami bahasa hewan dan menundukkan angin serta jin. Kisahnya bersama Ratu Balqis dari negeri Saba menunjukkan kebijaksanaannya dalam berdakwah mengajak sang ratu dan kaumnya kepada tauhid tanpa peperangan.",
+      "Sulaiman, putra Nabi Daud, mewarisi kenabian dan kerajaan ayahnya, lalu berdoa memohon kepada Allah agar dianugerahi kerajaan yang tidak dimiliki siapa pun setelahnya. Allah mengabulkan doanya dengan menundukkan angin agar berhembus sesuai perintahnya, mengizinkannya memahami bahasa burung dan hewan-hewan lain, serta menundukkan bangsa jin untuk bekerja di bawah kekuasaannya, termasuk membangun bangunan-bangunan megah dan menyelam mencari mutiara. Suatu hari, burung Hud-hud dalam pasukannya melaporkan keberadaan sebuah negeri bernama Saba yang dipimpin seorang ratu bernama Balqis, namun rakyatnya menyembah matahari alih-alih Allah. Sulaiman mengirimkan surat ajakan kepada Balqis untuk bertauhid, dan setelah pertukaran hadiah yang ditolaknya, ia memerintahkan salah seorang pembantunya yang memiliki ilmu untuk memindahkan singgasana Balqis ke istananya dalam sekejap mata sebagai bukti mukjizat. Ketika Balqis tiba dan menyaksikan kebesaran kerajaan Sulaiman serta istana berlantai kaca yang disangkanya genangan air, hatinya pun luluh dan ia menyatakan keislamannya kepada Allah, Tuhan semesta alam, tanpa terjadi peperangan sedikit pun.",
     hikmah: "Kekuasaan besar yang dianugerahkan Allah kepada Sulaiman tidak membuatnya lupa diri, melainkan selalu disyukuri dan digunakan di jalan dakwah.",
     dalil: "QS. An-Naml: 15–44, QS. Sad: 30–40",
   },
@@ -199,7 +199,7 @@ const NABI: Nabi[] = [
     arab: "إِلْيَاس",
     kaum: "Bani Israil (penyembah berhala Ba'al)",
     kisah:
-      "Ilyas diutus kepada kaumnya yang menyembah berhala bernama Ba'al. Ia mengajak mereka kembali kepada tauhid, namun sebagian besar menolak dan tetap dalam kesyirikan meski telah diperingatkan berulang kali.",
+      "Ilyas diutus kepada kaumnya di negeri Ba'labak (wilayah Syam) yang telah meninggalkan ajaran tauhid dan menyembah berhala besar bernama Ba'al sebagai sesembahan utama mereka. Ilyas mengingatkan kaumnya dengan tegas, mempertanyakan mengapa mereka menyembah berhala buatan tangan sendiri dan meninggalkan Allah, Pencipta mereka dan nenek moyang mereka terdahulu. Ia mengajak mereka kembali kepada tauhid dengan penuh kesabaran, namun mayoritas kaumnya mendustakannya dan tetap bertahan dalam kesyirikan meski telah diperingatkan berulang kali, sehingga hanya sedikit dari mereka yang beriman dan diselamatkan, sementara sisanya dibinasakan atas keingkaran mereka.",
     hikmah: "Dakwah tauhid harus terus disuarakan meski banyak yang enggan menerimanya, karena tugas seorang nabi adalah menyampaikan, bukan memaksa hidayah.",
     dalil: "QS. As-Saffat: 123–132",
   },
@@ -208,7 +208,7 @@ const NABI: Nabi[] = [
     nama: "Ilyasa",
     arab: "الْيَسَع",
     kisah:
-      "Ilyasa adalah penerus dakwah Nabi Ilyas, disebut Al-Qur'an sebagai hamba yang saleh dan termasuk golongan orang-orang pilihan. Ia melanjutkan tugas mengajak kaumnya kepada jalan kebenaran.",
+      "Ilyasa adalah murid sekaligus penerus dakwah Nabi Ilyas setelah wafatnya, melanjutkan tugas menyeru kaum Bani Israil yang telah menyimpang agar kembali kepada jalan tauhid. Al-Qur'an menyebutnya berdampingan dengan para nabi lain sebagai hamba yang saleh dan termasuk golongan orang-orang pilihan yang diberi keutamaan di atas seluruh umat manusia pada zamannya. Ia dikenal gigih dan konsisten meneruskan estafet perjuangan dakwah, memastikan cahaya kebenaran yang telah dirintis pendahulunya tidak terputus di tengah kaumnya.",
     hikmah: "Estafet dakwah kebaikan perlu diteruskan generasi berikutnya agar cahaya kebenaran tidak terputus.",
     dalil: "QS. Al-An'am: 86, QS. Sad: 48",
   },
@@ -228,7 +228,7 @@ const NABI: Nabi[] = [
     nama: "Zakariya",
     arab: "زَكَرِيَّا",
     kisah:
-      "Zakariya adalah nabi yang mengasuh Maryam di Baitul Maqdis dan senantiasa mendapati rezeki yang tak terduga di sisinya. Terinspirasi hal itu, ia berdoa memohon keturunan meski telah tua dan istrinya mandul, lalu Allah mengabulkan dengan lahirnya Nabi Yahya.",
+      "Zakariya adalah nabi yang diberi amanah mengasuh dan menjaga Maryam sejak kecil di Baitul Maqdis, setelah ibunya menazarkan Maryam untuk berkhidmat di tempat suci itu. Setiap kali Zakariya masuk ke mihrab tempat Maryam beribadah, ia mendapati makanan di sisinya, padahal bukan musimnya, dan ketika ditanya dari mana asalnya, Maryam menjawab bahwa itu adalah rezeki langsung dari Allah. Peristiwa itu menggugah hati Zakariya, sehingga ia pun berdoa memohon keturunan yang saleh kepada Allah, meski usianya sudah sangat lanjut, tulangnya lemah, rambutnya telah memutih, dan istrinya dikenal mandul sepanjang usia pernikahan mereka. Allah mengabulkan doanya dengan memberi kabar gembira melalui malaikat bahwa ia akan dikaruniai seorang putra bernama Yahya, sebuah nama yang belum pernah disandang siapa pun sebelumnya, sebagai tanda kekuasaan Allah yang tidak terbatas oleh sebab-sebab lahiriah.",
     hikmah: "Tidak ada yang mustahil bagi Allah; doa yang tulus di usia dan keadaan apa pun tetap layak dipanjatkan dengan penuh harap.",
     dalil: "QS. Maryam: 2–11, QS. Ali 'Imran: 37–41",
   },
@@ -237,7 +237,7 @@ const NABI: Nabi[] = [
     nama: "Yahya",
     arab: "يَحْيَى",
     kisah:
-      "Yahya adalah putra Nabi Zakariya yang diberi hikmah dan kenabian sejak kecil. Ia dikenal sangat taat, penuh kasih sayang, dan menjaga kesucian dirinya. Al-Qur'an menyebutnya sebagai sosok yang taat kepada kedua orang tuanya dan tidak sombong maupun durhaka.",
+      "Yahya adalah putra Nabi Zakariya yang lahir sebagai jawaban atas doa ayahnya di usia senja, dan Allah menganugerahkannya hikmah serta pemahaman agama sejak ia masih kanak-kanak. Ia diperintahkan untuk berpegang teguh pada kitab (Taurat) dengan sungguh-sungguh, dan Allah melimpahkan kepadanya kasih sayang serta kesucian jiwa yang luar biasa sehingga ia dikenal sangat menjaga diri dari dosa dan syahwat dunia. Yahya tumbuh menjadi sosok yang penuh kelembutan, sangat berbakti kepada kedua orang tuanya, dan tidak pernah bersikap sombong maupun durhaka. Al-Qur'an secara khusus mengabadikan salam sejahtera baginya pada tiga momen penting dalam hidup seorang manusia: hari kelahirannya, hari kematiannya, dan hari ia dibangkitkan kembali kelak.",
     hikmah: "Kesungguhan beribadah sejak usia muda dan berbakti kepada orang tua adalah sifat mulia yang dipuji Allah.",
     dalil: "QS. Maryam: 12–15",
   },
@@ -248,7 +248,7 @@ const NABI: Nabi[] = [
     gelar: "Ruhullah (Ruh dari Allah), Al-Masih",
     kaum: "Bani Israil",
     kisah:
-      "Isa dilahirkan secara mukjizat oleh Maryam tanpa ayah, atas kehendak Allah. Sejak bayi ia sudah bisa berbicara membela kesucian ibunya. Sebagai rasul, ia diberi mukjizat menyembuhkan orang buta dan berpenyakit kusta serta menghidupkan burung dari tanah liat dengan izin Allah. Al-Qur'an menegaskan Isa bukan disalib maupun mati, melainkan diangkat oleh Allah ke sisi-Nya.",
+      "Isa dilahirkan secara mukjizat oleh Maryam tanpa perantaraan ayah, semata-mata atas kehendak dan kalimat 'Kun' (Jadilah) dari Allah, sebagaimana Allah menciptakan Adam dari tanah tanpa ayah maupun ibu. Ketika Maryam pulang membawa bayinya dan dituduh kaumnya berbuat serong, ia hanya menunjuk kepada sang bayi, dan atas izin Allah, Isa yang masih dalam buaian berbicara membela kesucian ibunya serta menjelaskan bahwa dirinya adalah hamba Allah yang akan diberi kitab dan diangkat menjadi nabi. Setelah dewasa, Isa diutus kepada Bani Israil dengan membawa kitab Injil dan berbagai mukjizat luar biasa atas izin Allah: menyembuhkan orang buta sejak lahir dan penderita kusta, menghidupkan orang mati, serta membentuk burung dari tanah liat lalu meniupnya hingga menjadi burung sungguhan yang hidup. Ketika sebagian Bani Israil justru berencana membunuhnya karena menolak dakwahnya, Allah menyelamatkan Isa dengan mengangkatnya ke langit, sementara orang yang menyerupainyalah yang tertangkap dan disalib. Al-Qur'an menegaskan dengan jelas bahwa Isa tidak dibunuh dan tidak pula disalib, melainkan diangkat Allah ke sisi-Nya, dan kelak ia akan turun kembali ke bumi menjelang akhir zaman.",
     hikmah: "Kelahiran dan mukjizat Isa menunjukkan kekuasaan mutlak Allah atas segala hukum sebab-akibat di alam semesta.",
     dalil: "QS. Maryam: 16–34, QS. An-Nisa: 157–158",
   },

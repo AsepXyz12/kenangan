@@ -19,6 +19,10 @@ const NAV_ITEMS = [
   { href: "/rukun-iman", label: "Rukun Iman" },
   { href: "/aqidah", label: "Aqidah & Tauhid" },
   { href: "/fiqih-madzhab", label: "Fiqih & Madzhab" },
+  { href: "/akhlak-adab", label: "Akhlak & Adab" },
+  { href: "/ilmu-tajwid", label: "Ilmu Tajwid" },
+  { href: "/sirah-sahabat", label: "Sirah Sahabat" },
+  { href: "/wanita-dalam-islam", label: "Wanita dalam Islam" },
   { href: "/sejarah-islam", label: "Sejarah Islam" },
   { href: "/malam-jumat", label: "Amalan Malam" },
 ];
