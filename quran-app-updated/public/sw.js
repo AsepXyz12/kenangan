@@ -45,6 +45,7 @@ const APP_SHELL = [
   "/wanita-dalam-islam",
   "/sejarah-islam",
   "/malam-jumat",
+  "/tahlil-yasin",
 ];
 
 // Halaman fallback paling terakhir kalau semuanya gagal (network mati & cache

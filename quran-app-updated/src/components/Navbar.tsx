@@ -25,6 +25,7 @@ const NAV_ITEMS = [
   { href: "/wanita-dalam-islam", label: "Wanita dalam Islam" },
   { href: "/sejarah-islam", label: "Sejarah Islam" },
   { href: "/malam-jumat", label: "Amalan Malam" },
+  { href: "/tahlil-yasin", label: "Tahlil & Yasin" },
 ];
 
 export default function Navbar() {

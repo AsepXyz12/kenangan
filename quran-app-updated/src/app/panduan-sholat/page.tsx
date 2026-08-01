@@ -280,6 +280,81 @@ const GERAKAN: Gerakan[] = [
   },
 ];
 
+type ButirJamaah = {
+  judul: string;
+  keterangan: string;
+  bacaan?: { peran: string; arab: string; latin: string; arti: string }[];
+};
+
+const BACAAN_JAMAAH: ButirJamaah[] = [
+  {
+    judul: "Amin setelah Al-Fatihah",
+    keterangan:
+      "Imam membaca Al-Fatihah sampai selesai (pada sholat jahr, dibaca keras agar terdengar makmum). Begitu imam sampai di ujung ayat terakhir, imam dan makmum sama-sama mengucapkan \"Amin\". Pada sholat yang bacaannya dikeraskan (Subuh, dua rakaat pertama Maghrib & Isya, Jumat), amin ini juga dikeraskan bersama-sama, bukan hanya imam saja; pada sholat sirr (Dzuhur, Ashar), amin cukup dilirihkan seperti bacaan lainnya.",
+    bacaan: [
+      {
+        peran: "Imam membaca (ayat terakhir Al-Fatihah)",
+        arab: "غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ",
+        latin: "Ghairil maghdhuubi 'alaihim wa ladh dhaalliin",
+        arti: "Bukan (jalan) mereka yang dimurkai, dan bukan (pula jalan) mereka yang sesat.",
+      },
+      {
+        peran: "Imam & makmum bersama",
+        arab: "آمِينَ",
+        latin: "Aamiin",
+        arti: "Ya Allah, kabulkanlah (doa kami).",
+      },
+    ],
+  },
+  {
+    judul: "Sami'allahu Liman Hamidah & Jawaban Makmum",
+    keterangan:
+      "Saat bangkit dari ruku', yang mengucapkan \"Sami'allaahu liman hamidah\" adalah imam dan orang yang sholat sendirian (munfarid). Makmum yang bermakmum di belakang imam cukup menjawabnya dengan \"Rabbanaa wa lakal hamd\" tanpa perlu mengucapkan \"Sami'allaahu liman hamidah\" terlebih dahulu (HR. Bukhari & Muslim). Munfarid mengucapkan keduanya sekaligus, sama seperti pada gerakan i'tidal di atas.",
+    bacaan: [
+      {
+        peran: "Imam & munfarid",
+        arab: "سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ",
+        latin: "Sami'allaahu liman hamidah",
+        arti: "Allah Maha Mendengar orang yang memuji-Nya.",
+      },
+      {
+        peran: "Makmum",
+        arab: "رَبَّنَا وَلَكَ الْحَمْدُ",
+        latin: "Rabbanaa wa lakal hamd",
+        arti: "Ya Tuhan kami, bagi-Mu segala puji.",
+      },
+    ],
+  },
+  {
+    judul: "Bacaan Keras (Jahr) & Pelan (Sirr)",
+    keterangan:
+      "Imam mengeraskan bacaan Al-Fatihah dan surat pendek pada: seluruh rakaat sholat Subuh, dua rakaat pertama Maghrib dan Isya, serta sholat Jumat. Selain itu (Dzuhur, Ashar, dan rakaat ketiga/keempat Maghrib-Isya), bacaan dilirihkan (sirr), baik oleh imam maupun saat sholat sendirian.",
+  },
+  {
+    judul: "Bacaan Makmum saat Imam Mengeraskan Suara",
+    keterangan:
+      "Ini termasuk masalah khilafiyah. Sebagian ulama (di antaranya mazhab Hanafi) berpendapat makmum cukup mendengarkan bacaan imam dan tidak membaca Al-Fatihah sendiri saat imam mengeraskan suara, berdalil dengan ayat \"apabila dibacakan Al-Qur'an maka dengarkanlah\" (QS. Al-A'raf: 204). Mazhab Syafi'i berpendapat makmum tetap wajib membaca Al-Fatihah secara lirih untuk dirinya sendiri, baik pada sholat jahr maupun sirr, karena Al-Fatihah adalah rukun sholat bagi setiap orang yang sholat.",
+  },
+  {
+    judul: "Mengingatkan Imam yang Lupa",
+    keterangan:
+      "Bila imam tampak ragu, salah bacaan, atau lupa jumlah rakaat, makmum laki-laki mengingatkan dengan mengucapkan tasbih, sedangkan makmum perempuan mengingatkan dengan menepukkan punggung telapak tangan kanan ke telapak tangan kiri, bukan dengan berbicara.",
+    bacaan: [
+      {
+        peran: "Makmum laki-laki",
+        arab: "سُبْحَانَ اللَّهِ",
+        latin: "Subhaanallaah",
+        arti: "Mahasuci Allah.",
+      },
+    ],
+  },
+  {
+    judul: "Takbir Intiqal (Perpindahan Gerakan)",
+    keterangan:
+      "Di setiap perpindahan gerakan, imam mengucapkan takbir (\"Allaahu akbar\") dengan suara cukup terdengar oleh seluruh makmum, kecuali saat bangkit dari ruku' yang menggunakan \"Sami'allaahu liman hamidah\", agar makmum tidak mendahului atau tertinggal jauh dari gerakan imam.",
+  },
+];
+
 const JUMLAH_RAKAAT = [
   { waktu: "Subuh", rakaat: "2 rakaat", tasyahud: "1 kali tasyahud (langsung tasyahud akhir di rakaat ke-2)" },
   { waktu: "Zuhur", rakaat: "4 rakaat", tasyahud: "2 kali tasyahud (awal di rakaat ke-2, akhir di rakaat ke-4)" },
@@ -593,6 +668,46 @@ export default function PanduanSholatPage() {
                         {b.catatan}
                       </p>
                     )}
+                    <p className="ayat-arabic text-xl md:text-2xl text-[var(--ink)] mb-2 leading-loose" dir="rtl">
+                      {b.arab}
+                    </p>
+                    <p className="italic text-sm text-[var(--ink-soft)] mb-2">{b.latin}</p>
+                    <p className="text-sm text-[var(--ink)]">&ldquo;{b.arti}&rdquo;</p>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Bacaan khusus imam & makmum */}
+        <section className="mb-10">
+          <h2 className="font-display text-xl text-[var(--ink)] mb-2">
+            Bacaan Khusus Sholat Berjamaah (Imam &amp; Makmum)
+          </h2>
+          <p className="text-sm text-[var(--ink-soft)] leading-relaxed mb-4">
+            Beberapa bacaan di atas sedikit berbeda perannya antara imam,
+            makmum, dan orang yang sholat sendirian (munfarid). Berikut
+            rinciannya.
+          </p>
+          <div className="space-y-5">
+            {BACAAN_JAMAAH.map((j) => (
+              <div
+                key={j.judul}
+                className="rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment-deep)]/40 p-6"
+              >
+                <h3 className="font-display text-lg text-[var(--ink)] mb-2">{j.judul}</h3>
+                <p className="text-sm text-[var(--ink-soft)] leading-relaxed mb-4">
+                  {j.keterangan}
+                </p>
+                {j.bacaan?.map((b, idx) => (
+                  <div
+                    key={idx}
+                    className="border-t border-[var(--parchment-line)] pt-4 mt-4 first:border-t-0 first:pt-0 first:mt-0"
+                  >
+                    <p className="text-xs uppercase tracking-wide text-[var(--gold)] mb-2">
+                      {b.peran}
+                    </p>
                     <p className="ayat-arabic text-xl md:text-2xl text-[var(--ink)] mb-2 leading-loose" dir="rtl">
                       {b.arab}
                     </p>

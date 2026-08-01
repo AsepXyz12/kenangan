@@ -156,6 +156,17 @@ const DZIKIR_SETELAH_SHOLAT: Doa[] = [
     arti: "Allah, tiada Tuhan selain Dia, Yang Maha Hidup, Yang terus-menerus mengurus makhluk-Nya, tidak mengantuk dan tidak tidur... (QS. Al-Baqarah: 255, dibaca lengkap satu ayat).",
     keterangan: "Dibaca lengkap satu ayat penuh setelah sholat fardu, salah satu dzikir paling utama.",
   },
+  {
+    judul: "Doa Memohon Keselamatan",
+    arab:
+      "اللَّهُمَّ إِنِّي أَسْأَلُكَ سَلَامَةً فِي الدِّينِ، وَعَافِيَةً فِي الْجَسَدِ، وَزِيَادَةً فِي الْعِلْمِ، وَبَرَكَةً فِي الرِّزْقِ، وَتَوْبَةً قَبْلَ الْمَوْتِ، وَرَحْمَةً عِنْدَ الْمَوْتِ، وَمَغْفِرَةً بَعْدَ الْمَوْتِ، اللَّهُمَّ هَوِّنْ عَلَيْنَا فِي سَكَرَاتِ الْمَوْتِ، وَالنَّجَاةَ مِنَ النَّارِ، وَالْعَفْوَ عِنْدَ الْحِسَابِ",
+    latin:
+      "Allaahumma innii as-aluka salaamatan fid-diin, wa 'aafiyatan fil jasad, wa ziyaadatan fil 'ilmi, wa barakatan fir rizqi, wa taubatan qablal maut, wa rahmatan 'indal maut, wa maghfiratan ba'dal maut. Allaahumma hawwin 'alainaa fii sakaraatil maut, wan najaata minan naar, wal 'afwa 'indal hisaab",
+    arti:
+      "Ya Allah, sesungguhnya aku memohon kepada-Mu keselamatan dalam agama, kesehatan pada jasad, bertambahnya ilmu, keberkahan rezeki, taubat sebelum mati, rahmat ketika mati, dan ampunan setelah mati. Ya Allah, mudahkanlah bagi kami sakaratul maut, keselamatan dari api neraka, dan ampunan saat hisab.",
+    keterangan:
+      "Doa yang populer dibaca setelah dzikir sholat maupun di majelis-majelis. Sanadnya dinilai lemah (da'if) oleh sebagian ahli hadits, namun kandungan maknanya — memohon keselamatan agama, kesehatan, ilmu, rezeki, dan husnul khatimah — sejalan dengan doa-doa yang shahih, sehingga tetap banyak diamalkan.",
+  },
 ];
 
 const DZIKIR_PAGI: Doa[] = [

@@ -90,6 +90,13 @@ const MENU = [
     judul: "Wanita dalam Islam",
     deskripsi: "Kedudukan, hak-hak, dan kisah tokoh muslimah teladan sepanjang sejarah Islam.",
   },
+  {
+    href: "/tahlil-yasin",
+    nomor: 13,
+    judul: "Tahlil, Yasin & Acara Lainnya",
+    deskripsi:
+      "Susunan tahlil lengkap, Surat Yasin, dan panduan bacaan untuk tahlilan, maulid, isra mikraj, dan acara lainnya.",
+  },
 ];
 
 export default async function Home() {
