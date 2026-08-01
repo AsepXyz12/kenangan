@@ -2,6 +2,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Roundel from "@/components/Roundel";
+import BackButton from "@/components/BackButton";
 import { getHaditsDetail, getKitabList } from "@/lib/hadits-api";
 import { notFound } from "next/navigation";
 
@@ -39,14 +40,7 @@ export default async function HaditsDetailPage({
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 max-w-2xl mx-auto w-full px-5 md:px-8 py-12">
-        <div className="mb-8">
-          <Link
-            href={`/hadits/${meta.slug}?halaman=${halamanListing}`}
-            className="text-xs text-[var(--ink-soft)] hover:text-[var(--heading)]"
-          >
-            ← {meta.nama}
-          </Link>
-        </div>
+        <BackButton href={`/hadits/${meta.slug}?halaman=${halamanListing}`} label={meta.nama} />
 
         <div className="ornament-border ornament-corner rounded-sm bg-[var(--parchment-deep)] px-6 py-7 md:px-10 md:py-9 text-center mb-8">
           <Roundel number={hadits.nomor} variant="maroon" size={44} className="mx-auto mb-3" />

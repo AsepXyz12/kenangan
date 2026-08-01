@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Roundel from "@/components/Roundel";
 import HaditsJumpBox from "@/components/HaditsJumpBox";
+import BackButton from "@/components/BackButton";
 import { getHaditsList, getKitabList } from "@/lib/hadits-api";
 import { notFound } from "next/navigation";
 
@@ -44,9 +45,7 @@ export default async function HaditsKitabPage({
       <Navbar />
       <main className="flex-1 max-w-2xl mx-auto w-full px-5 md:px-8 py-12">
         <div className="mb-8">
-          <Link href="/hadits" className="text-xs text-[var(--ink-soft)] hover:text-[var(--heading)]">
-            ← Semua Kitab
-          </Link>
+          <BackButton href="/hadits" label="Semua Kitab" />
           <h1 className="font-display text-3xl text-[var(--ink)] mt-2 mb-1">
             {meta.nama}
           </h1>
