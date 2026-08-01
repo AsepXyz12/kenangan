@@ -20,7 +20,7 @@ export default function BacaanMalamJumat({
           onClick={() => setAktif("yasin")}
           className={`flex-1 px-4 py-3 rounded-sm text-sm border transition-colors ${
             aktif === "yasin"
-              ? "bg-[var(--teal)] text-[var(--text-on-dark)] border-[var(--teal)]"
+              ? "bg-[var(--teal)] text-[var(--parchment)] border-[var(--teal)]"
               : "border-[var(--parchment-line)] text-[var(--ink-soft)] hover:border-[var(--teal)]"
           }`}
         >
@@ -30,7 +30,7 @@ export default function BacaanMalamJumat({
           onClick={() => setAktif("kahf")}
           className={`flex-1 px-4 py-3 rounded-sm text-sm border transition-colors ${
             aktif === "kahf"
-              ? "bg-[var(--teal)] text-[var(--text-on-dark)] border-[var(--teal)]"
+              ? "bg-[var(--teal)] text-[var(--parchment)] border-[var(--teal)]"
               : "border-[var(--parchment-line)] text-[var(--ink-soft)] hover:border-[var(--teal)]"
           }`}
         >

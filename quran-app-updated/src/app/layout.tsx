@@ -3,7 +3,6 @@ import { Scheherazade_New, Fraunces, Literata } from "next/font/google";
 import "./globals.css";
 import { AudioPlayerProvider } from "@/components/AudioPlayerContext";
 import { FontSizeProvider } from "@/components/FontSizeContext";
-import { ThemeProvider } from "@/components/ThemeContext";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 import InstallPrompt from "@/components/InstallPrompt";
 import OfflineBanner from "@/components/OfflineBanner";
@@ -120,14 +119,12 @@ export default function RootLayout({
     <html lang="id">
       <body className={`${arabic.variable} ${display.variable} ${body.variable}`}>
         <OfflineBanner />
-        <ThemeProvider>
-          <FontSizeProvider>
-            <AudioPlayerProvider>
-              {children}
-              <InstallPrompt />
-            </AudioPlayerProvider>
-          </FontSizeProvider>
-        </ThemeProvider>
+        <FontSizeProvider>
+          <AudioPlayerProvider>
+            {children}
+            <InstallPrompt />
+          </AudioPlayerProvider>
+        </FontSizeProvider>
         <ServiceWorkerRegister />
       </body>
     </html>

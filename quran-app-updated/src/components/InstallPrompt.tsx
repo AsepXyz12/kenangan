@@ -61,7 +61,7 @@ export default function InstallPrompt() {
   return (
     <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:w-80 z-50">
       <div className="flex items-start gap-3 rounded-lg border border-[var(--parchment-line)] bg-[var(--parchment)] shadow-lg p-4">
-        <div className="flex items-center justify-center w-9 h-9 rounded-full bg-[var(--teal)] text-[var(--text-on-dark)] shrink-0">
+        <div className="flex items-center justify-center w-9 h-9 rounded-full bg-[var(--teal)] text-[var(--parchment)] shrink-0">
           <Download size={16} />
         </div>
         <div className="flex-1 min-w-0">
@@ -73,7 +73,7 @@ export default function InstallPrompt() {
           <div className="flex items-center gap-2 mt-3">
             <button
               onClick={handleInstall}
-              className="text-xs px-3 py-1.5 rounded-full bg-[var(--teal)] text-[var(--text-on-dark)] hover:bg-[var(--teal-deep)] transition-colors"
+              className="text-xs px-3 py-1.5 rounded-full bg-[var(--teal)] text-[var(--parchment)] hover:bg-[var(--teal-deep)] transition-colors"
             >
               Pasang
             </button>

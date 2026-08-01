@@ -17,7 +17,7 @@ function DaftarKartu({ items }: { items: string[] }) {
       <ul className="space-y-2">
         {items.map((s) => (
           <li key={s} className="text-sm text-[var(--ink-soft)] flex gap-2">
-            <span className="text-[var(--heading)]">•</span>
+            <span className="text-[var(--teal-deep)]">•</span>
             <span>{s}</span>
           </li>
         ))}
@@ -117,7 +117,7 @@ export default function PanduanPuasaPage() {
       <Navbar />
       <main className="flex-1 max-w-3xl mx-auto px-5 md:px-8 py-10 md:py-14 w-full">
         <span className="text-xs tracking-widest uppercase text-[var(--ink-soft)]">Fiqih Ibadah</span>
-        <h1 className="font-display text-3xl md:text-4xl text-[var(--heading)] mt-1 mb-3">
+        <h1 className="font-display text-3xl md:text-4xl text-[var(--teal-deep)] mt-1 mb-3">
           Panduan Puasa
         </h1>
         <p className="text-[var(--ink-soft)] mb-10 leading-relaxed">
@@ -127,33 +127,33 @@ export default function PanduanPuasaPage() {
         </p>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--heading)] mb-3">Syarat Wajib Puasa</h2>
+          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-3">Syarat Wajib Puasa</h2>
           <DaftarKartu items={SYARAT_WAJIB} />
         </section>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--heading)] mb-3">Rukun Puasa</h2>
+          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-3">Rukun Puasa</h2>
           <DaftarKartu items={RUKUN_PUASA} />
           <h3 className="font-medium text-[var(--ink)] mt-6 mb-2">Niat Puasa Ramadhan</h3>
           <BacaanBlok {...NIAT_RAMADHAN} />
         </section>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--heading)] mb-3">Sunnah-Sunnah Puasa</h2>
+          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-3">Sunnah-Sunnah Puasa</h2>
           <DaftarKartu items={SUNNAH_PUASA} />
           <h3 className="font-medium text-[var(--ink)] mt-6 mb-2">Doa Berbuka Puasa</h3>
           <BacaanBlok {...DOA_BUKA_PUASA} />
         </section>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--heading)] mb-3">Hal-Hal yang Membatalkan Puasa</h2>
+          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-3">Hal-Hal yang Membatalkan Puasa</h2>
           <DaftarKartu items={PEMBATAL_PUASA} />
           <h3 className="font-medium text-[var(--ink)] mt-6 mb-2">Yang Tidak Membatalkan Puasa</h3>
           <DaftarKartu items={TIDAK_BATAL} />
         </section>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--heading)] mb-3">
+          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-3">
             Keringanan bagi Golongan Tertentu
           </h2>
           <div className="space-y-3">
@@ -167,7 +167,7 @@ export default function PanduanPuasaPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--heading)] mb-3">Puasa-Puasa Sunnah</h2>
+          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-3">Puasa-Puasa Sunnah</h2>
           <div className="space-y-3">
             {PUASA_SUNNAH.map((p) => (
               <Kartu key={p.nama}>

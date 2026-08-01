@@ -36,7 +36,7 @@ export default function HaditsIndexPage() {
             >
               <Roundel number={i + 1} variant="maroon" size={40} />
               <div className="min-w-0">
-                <p className="font-display text-lg text-[var(--ink)] group-hover:text-[var(--heading)] transition-colors">
+                <p className="font-display text-lg text-[var(--ink)] group-hover:text-[var(--teal-deep)] transition-colors">
                   {k.nama}
                 </p>
                 <p className="text-xs text-[var(--ink-soft)]">

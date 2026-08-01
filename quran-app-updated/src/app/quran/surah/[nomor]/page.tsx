@@ -1,6 +1,5 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import BackButton from "@/components/BackButton";
 import SurahReader from "@/components/SurahReader";
 import { getSurahDetail } from "@/lib/quran-api";
 import { notFound } from "next/navigation";
@@ -41,7 +40,6 @@ export default async function SurahPage({
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 max-w-2xl mx-auto w-full px-5 md:px-8 py-12">
-        <BackButton href="/quran" label="Kembali ke daftar surat" />
         <div className="mb-4 text-right">
           <a
             href={`/quran/tafsir/${surah.nomor}`}

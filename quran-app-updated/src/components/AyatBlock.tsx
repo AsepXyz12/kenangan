@@ -52,8 +52,8 @@ export default function AyatBlock({
           aria-label={sedangPutar ? `Jeda ayat ${nomorAyat}` : `Putar ayat ${nomorAyat}`}
           className={`flex items-center justify-center w-9 h-9 rounded-full border transition-colors shrink-0 ${
             aktif
-              ? "border-[var(--teal)] bg-[var(--teal)] text-[var(--text-on-dark)]"
-              : "border-[var(--parchment-line)] text-[var(--ink-soft)] hover:border-[var(--teal)] hover:text-[var(--heading)]"
+              ? "border-[var(--teal)] bg-[var(--teal)] text-[var(--parchment)]"
+              : "border-[var(--parchment-line)] text-[var(--ink-soft)] hover:border-[var(--teal)] hover:text-[var(--teal-deep)]"
           }`}
         >
           {sedangMuat ? (

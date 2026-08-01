@@ -32,7 +32,7 @@ export default function FontSizeControl() {
           style={{ fontSize: SIZE_PX[opt.value] }}
           className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
             fontSize === opt.value
-              ? "bg-[var(--teal)] text-[var(--text-on-dark)]"
+              ? "bg-[var(--teal)] text-[var(--parchment)]"
               : "text-[var(--ink-soft)] hover:bg-[var(--parchment-deep)]"
           }`}
         >

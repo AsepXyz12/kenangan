@@ -28,7 +28,7 @@ export default function SurahHeader({
         <h1 className="font-arabic text-4xl md:text-5xl text-[var(--ink)] mb-2" dir="rtl">
           {nama}
         </h1>
-        <p className="font-display text-xl md:text-2xl text-[var(--heading)]">
+        <p className="font-display text-xl md:text-2xl text-[var(--teal-deep)]">
           {namaLatin}
         </p>
         <p className="text-sm text-[var(--ink-soft)] mt-1">&ldquo;{arti}&rdquo;</p>

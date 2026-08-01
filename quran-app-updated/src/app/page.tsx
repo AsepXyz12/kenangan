@@ -18,15 +18,8 @@ const MENU = [
       "Baca lengkap 114 surat dan 30 juz, teks Arab berharakat, transliterasi, dan terjemahan Indonesia.",
   },
   {
-    href: "/iqro",
-    nomor: 2,
-    judul: "Iqro Anak (Jilid 1-6)",
-    deskripsi:
-      "Belajar membaca Al-Qur'an dari mengenal huruf hijaiyah, lengkap dengan suara pelafalan tiap contoh.",
-  },
-  {
     href: "/hadits",
-    nomor: 3,
+    nomor: 2,
     judul: "Hadits 9 Imam",
     deskripsi:
       "62.169 hadits dari sembilan kitab induk, teks Arab dan terjemahan Indonesia, tersimpan langsung di situs ini.",
@@ -97,13 +90,6 @@ const MENU = [
     judul: "Wanita dalam Islam",
     deskripsi: "Kedudukan, hak-hak, dan kisah tokoh muslimah teladan sepanjang sejarah Islam.",
   },
-  {
-    href: "/tahlil-yasin",
-    nomor: 13,
-    judul: "Tahlil, Yasin & Acara Lainnya",
-    deskripsi:
-      "Susunan tahlil lengkap, Surat Yasin, dan panduan bacaan untuk tahlilan, maulid, isra mikraj, dan acara lainnya.",
-  },
 ];
 
 export default async function Home() {
@@ -122,14 +108,14 @@ export default async function Home() {
             <span className="h-px w-10 bg-[var(--gold)] animate-glow" />
           </div>
           <h1
-            className="font-arabic text-gold-foil text-5xl md:text-6xl mb-5 animate-fade-up animate-glow"
+            className="font-arabic text-5xl md:text-6xl text-[var(--ink)] mb-5 animate-fade-up"
             style={{ animationDelay: "0.08s" }}
             dir="rtl"
           >
             القرآن الكريم
           </h1>
           <p
-            className="font-display italic text-2xl md:text-3xl text-[var(--heading)] mb-5 animate-fade-up"
+            className="font-display italic text-2xl md:text-3xl text-[var(--teal-deep)] mb-5 animate-fade-up"
             style={{ animationDelay: "0.16s" }}
           >
             Satu tempat untuk membaca, memahami, dan mengamalkan
@@ -174,7 +160,7 @@ export default async function Home() {
             <p className="text-sm md:text-[15px] text-[var(--ink-soft)] leading-relaxed max-w-xl mx-auto">
               {ayatHariIni.ayat.teksIndonesia}
             </p>
-            <p className="font-display italic text-sm text-[var(--heading)] mt-5 group-hover:text-[var(--gold)] transition-colors">
+            <p className="font-display italic text-sm text-[var(--teal-deep)] mt-5 group-hover:text-[var(--gold)] transition-colors">
               QS. {ayatHariIni.namaLatin}: {ayatHariIni.ayat.nomorAyat}
             </p>
           </Link>
@@ -190,11 +176,11 @@ export default async function Home() {
                 style={{ animationDelay: `${0.4 + i * 0.07}s` }}
               >
                 <Roundel
-                  number={i + 1}
+                  number={m.nomor}
                   variant="teal"
                   className="mb-4 transition-transform duration-500 group-hover:rotate-[18deg]"
                 />
-                <h2 className="font-display text-xl text-[var(--ink)] mb-2 group-hover:text-[var(--heading)] transition-colors">
+                <h2 className="font-display text-xl text-[var(--ink)] mb-2 group-hover:text-[var(--teal-deep)] transition-colors">
                   {m.judul}
                 </h2>
                 <p className="text-sm text-[var(--ink-soft)] leading-relaxed">

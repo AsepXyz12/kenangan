@@ -1,6 +1,5 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import BackButton from "@/components/BackButton";
 import JuzReader, { type JuzSegment } from "@/components/JuzReader";
 import { getJuzBoundary, surahRangeInJuz } from "@/lib/juz-data";
 import { getSurahDetail } from "@/lib/quran-api";
@@ -50,7 +49,6 @@ export default async function JuzPage({
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 max-w-2xl mx-auto w-full px-5 md:px-8 py-12">
-        <BackButton href="/quran" label="Kembali ke daftar surat" />
         <div className="text-center mb-10">
           <p className="text-xs tracking-[0.25em] uppercase text-[var(--gold)] mb-2">
             Juz {nomorJuz}
@@ -64,14 +62,14 @@ export default async function JuzPage({
 
         <div className="flex items-center justify-between mt-10 pt-6 border-t border-[var(--parchment-line)]">
           {juzSebelumnya ? (
-            <Link href={`/quran/juz/${juzSebelumnya}`} className="text-sm text-[var(--heading)] hover:underline">
+            <Link href={`/quran/juz/${juzSebelumnya}`} className="text-sm text-[var(--teal-deep)] hover:underline">
               ← Juz {juzSebelumnya}
             </Link>
           ) : (
             <span />
           )}
           {juzSelanjutnya ? (
-            <Link href={`/quran/juz/${juzSelanjutnya}`} className="text-sm text-[var(--heading)] hover:underline">
+            <Link href={`/quran/juz/${juzSelanjutnya}`} className="text-sm text-[var(--teal-deep)] hover:underline">
               Juz {juzSelanjutnya} →
             </Link>
           ) : (

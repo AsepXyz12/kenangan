@@ -337,7 +337,7 @@ export default function SirahNabawiyahPage() {
                   </span>
                   <h2 className="font-display text-2xl text-[var(--ink)]">{e.judul}</h2>
                 </div>
-                <p className="text-xs uppercase tracking-wide text-[var(--heading)] mb-2">
+                <p className="text-xs uppercase tracking-wide text-[var(--teal-deep)] mb-2">
                   {e.rentang}
                 </p>
                 <p className="text-sm text-[var(--ink-soft)] leading-relaxed">{e.ringkasan}</p>

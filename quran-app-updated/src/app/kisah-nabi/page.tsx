@@ -303,7 +303,7 @@ export default function KisahNabiPage() {
                     </span>
                   </div>
                   {n.gelar && (
-                    <p className="text-xs text-[var(--heading)] mt-1">Gelar: {n.gelar}</p>
+                    <p className="text-xs text-[var(--teal-deep)] mt-1">Gelar: {n.gelar}</p>
                   )}
                   {n.kaum && (
                     <p className="text-xs text-[var(--ink-soft)] mt-0.5">Diutus kepada: {n.kaum}</p>

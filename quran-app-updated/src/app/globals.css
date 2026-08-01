@@ -1,61 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  /* Ditarik agak lebih gelap & hangat dari sebelumnya (f4eeda -> ecd) supaya
-     nggak keliatan "putih polos", lebih berasa mushaf kertas tua yang kaya. */
-  --parchment: #ede2c4;
-  --parchment-deep: #ddc99a;
-  --parchment-line: #c7b077;
-  --ink: #1a140b;
-  --ink-soft: #4d4128;
-  --teal: #1d3c34;
-  --teal-deep: #112620;
+  --parchment: #f4eeda;
+  --parchment-deep: #e8dcb8;
+  --parchment-line: #d8c79a;
+  --ink: #211a10;
+  --ink-soft: #5a4e37;
+  --teal: #24463d;
+  --teal-deep: #16302a;
   --gold: #a97e2f;
-  --gold-bright: #e0b84f;
-  --gold-glow: rgba(224, 184, 79, 0.35);
+  --gold-bright: #c99a3f;
   --maroon: #7c3232;
-  /* --heading dipakai utk warna teks judul/aksen di atas parchment (bisa
-     beda dari --teal-deep di dark mode). --text-on-dark dipakai utk teks
-     yang selalu duduk di atas permukaan teal gelap (drawer menu, badge,
-     tombol bulat) -- nilainya sengaja FIXED, tidak ikut berubah pas ganti
-     tema, karena permukaan teal-nya juga selalu gelap di kedua tema. */
-  --heading: #112620;
-  --text-on-dark: #f1e6c8;
-  color-scheme: light;
-}
-
-/* Mode gelap: nuansa "mushaf malam" — kertas jadi teal gelap berlapis,
-   tinta jadi krem hangat, aksen emas dipertahankan supaya identitas visual
-   situs tetap sama, cuma pindah "suasana" siang -> malam. Diaktifkan lewat
-   attribute data-theme="dark" di <html> (lihat ThemeContext.tsx). */
-[data-theme="dark"] {
-  --parchment: #14211d;
-  --parchment-deep: #0d1815;
-  --parchment-line: #2e4a41;
-  --ink: #f1e6c8;
-  --ink-soft: #c9b98c;
-  --teal: #2a5347;
-  --teal-deep: #0a1613;
-  --gold: #d6a94a;
-  --gold-bright: #f2c968;
-  --gold-glow: rgba(242, 201, 104, 0.25);
-  --maroon: #c46a6a;
-  /* --heading tetap terang di dark mode (bukan ikut jadi lebih gelap kayak
-     --teal-deep), karena dipakai sebagai warna teks di atas parchment yang
-     sudah gelap. Kalau ikut --teal-deep, teks jadi nyaris tak kelihatan
-     (hijau tua di atas hijau tua). */
-  --heading: #8fd9c4;
-  color-scheme: dark;
-}
-
-html {
-  transition: color-scheme 0.3s ease;
-}
-
-body,
-[class*="bg-[var(--parchment"],
-[class*="border-[var(--parchment-line)]"] {
-  transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease;
 }
 
 @theme inline {
@@ -68,7 +23,6 @@ body,
   --color-teal-deep: var(--teal-deep);
   --color-gold: var(--gold);
   --color-gold-bright: var(--gold-bright);
-  --color-gold-glow: var(--gold-glow);
   --color-maroon: var(--maroon);
   --font-arabic: var(--font-arabic);
   --font-display: var(--font-display);
@@ -88,96 +42,8 @@ body {
   color: var(--ink);
   font-family: var(--font-body), serif;
   background-image:
-    /* Motif geometris 8 sudut khas ornamen mushaf, sangat samar (opacity
-       rendah) -> nambah "kedalaman" & kesan berkelas tanpa ganggu keterbacaan
-       teks. Sebelumnya cuma ada dot-grid polos, sekarang ada pola berulang
-       yang lebih terasa "karya", bukan cuma warna rata. */
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='84' viewBox='0 0 84 84'%3E%3Cg fill='none' stroke='%231a140b' stroke-width='0.6' stroke-opacity='0.055'%3E%3Cpath d='M42 4 L58 14 L58 28 L74 38 L74 46 L58 56 L58 70 L42 80 L26 70 L26 56 L10 46 L10 38 L26 28 L26 14 Z'/%3E%3Ccircle cx='42' cy='42' r='16'/%3E%3C/g%3E%3C/svg%3E"),
-    radial-gradient(circle at 1px 1px, rgba(26, 20, 11, 0.1) 1px, transparent 0),
-    radial-gradient(ellipse 900px 500px at 50% -10%, rgba(29, 60, 52, 0.14), transparent 60%),
-    radial-gradient(ellipse 1000px 600px at 100% 0%, rgba(169, 126, 47, 0.12), transparent 55%),
-    radial-gradient(ellipse 1200px 900px at 0% 100%, rgba(26, 20, 11, 0.1), transparent 60%),
-    /* Vignette halus di tepi layar -> pusat perhatian ke tengah, dan
-       "putih"-nya nggak polos rata sampai ke pinggir. */
-    radial-gradient(ellipse 1400px 1000px at 50% 40%, transparent 55%, rgba(26, 20, 11, 0.09) 100%);
-  background-size: 84px 84px, 22px 22px, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
-  background-repeat: repeat, repeat, no-repeat, no-repeat, no-repeat, no-repeat;
-  background-attachment: fixed, fixed, scroll, scroll, scroll, fixed;
-}
-
-/* Kedalaman "elevation" untuk semua kartu/kotak berbingkai di seluruh situs.
-   Sebelumnya kartu cuma pakai garis tipis (hairline border) tanpa bayangan
-   sama sekali, jadi kelihatan datar/pucat di layar HP yang terang. Selector
-   ini menyasar SEMUA elemen yang classname-nya mengandung kombinasi
-   "rounded-*" + border parchment-line, tanpa perlu ubah tiap file halaman. */
-[class*="rounded"][class*="border-[var(--parchment-line)]"] {
-  position: relative;
-  /* Gradasi tipis dari terang ke sedikit lebih gelap + garis emas transparan
-     di puncak, biar permukaan kartu berasa "berlapis kertas mahal", bukan
-     satu warna rata seperti sebelumnya. Dipasang lewat background-image
-     supaya tidak menimpa warna/opacity latar yang sudah didefinisikan tiap
-     komponen (mis. bg-[var(--parchment-deep)]/60). */
-  background-image: linear-gradient(
-    165deg,
-    rgba(255, 250, 235, 0.5) 0%,
-    rgba(255, 250, 235, 0) 30%,
-    rgba(15, 10, 4, 0.05) 100%
-  );
-  box-shadow:
-    0 1px 2px rgba(20, 14, 6, 0.08),
-    0 20px 40px -22px rgba(15, 10, 4, 0.55),
-    inset 0 1px 0 rgba(255, 250, 235, 0.35);
-  transition: box-shadow 0.35s ease, transform 0.35s ease, border-color 0.35s ease;
-}
-
-[class*="rounded"][class*="border-[var(--parchment-line)]"]:hover {
-  box-shadow:
-    0 1px 2px rgba(20, 14, 6, 0.08),
-    0 24px 48px -20px rgba(15, 10, 4, 0.6),
-    0 0 0 1px var(--gold-glow),
-    inset 0 1px 0 rgba(255, 250, 235, 0.4);
-}
-
-/* Navbar & Footer: bayangan halus + kaca gelap tipis supaya nggak nempel rata
-   sama konten dan kelihatan lebih "melayang" di atas halaman. */
-header.sticky {
-  box-shadow: 0 8px 28px -16px rgba(15, 10, 4, 0.6);
-}
-
-/* Header baru dengan hamburger: gradasi teal-tua ke gold tipis di garis bawah
-   supaya nggak keliatan putih/pucat kayak header standar, langsung kerasa
-   "berkelas" begitu halaman dibuka. */
-.header-glass {
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--parchment) 92%, var(--teal) 8%) 0%,
-    var(--parchment) 100%
-  );
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--gold);
-  position: relative;
-}
-
-.header-glass::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -3px;
-  height: 3px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--gold-bright) 20%,
-    var(--gold) 50%,
-    var(--gold-bright) 80%,
-    transparent
-  );
-  opacity: 0.7;
-}
-
-footer {
-  box-shadow: 0 -8px 28px -18px rgba(15, 10, 4, 0.45);
+    radial-gradient(circle at 1px 1px, rgba(33, 26, 16, 0.05) 1px, transparent 0);
+  background-size: 22px 22px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -215,9 +81,7 @@ footer {
   border: 1px solid var(--gold);
   box-shadow:
     0 0 0 3px var(--parchment),
-    0 0 0 4px var(--parchment-line),
-    0 0 32px -6px var(--gold-glow),
-    0 24px 48px -24px rgba(15, 10, 4, 0.6);
+    0 0 0 4px var(--parchment-line);
 }
 
 .ornament-corner::before,
@@ -248,50 +112,6 @@ footer {
   direction: rtl;
 }
 
-/* Teks "foil emas" untuk judul-judul penting -> terasa lebih mewah/"canggih"
-   daripada teks satu warna polos. Dipakai selektif (bukan semua heading)
-   supaya tetap enak dibaca & tidak berlebihan. */
-.text-gold-foil {
-  background: linear-gradient(
-    100deg,
-    var(--gold) 0%,
-    var(--gold-bright) 35%,
-    #fff3d6 50%,
-    var(--gold-bright) 65%,
-    var(--gold) 100%
-  );
-  background-size: 220% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* Tombol utama gaya "foil emas" dengan kedalaman -> dipakai untuk aksi
-   paling penting di halaman (CTA), supaya kontras jelas dari tombol biasa
-   yang cuma outline/flat, dan situs kerasa lebih "hidup". */
-.btn-gold {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: linear-gradient(155deg, var(--gold-bright) 0%, var(--gold) 65%, #8a6320 100%);
-  color: var(--teal-deep);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.5) inset,
-    0 10px 24px -10px rgba(169, 126, 47, 0.65),
-    0 2px 6px rgba(20, 14, 6, 0.25);
-  transition: box-shadow 0.3s ease, transform 0.3s ease, filter 0.3s ease;
-}
-
-.btn-gold:hover {
-  filter: brightness(1.05);
-  transform: translateY(-1px);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.55) inset,
-    0 14px 30px -10px rgba(169, 126, 47, 0.75),
-    0 3px 8px rgba(20, 14, 6, 0.3);
-}
-
 ::selection {
   background: var(--gold);
   color: var(--parchment);
@@ -304,42 +124,6 @@ footer {
 
 .no-scrollbar::-webkit-scrollbar {
   display: none;
-}
-
-/* Scrollbar tipis bergaya "emas" untuk area yang memang scrollable (bukan
-   no-scrollbar) -> kesan modern, konsisten sama identitas warna situs,
-   dibanding scrollbar default abu-abu bawaan browser. */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--gold) transparent;
-}
-
-*::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-*::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: var(--gold);
-  border-radius: 999px;
-  border: 2px solid transparent;
-  background-clip: content-box;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  background-color: var(--gold-bright);
-}
-
-/* Tap highlight bawaan mobile browser (kotak biru/abu pas tap) dimatikan,
-   diganti feedback sendiri lewat active:scale di tiap tombol -> berasa
-   lebih "native app" daripada web biasa. */
-button,
-a {
-  -webkit-tap-highlight-color: transparent;
 }
 
 @keyframes fade-up {
@@ -386,35 +170,4 @@ a {
 
 .animate-twinkle {
   animation: twinkle 2.4s ease-in-out infinite;
-}
-
-/* Skeleton shimmer -> dipakai untuk state loading (mis. daftar surah/hadits
-   yang lagi fetch data) supaya terasa lebih modern & "hidup" dibanding
-   placeholder abu-abu statis. Pakai class ".skeleton" di elemen kotak/garis
-   placeholder. */
-.skeleton {
-  position: relative;
-  overflow: hidden;
-  background: color-mix(in srgb, var(--parchment-line) 35%, transparent);
-  border-radius: 6px;
-}
-
-.skeleton::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  transform: translateX(-100%);
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--gold-glow),
-    transparent
-  );
-  animation: shimmer 1.6s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-  100% {
-    transform: translateX(100%);
-  }
 }

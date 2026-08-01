@@ -16,7 +16,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "rukun-iman",
     "aqidah",
     "fiqih-madzhab",
-    "hukum-islam",
     "panduan-sholat",
     "sholat-khusus",
     "panduan-puasa",

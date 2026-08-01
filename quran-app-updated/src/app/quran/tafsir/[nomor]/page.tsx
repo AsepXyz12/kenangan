@@ -1,6 +1,5 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import BackButton from "@/components/BackButton";
 import Roundel from "@/components/Roundel";
 import { getTafsirSurah } from "@/lib/tafsir-api";
 import { getSurahDetail } from "@/lib/quran-api";
@@ -50,7 +49,6 @@ export default async function TafsirPage({
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 max-w-2xl mx-auto w-full px-5 md:px-8 py-12">
-        <BackButton href={`/quran/surah/${nomorSurah}`} label="Kembali ke surat" />
         <div className="mb-10">
           <p className="text-xs tracking-[0.25em] uppercase text-[var(--gold)] mb-2">
             Tafsir · Kemenag RI

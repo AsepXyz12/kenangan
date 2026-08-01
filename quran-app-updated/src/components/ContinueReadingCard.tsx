@@ -29,7 +29,7 @@ export default function ContinueReadingCard() {
         href={`/quran/surah/${lastRead.surahNomor}#ayat-${lastRead.ayatNomor}`}
         className="group flex items-center gap-4 rounded-sm border border-[var(--gold)]/50 bg-[var(--gold)]/[0.07] px-5 py-4 transition-colors hover:bg-[var(--gold)]/[0.13]"
       >
-        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[var(--teal)] text-[var(--text-on-dark)] shrink-0">
+        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[var(--teal)] text-[var(--parchment)] shrink-0">
           <BookOpen size={17} />
         </div>
         <div className="min-w-0 flex-1">
@@ -40,7 +40,7 @@ export default function ContinueReadingCard() {
             {lastRead.namaLatin} &middot; ayat {lastRead.ayatNomor}
           </p>
         </div>
-        <span className="text-[var(--heading)] group-hover:translate-x-1 transition-transform shrink-0">
+        <span className="text-[var(--teal-deep)] group-hover:translate-x-1 transition-transform shrink-0">
           →
         </span>
       </Link>

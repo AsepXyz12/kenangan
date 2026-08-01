@@ -28,7 +28,7 @@ export default function QuranIndexClient({ surahList }: { surahList: SurahListIt
           onClick={() => setTab("juz")}
           className={`px-4 py-2 rounded-full text-sm border transition-colors ${
             tab === "juz"
-              ? "bg-[var(--teal)] text-[var(--text-on-dark)] border-[var(--teal)]"
+              ? "bg-[var(--teal)] text-[var(--parchment)] border-[var(--teal)]"
               : "border-[var(--parchment-line)] text-[var(--ink-soft)] hover:border-[var(--teal)]"
           }`}
         >
@@ -38,7 +38,7 @@ export default function QuranIndexClient({ surahList }: { surahList: SurahListIt
           onClick={() => setTab("surat")}
           className={`px-4 py-2 rounded-full text-sm border transition-colors ${
             tab === "surat"
-              ? "bg-[var(--teal)] text-[var(--text-on-dark)] border-[var(--teal)]"
+              ? "bg-[var(--teal)] text-[var(--parchment)] border-[var(--teal)]"
               : "border-[var(--parchment-line)] text-[var(--ink-soft)] hover:border-[var(--teal)]"
           }`}
         >

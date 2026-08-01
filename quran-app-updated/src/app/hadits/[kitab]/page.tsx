@@ -44,7 +44,7 @@ export default async function HaditsKitabPage({
       <Navbar />
       <main className="flex-1 max-w-2xl mx-auto w-full px-5 md:px-8 py-12">
         <div className="mb-8">
-          <Link href="/hadits" className="text-xs text-[var(--ink-soft)] hover:text-[var(--heading)]">
+          <Link href="/hadits" className="text-xs text-[var(--ink-soft)] hover:text-[var(--teal-deep)]">
             ← Semua Kitab
           </Link>
           <h1 className="font-display text-3xl text-[var(--ink)] mt-2 mb-1">
@@ -76,7 +76,7 @@ export default async function HaditsKitabPage({
           {result.page > 1 ? (
             <Link
               href={`/hadits/${meta.slug}?halaman=${result.page - 1}`}
-              className="text-sm text-[var(--heading)] hover:underline"
+              className="text-sm text-[var(--teal-deep)] hover:underline"
             >
               ← Halaman sebelumnya
             </Link>
@@ -86,7 +86,7 @@ export default async function HaditsKitabPage({
           {result.page < totalPages ? (
             <Link
               href={`/hadits/${meta.slug}?halaman=${result.page + 1}`}
-              className="text-sm text-[var(--heading)] hover:underline"
+              className="text-sm text-[var(--teal-deep)] hover:underline"
             >
               Halaman selanjutnya →
             </Link>

@@ -17,7 +17,7 @@ function DaftarKartu({ items }: { items: string[] }) {
       <ul className="space-y-2">
         {items.map((s) => (
           <li key={s} className="text-sm text-[var(--ink-soft)] flex gap-2">
-            <span className="text-[var(--heading)]">•</span>
+            <span className="text-[var(--teal-deep)]">•</span>
             <span>{s}</span>
           </li>
         ))}
@@ -154,7 +154,7 @@ export default function PanduanHajiUmrahPage() {
       <Navbar />
       <main className="flex-1 max-w-3xl mx-auto px-5 md:px-8 py-10 md:py-14 w-full">
         <span className="text-xs tracking-widest uppercase text-[var(--ink-soft)]">Fiqih Ibadah</span>
-        <h1 className="font-display text-3xl md:text-4xl text-[var(--heading)] mt-1 mb-3">
+        <h1 className="font-display text-3xl md:text-4xl text-[var(--teal-deep)] mt-1 mb-3">
           Panduan Haji & Umrah
         </h1>
         <p className="text-[var(--ink-soft)] mb-10 leading-relaxed">
@@ -164,12 +164,12 @@ export default function PanduanHajiUmrahPage() {
         </p>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--heading)] mb-3">Syarat Wajib Haji</h2>
+          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-3">Syarat Wajib Haji</h2>
           <DaftarKartu items={SYARAT_WAJIB_HAJI} />
         </section>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--heading)] mb-3">Tiga Jenis Pelaksanaan Haji</h2>
+          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-3">Tiga Jenis Pelaksanaan Haji</h2>
           <div className="space-y-3">
             {JENIS_HAJI.map((j) => (
               <Kartu key={j.nama}>
@@ -181,7 +181,7 @@ export default function PanduanHajiUmrahPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--heading)] mb-3">Miqat (Batas Memulai Ihram)</h2>
+          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-3">Miqat (Batas Memulai Ihram)</h2>
           <div className="space-y-3">
             {MIQAT.map((m) => (
               <Kartu key={m.nama}>
@@ -193,7 +193,7 @@ export default function PanduanHajiUmrahPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--heading)] mb-3">Niat & Talbiyah</h2>
+          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-3">Niat & Talbiyah</h2>
           <h3 className="font-medium text-[var(--ink)] mb-2">Niat Umrah</h3>
           <BacaanBlok {...NIAT_UMRAH} />
           <h3 className="font-medium text-[var(--ink)] mt-6 mb-2">Niat Haji</h3>
@@ -203,14 +203,14 @@ export default function PanduanHajiUmrahPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--heading)] mb-3">Rukun Umrah</h2>
+          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-3">Rukun Umrah</h2>
           <DaftarKartu items={RUKUN_UMRAH} />
           <h3 className="font-medium text-[var(--ink)] mt-6 mb-2">Urutan Pelaksanaan Umrah</h3>
           <Kartu>
             <ol className="space-y-2">
               {URUTAN_UMRAH.map((s, i) => (
                 <li key={s} className="text-sm text-[var(--ink-soft)] flex gap-2">
-                  <span className="text-[var(--heading)] shrink-0">{i + 1}.</span>
+                  <span className="text-[var(--teal-deep)] shrink-0">{i + 1}.</span>
                   <span>{s}</span>
                 </li>
               ))}
@@ -219,7 +219,7 @@ export default function PanduanHajiUmrahPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--heading)] mb-3">Rukun Haji</h2>
+          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-3">Rukun Haji</h2>
           <DaftarKartu items={RUKUN_HAJI} />
           <h3 className="font-medium text-[var(--ink)] mt-6 mb-2">Wajib Haji</h3>
           <p className="text-sm text-[var(--ink-soft)] mb-3">
@@ -232,7 +232,7 @@ export default function PanduanHajiUmrahPage() {
             <ol className="space-y-2">
               {URUTAN_HAJI.map((s, i) => (
                 <li key={s} className="text-sm text-[var(--ink-soft)] flex gap-2">
-                  <span className="text-[var(--heading)] shrink-0">{i + 1}.</span>
+                  <span className="text-[var(--teal-deep)] shrink-0">{i + 1}.</span>
                   <span>{s}</span>
                 </li>
               ))}
@@ -241,7 +241,7 @@ export default function PanduanHajiUmrahPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--heading)] mb-3">Larangan Selama Ihram</h2>
+          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-3">Larangan Selama Ihram</h2>
           <h3 className="font-medium text-[var(--ink)] mb-2">Larangan Umum (Laki-laki & Perempuan)</h3>
           <DaftarKartu items={LARANGAN_IHRAM_UMUM} />
           <h3 className="font-medium text-[var(--ink)] mt-6 mb-2">Khusus Laki-laki</h3>

@@ -140,7 +140,7 @@ export default function LiveStrip() {
 
         <div className="text-center">
           {isJumat ? (
-            <p className="font-display italic text-lg md:text-xl text-[var(--heading)]">
+            <p className="font-display italic text-lg md:text-xl text-[var(--teal-deep)]">
               Selamat hari Jumat &mdash; perbanyak selawat dan baca Surat
               Al-Kahf hari ini.
             </p>
@@ -149,7 +149,7 @@ export default function LiveStrip() {
               <p className="text-xs tracking-[0.2em] uppercase text-[var(--ink-soft)] mb-2">
                 Menuju hari Jumat (WIB)
               </p>
-              <div className="flex items-center justify-center gap-3 md:gap-5 font-display text-2xl md:text-3xl text-[var(--heading)] tabular-nums">
+              <div className="flex items-center justify-center gap-3 md:gap-5 font-display text-2xl md:text-3xl text-[var(--teal-deep)] tabular-nums">
                 <span>
                   {pad(days)}
                   <span className="block text-[10px] tracking-widest uppercase text-[var(--ink-soft)] font-body not-italic mt-1">

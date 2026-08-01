@@ -26,7 +26,7 @@ export default function VisitorCounter() {
   return (
     <div className="inline-flex items-center gap-2.5 rounded-full border border-[var(--gold)]/40 bg-[var(--parchment-deep)]/60 px-5 py-2.5">
       <Users size={18} strokeWidth={2} className="text-[var(--gold-bright)]" />
-      <span className="font-display text-lg md:text-xl text-[var(--heading)] tabular-nums">
+      <span className="font-display text-lg md:text-xl text-[var(--teal-deep)] tabular-nums">
         {count.toLocaleString("id-ID")}
       </span>
       <span className="text-sm text-[var(--ink-soft)]">

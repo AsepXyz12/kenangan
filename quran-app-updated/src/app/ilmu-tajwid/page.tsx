@@ -199,7 +199,7 @@ export default function IlmuTajwidPage() {
                     className="rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment-deep)]/40 p-5"
                   >
                     <div className="flex items-baseline justify-between gap-3 flex-wrap mb-2">
-                      <p className="text-sm font-semibold text-[var(--heading)]">{h.nama}</p>
+                      <p className="text-sm font-semibold text-[var(--teal-deep)]">{h.nama}</p>
                       {h.huruf && (
                         <p className="ayat-arabic text-lg text-[var(--ink)]" dir="rtl">
                           {h.huruf}
