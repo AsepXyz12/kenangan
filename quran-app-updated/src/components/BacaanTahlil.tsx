@@ -12,7 +12,7 @@ function BacaanCard({ b }: { b: Bacaan }) {
       <div className="flex items-center justify-between gap-3 mb-2">
         <h3 className="font-medium text-[var(--ink)]">{b.judul}</h3>
         {b.ulangan && (
-          <span className="shrink-0 text-xs px-2.5 py-1 rounded-full bg-[var(--parchment-deep)] text-[var(--teal-deep)]">
+          <span className="shrink-0 text-xs px-2.5 py-1 rounded-full bg-[var(--parchment-deep)] text-[var(--heading)]">
             {b.ulangan}
           </span>
         )}
@@ -86,7 +86,7 @@ export default function BacaanTahlil({
           onClick={() => setAktif("tahlil")}
           className={`flex-1 px-4 py-3 rounded-sm text-sm border transition-colors ${
             aktif === "tahlil"
-              ? "bg-[var(--teal)] text-[var(--parchment)] border-[var(--teal)]"
+              ? "bg-[var(--teal)] text-[var(--text-on-dark)] border-[var(--teal)]"
               : "border-[var(--parchment-line)] text-[var(--ink-soft)] hover:border-[var(--teal)]"
           }`}
         >
@@ -96,7 +96,7 @@ export default function BacaanTahlil({
           onClick={() => setAktif("yasin")}
           className={`flex-1 px-4 py-3 rounded-sm text-sm border transition-colors ${
             aktif === "yasin"
-              ? "bg-[var(--teal)] text-[var(--parchment)] border-[var(--teal)]"
+              ? "bg-[var(--teal)] text-[var(--text-on-dark)] border-[var(--teal)]"
               : "border-[var(--parchment-line)] text-[var(--ink-soft)] hover:border-[var(--teal)]"
           }`}
         >

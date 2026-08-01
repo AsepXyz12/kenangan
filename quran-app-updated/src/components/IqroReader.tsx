@@ -7,7 +7,7 @@ import type { IqroJilid } from "@/lib/iqro-data";
 import { isSpeechSupported, speakArabic, speakSequence, stopSpeaking } from "@/lib/iqro-audio";
 
 const VARIANT_TEXT: Record<string, string> = {
-  teal: "text-[var(--teal-deep)]",
+  teal: "text-[var(--heading)]",
   gold: "text-[var(--gold)]",
   maroon: "text-[var(--maroon)]",
 };
@@ -85,7 +85,7 @@ export default function IqroReader({ jilid }: { jilid: IqroJilid }) {
             onClick={() => setHalamanAktif(i)}
             className={`px-3.5 py-1.5 rounded-full text-xs border transition-colors ${
               i === halamanAktif
-                ? `${warnaBg} text-[var(--parchment)] border-transparent`
+                ? `${warnaBg} text-[var(--text-on-dark)] border-transparent`
                 : "border-[var(--parchment-line)] text-[var(--ink-soft)] hover:border-[var(--gold)]"
             }`}
           >
@@ -108,7 +108,7 @@ export default function IqroReader({ jilid }: { jilid: IqroJilid }) {
         <button
           onClick={handlePlaySemua}
           disabled={!supported}
-          className={`flex items-center gap-2 mb-6 px-4 py-2 rounded-full text-sm text-[var(--parchment)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${warnaBg} hover:opacity-90`}
+          className={`flex items-center gap-2 mb-6 px-4 py-2 rounded-full text-sm text-[var(--text-on-dark)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${warnaBg} hover:opacity-90`}
         >
           <PlayCircle size={16} />
           {playingAll ? "Berhenti" : "Dengarkan semua di halaman ini"}
@@ -135,7 +135,7 @@ export default function IqroReader({ jilid }: { jilid: IqroJilid }) {
                 <span
                   className={`inline-flex items-center justify-center w-7 h-7 rounded-full transition-colors ${
                     aktif ? warnaBg : "bg-[var(--parchment-line)]/60"
-                  } ${aktif ? "text-[var(--parchment)]" : "text-[var(--ink-soft)]"}`}
+                  } ${aktif ? "text-[var(--text-on-dark)]" : "text-[var(--ink-soft)]"}`}
                 >
                   {!supported ? (
                     <VolumeX size={13} />
@@ -161,14 +161,14 @@ export default function IqroReader({ jilid }: { jilid: IqroJilid }) {
       {/* Navigasi antar jilid */}
       <div className="flex items-center justify-between mt-8 pt-6 border-t border-[var(--parchment-line)] text-sm">
         {jilid.jilid > 1 ? (
-          <Link href={`/iqro/${jilid.jilid - 1}`} className="text-[var(--teal-deep)] hover:underline">
+          <Link href={`/iqro/${jilid.jilid - 1}`} className="text-[var(--heading)] hover:underline">
             ← Jilid {jilid.jilid - 1}
           </Link>
         ) : (
           <span />
         )}
         {jilid.jilid < 6 ? (
-          <Link href={`/iqro/${jilid.jilid + 1}`} className="text-[var(--teal-deep)] hover:underline">
+          <Link href={`/iqro/${jilid.jilid + 1}`} className="text-[var(--heading)] hover:underline">
             Jilid {jilid.jilid + 1} →
           </Link>
         ) : (

@@ -42,7 +42,7 @@ export default async function HaditsDetailPage({
         <div className="mb-8">
           <Link
             href={`/hadits/${meta.slug}?halaman=${halamanListing}`}
-            className="text-xs text-[var(--ink-soft)] hover:text-[var(--teal-deep)]"
+            className="text-xs text-[var(--ink-soft)] hover:text-[var(--heading)]"
           >
             ← {meta.nama}
           </Link>
@@ -66,7 +66,7 @@ export default async function HaditsDetailPage({
           {hadits.nomor > 1 ? (
             <Link
               href={`/hadits/${meta.slug}/${hadits.nomor - 1}`}
-              className="text-sm text-[var(--teal-deep)] hover:underline"
+              className="text-sm text-[var(--heading)] hover:underline"
             >
               ← No. {hadits.nomor - 1}
             </Link>
@@ -76,7 +76,7 @@ export default async function HaditsDetailPage({
           {hadits.nomor < meta.totalHadits ? (
             <Link
               href={`/hadits/${meta.slug}/${hadits.nomor + 1}`}
-              className="text-sm text-[var(--teal-deep)] hover:underline"
+              className="text-sm text-[var(--heading)] hover:underline"
             >
               No. {hadits.nomor + 1} →
             </Link>

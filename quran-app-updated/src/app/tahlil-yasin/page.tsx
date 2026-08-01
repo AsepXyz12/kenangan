@@ -84,7 +84,7 @@ export default async function TahlilYasinPage() {
                 <ul className="space-y-1 mb-3">
                   {a.bacaan.map((b) => (
                     <li key={b} className="text-sm text-[var(--ink-soft)] flex gap-2">
-                      <span className="text-[var(--teal-deep)]">•</span>
+                      <span className="text-[var(--heading)]">•</span>
                       <span>{b}</span>
                     </li>
                   ))}

@@ -22,7 +22,7 @@ export default function JuzReader({ segments }: { segments: JuzSegment[] }) {
         <FontSizeControl />
         <button
           onClick={() => setTampilkanLatin((v) => !v)}
-          className="text-xs px-3 py-1.5 rounded-full border border-[var(--parchment-line)] text-[var(--ink-soft)] hover:border-[var(--teal)] hover:text-[var(--teal-deep)] transition-colors"
+          className="text-xs px-3 py-1.5 rounded-full border border-[var(--parchment-line)] text-[var(--ink-soft)] hover:border-[var(--teal)] hover:text-[var(--heading)] transition-colors"
         >
           {tampilkanLatin ? "Sembunyikan transliterasi" : "Tampilkan transliterasi"}
         </button>

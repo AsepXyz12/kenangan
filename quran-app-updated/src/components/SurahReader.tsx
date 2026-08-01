@@ -97,7 +97,7 @@ export default function SurahReader({
         </div>
         <button
           onClick={() => setTampilkanLatin((v) => !v)}
-          className="text-xs px-3 py-1.5 rounded-full border border-[var(--parchment-line)] text-[var(--ink-soft)] hover:border-[var(--teal)] hover:text-[var(--teal-deep)] transition-colors"
+          className="text-xs px-3 py-1.5 rounded-full border border-[var(--parchment-line)] text-[var(--ink-soft)] hover:border-[var(--teal)] hover:text-[var(--heading)] transition-colors"
         >
           {tampilkanLatin ? "Sembunyikan transliterasi" : "Tampilkan transliterasi"}
         </button>
@@ -122,7 +122,7 @@ export default function SurahReader({
           {surah.suratSebelumnya ? (
             <Link
               href={`/quran/surah/${surah.suratSebelumnya.nomor}`}
-              className="text-sm text-[var(--teal-deep)] hover:underline"
+              className="text-sm text-[var(--heading)] hover:underline"
             >
               ← {surah.suratSebelumnya.namaLatin}
             </Link>
@@ -132,7 +132,7 @@ export default function SurahReader({
           {surah.suratSelanjutnya ? (
             <Link
               href={`/quran/surah/${surah.suratSelanjutnya.nomor}`}
-              className="text-sm text-[var(--teal-deep)] hover:underline"
+              className="text-sm text-[var(--heading)] hover:underline"
             >
               {surah.suratSelanjutnya.namaLatin} →
             </Link>

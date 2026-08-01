@@ -42,7 +42,7 @@ export default function IqroIndexPage() {
               className="group relative rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment-deep)]/60 p-6 transition-all duration-300 hover:border-[var(--gold)] hover:-translate-y-1"
             >
               <Roundel number={j.jilid} variant={j.warna} className="mb-4" />
-              <h2 className="font-display text-lg text-[var(--ink)] mb-2 group-hover:text-[var(--teal-deep)] transition-colors">
+              <h2 className="font-display text-lg text-[var(--ink)] mb-2 group-hover:text-[var(--heading)] transition-colors">
                 {j.judul}
               </h2>
               <p className="text-sm text-[var(--ink-soft)] leading-relaxed">{j.ringkasan}</p>

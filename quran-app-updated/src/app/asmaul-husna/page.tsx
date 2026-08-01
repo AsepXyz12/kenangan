@@ -113,7 +113,7 @@ export default function AsmaulHusnaPage() {
       <Navbar />
       <main className="flex-1 max-w-4xl mx-auto px-5 md:px-8 py-10 md:py-14 w-full">
         <span className="text-xs tracking-widest uppercase text-[var(--ink-soft)]">Aqidah</span>
-        <h1 className="font-display text-3xl md:text-4xl text-[var(--teal-deep)] mt-1 mb-3">
+        <h1 className="font-display text-3xl md:text-4xl text-[var(--heading)] mt-1 mb-3">
           Asmaul Husna
         </h1>
         <p className="text-[var(--ink-soft)] mb-4 leading-relaxed">
@@ -141,7 +141,7 @@ export default function AsmaulHusnaPage() {
                   {a.arab}
                 </p>
               </div>
-              <p className="font-medium text-[var(--teal-deep)] text-sm">{a.latin}</p>
+              <p className="font-medium text-[var(--heading)] text-sm">{a.latin}</p>
               <p className="text-xs text-[var(--ink-soft)]">{a.arti}</p>
             </div>
           ))}

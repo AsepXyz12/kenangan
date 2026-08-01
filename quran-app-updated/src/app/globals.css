@@ -14,6 +14,13 @@
   --gold-bright: #e0b84f;
   --gold-glow: rgba(224, 184, 79, 0.35);
   --maroon: #7c3232;
+  /* --heading dipakai utk warna teks judul/aksen di atas parchment (bisa
+     beda dari --teal-deep di dark mode). --text-on-dark dipakai utk teks
+     yang selalu duduk di atas permukaan teal gelap (drawer menu, badge,
+     tombol bulat) -- nilainya sengaja FIXED, tidak ikut berubah pas ganti
+     tema, karena permukaan teal-nya juga selalu gelap di kedua tema. */
+  --heading: #112620;
+  --text-on-dark: #f1e6c8;
   color-scheme: light;
 }
 
@@ -33,6 +40,11 @@
   --gold-bright: #f2c968;
   --gold-glow: rgba(242, 201, 104, 0.25);
   --maroon: #c46a6a;
+  /* --heading tetap terang di dark mode (bukan ikut jadi lebih gelap kayak
+     --teal-deep), karena dipakai sebagai warna teks di atas parchment yang
+     sudah gelap. Kalau ikut --teal-deep, teks jadi nyaris tak kelihatan
+     (hijau tua di atas hijau tua). */
+  --heading: #8fd9c4;
   color-scheme: dark;
 }
 

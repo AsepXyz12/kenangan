@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BackButton from "@/components/BackButton";
 import IqroReader from "@/components/IqroReader";
 import IqroCredit from "@/components/IqroCredit";
 import { IQRO_DATA, getIqroJilid } from "@/lib/iqro-data";
@@ -38,6 +39,7 @@ export default async function IqroJilidPage({
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 max-w-2xl mx-auto w-full px-5 md:px-8 py-12">
+        <BackButton href="/iqro" label="Kembali ke daftar jilid" />
         <p className="text-xs tracking-[0.25em] uppercase text-[var(--gold)] mb-2">
           Iqro Jilid {data.jilid}
         </p>

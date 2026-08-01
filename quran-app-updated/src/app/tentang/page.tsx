@@ -45,7 +45,7 @@ export default function TentangPage() {
             Dibuat oleh
           </h2>
           <div className="rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment-deep)]/40 p-6 md:p-7">
-            <p className="font-display text-lg text-[var(--teal-deep)] mb-2">Ramzz</p>
+            <p className="font-display text-lg text-[var(--heading)] mb-2">Ramzz</p>
             <p className="text-sm text-[var(--ink-soft)] leading-relaxed">
               Mushaf dibangun dan dirawat oleh Ramzz, dengan niat sederhana:
               menyediakan satu tempat yang mudah diakses siapa saja untuk
@@ -62,7 +62,7 @@ export default function TentangPage() {
             Metode Iqro
           </h2>
           <div className="rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment-deep)]/40 p-6 md:p-7">
-            <p className="font-display text-lg text-[var(--teal-deep)] mb-2">
+            <p className="font-display text-lg text-[var(--heading)] mb-2">
               KH As&apos;ad Humam (1933–1996)
             </p>
             <p className="text-sm text-[var(--ink-soft)] leading-relaxed mb-4">

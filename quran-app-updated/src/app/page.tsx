@@ -129,7 +129,7 @@ export default async function Home() {
             القرآن الكريم
           </h1>
           <p
-            className="font-display italic text-2xl md:text-3xl text-[var(--teal-deep)] mb-5 animate-fade-up"
+            className="font-display italic text-2xl md:text-3xl text-[var(--heading)] mb-5 animate-fade-up"
             style={{ animationDelay: "0.16s" }}
           >
             Satu tempat untuk membaca, memahami, dan mengamalkan
@@ -174,7 +174,7 @@ export default async function Home() {
             <p className="text-sm md:text-[15px] text-[var(--ink-soft)] leading-relaxed max-w-xl mx-auto">
               {ayatHariIni.ayat.teksIndonesia}
             </p>
-            <p className="font-display italic text-sm text-[var(--teal-deep)] mt-5 group-hover:text-[var(--gold)] transition-colors">
+            <p className="font-display italic text-sm text-[var(--heading)] mt-5 group-hover:text-[var(--gold)] transition-colors">
               QS. {ayatHariIni.namaLatin}: {ayatHariIni.ayat.nomorAyat}
             </p>
           </Link>
@@ -194,7 +194,7 @@ export default async function Home() {
                   variant="teal"
                   className="mb-4 transition-transform duration-500 group-hover:rotate-[18deg]"
                 />
-                <h2 className="font-display text-xl text-[var(--ink)] mb-2 group-hover:text-[var(--teal-deep)] transition-colors">
+                <h2 className="font-display text-xl text-[var(--ink)] mb-2 group-hover:text-[var(--heading)] transition-colors">
                   {m.judul}
                 </h2>
                 <p className="text-sm text-[var(--ink-soft)] leading-relaxed">

@@ -130,7 +130,7 @@ export default function SirahSahabatPage() {
                     <span className="text-[var(--gold)]"> radhiyallahu &#39;anhu</span>
                   </h2>
                   {s.gelar && (
-                    <p className="text-xs text-[var(--teal-deep)] mt-1">{s.gelar}</p>
+                    <p className="text-xs text-[var(--heading)] mt-1">{s.gelar}</p>
                   )}
                 </div>
               </div>

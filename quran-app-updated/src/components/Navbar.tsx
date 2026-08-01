@@ -91,7 +91,7 @@ export default function Navbar() {
       <header className="header-glass sticky top-0 z-40">
         <div className="max-w-5xl mx-auto px-5 md:px-8 h-16 flex items-center justify-between gap-4">
           <Link href="/" className="flex items-center gap-2 shrink-0 group">
-            <span className="flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-br from-[var(--gold-bright)] to-[var(--gold)] text-[var(--teal-deep)] shadow-[0_4px_16px_-4px_rgba(224,184,79,0.6)] transition-transform group-hover:rotate-[12deg]">
+            <span className="flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-br from-[var(--gold-bright)] to-[var(--gold)] text-[var(--heading)] shadow-[0_4px_16px_-4px_rgba(224,184,79,0.6)] transition-transform group-hover:rotate-[12deg]">
               <BookOpenText size={18} strokeWidth={2.2} />
             </span>
             <span
@@ -128,7 +128,7 @@ export default function Navbar() {
               onClick={() => setOpen(true)}
               aria-label="Buka menu navigasi"
               aria-expanded={open}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-full border border-[var(--gold)]/40 bg-[var(--teal-deep)] text-[var(--parchment)] hover:bg-[var(--teal)] hover:border-[var(--gold)] active:scale-95 transition-all duration-200 shadow-[0_6px_18px_-8px_rgba(17,38,32,0.7)]"
+              className="flex items-center gap-2 px-3.5 py-2 rounded-full border border-[var(--gold)]/40 bg-[var(--teal-deep)] text-[var(--text-on-dark)] hover:bg-[var(--teal)] hover:border-[var(--gold)] active:scale-95 transition-all duration-200 shadow-[0_6px_18px_-8px_rgba(17,38,32,0.7)]"
             >
               <Menu size={18} />
               <span className="text-sm hidden sm:inline">Menu</span>
@@ -149,7 +149,7 @@ export default function Navbar() {
       {/* Drawer */}
       <nav
         aria-label="Navigasi utama"
-        className={`fixed top-0 right-0 z-50 h-dvh w-[86%] max-w-sm bg-[var(--teal-deep)] text-[var(--parchment)] shadow-[-24px_0_60px_-24px_rgba(0,0,0,0.6)] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] overflow-y-auto ${
+        className={`fixed top-0 right-0 z-50 h-dvh w-[86%] max-w-sm bg-[var(--teal-deep)] text-[var(--text-on-dark)] shadow-[-24px_0_60px_-24px_rgba(0,0,0,0.6)] transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] overflow-y-auto ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -183,7 +183,7 @@ export default function Navbar() {
                       className={`py-2.5 text-[15px] border-b border-white/[0.06] transition-colors ${
                         active
                           ? "text-[var(--gold-bright)]"
-                          : "text-[var(--parchment)]/90 hover:text-[var(--gold-bright)]"
+                          : "text-[var(--text-on-dark)]/90 hover:text-[var(--gold-bright)]"
                       }`}
                     >
                       {item.label}

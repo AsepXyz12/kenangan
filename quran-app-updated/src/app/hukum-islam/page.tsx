@@ -197,7 +197,7 @@ export default function HukumIslamPage() {
                 key={h.nama}
                 className="rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment-deep)]/40 p-5"
               >
-                <h3 className="font-display text-base text-[var(--teal-deep)] mb-1">{h.nama}</h3>
+                <h3 className="font-display text-base text-[var(--heading)] mb-1">{h.nama}</h3>
                 <p className="text-sm text-[var(--ink-soft)] leading-relaxed mb-2">{h.arti}</p>
                 <p className="text-xs text-[var(--ink-soft)]">
                   <span className="font-medium">Contoh:</span> {h.contoh}

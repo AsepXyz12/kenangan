@@ -289,7 +289,7 @@ const DOA_ZIARAH_KUBUR: Doa = {
 function Seksi({ title, desc, items }: { title: string; desc?: string; items: Doa[] }) {
   return (
     <section className="mb-12">
-      <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-2">{title}</h2>
+      <h2 className="font-display text-2xl text-[var(--heading)] mb-2">{title}</h2>
       {desc && <p className="text-sm text-[var(--ink-soft)] mb-4">{desc}</p>}
       <div className="space-y-3">
         {items.map((d) => (
@@ -306,7 +306,7 @@ export default function DoaDzikirPage() {
       <Navbar />
       <main className="flex-1 max-w-3xl mx-auto px-5 md:px-8 py-10 md:py-14 w-full">
         <span className="text-xs tracking-widest uppercase text-[var(--ink-soft)]">Amalan Harian</span>
-        <h1 className="font-display text-3xl md:text-4xl text-[var(--teal-deep)] mt-1 mb-3">
+        <h1 className="font-display text-3xl md:text-4xl text-[var(--heading)] mt-1 mb-3">
           Doa & Dzikir Harian
         </h1>
         <p className="text-[var(--ink-soft)] mb-10 leading-relaxed">
@@ -329,7 +329,7 @@ export default function DoaDzikirPage() {
         />
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-2">Dzikir Setelah Sholat Fardu</h2>
+          <h2 className="font-display text-2xl text-[var(--heading)] mb-2">Dzikir Setelah Sholat Fardu</h2>
           <p className="text-sm text-[var(--ink-soft)] mb-4">
             Rangkaian dzikir yang dianjurkan dibaca setelah salam pada setiap sholat wajib.
           </p>
@@ -341,7 +341,7 @@ export default function DoaDzikirPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-2">Dzikir Pagi & Petang</h2>
+          <h2 className="font-display text-2xl text-[var(--heading)] mb-2">Dzikir Pagi & Petang</h2>
           <p className="text-sm text-[var(--ink-soft)] mb-4">
             Dzikir pagi dibaca setelah Subuh hingga terbit matahari, dzikir petang dibaca setelah
             Ashar hingga Maghrib.
@@ -358,7 +358,7 @@ export default function DoaDzikirPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-2">Dzikir Petang (Lengkap)</h2>
+          <h2 className="font-display text-2xl text-[var(--heading)] mb-2">Dzikir Petang (Lengkap)</h2>
           <p className="text-sm text-[var(--ink-soft)] mb-4">
             Dibaca setelah Ashar hingga Maghrib. Susunannya sama dengan dzikir pagi,
             hanya redaksi &quot;pagi&quot; diganti &quot;petang&quot;.

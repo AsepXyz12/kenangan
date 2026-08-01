@@ -546,7 +546,7 @@ export default function PanduanSholatPage() {
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment-deep)]/40 p-5">
-              <h3 className="text-sm font-semibold text-[var(--teal-deep)] mb-3">
+              <h3 className="text-sm font-semibold text-[var(--heading)] mb-3">
                 Syarat Wajib
               </h3>
               <ul className="space-y-2 text-sm text-[var(--ink-soft)]">
@@ -559,7 +559,7 @@ export default function PanduanSholatPage() {
               </ul>
             </div>
             <div className="rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment-deep)]/40 p-5">
-              <h3 className="text-sm font-semibold text-[var(--teal-deep)] mb-3">
+              <h3 className="text-sm font-semibold text-[var(--heading)] mb-3">
                 Syarat Sah
               </h3>
               <ul className="space-y-2 text-sm text-[var(--ink-soft)]">
@@ -615,7 +615,7 @@ export default function PanduanSholatPage() {
                 key={n.nama}
                 className="rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment-deep)]/40 p-5"
               >
-                <p className="text-sm font-semibold text-[var(--teal-deep)] mb-2">
+                <p className="text-sm font-semibold text-[var(--heading)] mb-2">
                   Niat Sholat {n.nama} ({n.rakaat} Rakaat)
                 </p>
                 <p className="ayat-arabic text-xl md:text-2xl text-[var(--ink)] mb-2" dir="rtl">
@@ -731,7 +731,7 @@ export default function PanduanSholatPage() {
                 key={s.nama}
                 className="rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment-deep)]/40 p-4"
               >
-                <p className="text-sm font-semibold text-[var(--teal-deep)] mb-1">{s.nama}</p>
+                <p className="text-sm font-semibold text-[var(--heading)] mb-1">{s.nama}</p>
                 <p className="text-sm text-[var(--ink-soft)] leading-relaxed">{s.keterangan}</p>
               </div>
             ))}
@@ -749,7 +749,7 @@ export default function PanduanSholatPage() {
                 key={n.nama}
                 className="rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment-deep)]/40 p-5"
               >
-                <p className="text-sm font-semibold text-[var(--teal-deep)] mb-2">{n.nama}</p>
+                <p className="text-sm font-semibold text-[var(--heading)] mb-2">{n.nama}</p>
                 <p className="ayat-arabic text-lg md:text-xl text-[var(--ink)] mb-2" dir="rtl">
                   {n.arab}
                 </p>
@@ -785,7 +785,7 @@ export default function PanduanSholatPage() {
             Sujud Sahwi
           </h2>
           <div className="rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment-deep)]/40 p-6">
-            <h3 className="text-sm font-semibold text-[var(--teal-deep)] mb-3">
+            <h3 className="text-sm font-semibold text-[var(--heading)] mb-3">
               Penyebab Disunnahkannya Sujud Sahwi
             </h3>
             <ul className="space-y-2 text-sm text-[var(--ink-soft)] mb-4">
