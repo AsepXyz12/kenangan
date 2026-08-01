@@ -46,6 +46,7 @@ const APP_SHELL = [
   "/rukun-iman",
   "/aqidah",
   "/fiqih-madzhab",
+  "/hukum-islam",
   "/akhlak-adab",
   "/ilmu-tajwid",
   "/sirah-sahabat",

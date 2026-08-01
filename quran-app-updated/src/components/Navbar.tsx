@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, BookOpenText } from "lucide-react";
+import { Menu, X, BookOpenText, Sun, Moon } from "lucide-react";
+import { useTheme } from "@/components/ThemeContext";
 
 // Catatan: daftar href di sini juga di-precache untuk offline di public/sw.js
 // (APP_SHELL). Kalau nambah/hapus menu di sini, update juga di sw.js.
@@ -36,6 +37,7 @@ const NAV_GROUPS: { label: string; items: { href: string; label: string }[] }[] 
       { href: "/rukun-iman", label: "Rukun Iman" },
       { href: "/aqidah", label: "Aqidah & Tauhid" },
       { href: "/fiqih-madzhab", label: "Fiqih & Madzhab" },
+      { href: "/hukum-islam", label: "Hukum-Hukum Islam" },
       { href: "/akhlak-adab", label: "Akhlak & Adab" },
       { href: "/ilmu-tajwid", label: "Ilmu Tajwid" },
     ],
@@ -62,6 +64,7 @@ const NAV_GROUPS: { label: string; items: { href: string; label: string }[] }[] 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const { theme, toggleTheme } = useTheme();
 
   // Tutup drawer otomatis tiap kali pindah halaman.
   useEffect(() => {
@@ -99,16 +102,38 @@ export default function Navbar() {
             </span>
           </Link>
 
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            aria-label="Buka menu navigasi"
-            aria-expanded={open}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-full border border-[var(--gold)]/40 bg-[var(--teal-deep)] text-[var(--parchment)] hover:bg-[var(--teal)] hover:border-[var(--gold)] transition-colors shadow-[0_6px_18px_-8px_rgba(17,38,32,0.7)]"
-          >
-            <Menu size={18} />
-            <span className="text-sm hidden sm:inline">Menu</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={theme === "dark" ? "Ganti ke mode terang" : "Ganti ke mode gelap"}
+              className="relative flex items-center justify-center w-10 h-10 rounded-full border border-[var(--gold)]/40 bg-[var(--teal-deep)] text-[var(--gold-bright)] hover:border-[var(--gold)] hover:bg-[var(--teal)] active:scale-90 transition-all duration-200 shadow-[0_6px_18px_-8px_rgba(17,38,32,0.7)]"
+            >
+              <Sun
+                size={17}
+                className={`absolute transition-all duration-300 ${
+                  theme === "dark" ? "opacity-0 -rotate-90 scale-50" : "opacity-100 rotate-0 scale-100"
+                }`}
+              />
+              <Moon
+                size={17}
+                className={`absolute transition-all duration-300 ${
+                  theme === "dark" ? "opacity-100 rotate-0 scale-100" : "opacity-0 rotate-90 scale-50"
+                }`}
+              />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              aria-label="Buka menu navigasi"
+              aria-expanded={open}
+              className="flex items-center gap-2 px-3.5 py-2 rounded-full border border-[var(--gold)]/40 bg-[var(--teal-deep)] text-[var(--parchment)] hover:bg-[var(--teal)] hover:border-[var(--gold)] active:scale-95 transition-all duration-200 shadow-[0_6px_18px_-8px_rgba(17,38,32,0.7)]"
+            >
+              <Menu size={18} />
+              <span className="text-sm hidden sm:inline">Menu</span>
+            </button>
+          </div>
         </div>
       </header>
 

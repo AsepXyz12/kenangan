@@ -14,6 +14,36 @@
   --gold-bright: #e0b84f;
   --gold-glow: rgba(224, 184, 79, 0.35);
   --maroon: #7c3232;
+  color-scheme: light;
+}
+
+/* Mode gelap: nuansa "mushaf malam" — kertas jadi teal gelap berlapis,
+   tinta jadi krem hangat, aksen emas dipertahankan supaya identitas visual
+   situs tetap sama, cuma pindah "suasana" siang -> malam. Diaktifkan lewat
+   attribute data-theme="dark" di <html> (lihat ThemeContext.tsx). */
+[data-theme="dark"] {
+  --parchment: #14211d;
+  --parchment-deep: #0d1815;
+  --parchment-line: #2e4a41;
+  --ink: #f1e6c8;
+  --ink-soft: #c9b98c;
+  --teal: #2a5347;
+  --teal-deep: #0a1613;
+  --gold: #d6a94a;
+  --gold-bright: #f2c968;
+  --gold-glow: rgba(242, 201, 104, 0.25);
+  --maroon: #c46a6a;
+  color-scheme: dark;
+}
+
+html {
+  transition: color-scheme 0.3s ease;
+}
+
+body,
+[class*="bg-[var(--parchment"],
+[class*="border-[var(--parchment-line)]"] {
+  transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease;
 }
 
 @theme inline {
@@ -264,6 +294,42 @@ footer {
   display: none;
 }
 
+/* Scrollbar tipis bergaya "emas" untuk area yang memang scrollable (bukan
+   no-scrollbar) -> kesan modern, konsisten sama identitas warna situs,
+   dibanding scrollbar default abu-abu bawaan browser. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--gold);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--gold-bright);
+}
+
+/* Tap highlight bawaan mobile browser (kotak biru/abu pas tap) dimatikan,
+   diganti feedback sendiri lewat active:scale di tiap tombol -> berasa
+   lebih "native app" daripada web biasa. */
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
 @keyframes fade-up {
   from {
     opacity: 0;
@@ -308,4 +374,35 @@ footer {
 
 .animate-twinkle {
   animation: twinkle 2.4s ease-in-out infinite;
+}
+
+/* Skeleton shimmer -> dipakai untuk state loading (mis. daftar surah/hadits
+   yang lagi fetch data) supaya terasa lebih modern & "hidup" dibanding
+   placeholder abu-abu statis. Pakai class ".skeleton" di elemen kotak/garis
+   placeholder. */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--parchment-line) 35%, transparent);
+  border-radius: 6px;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--gold-glow),
+    transparent
+  );
+  animation: shimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
 }
