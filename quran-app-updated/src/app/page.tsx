@@ -18,8 +18,15 @@ const MENU = [
       "Baca lengkap 114 surat dan 30 juz, teks Arab berharakat, transliterasi, dan terjemahan Indonesia.",
   },
   {
-    href: "/hadits",
+    href: "/iqro",
     nomor: 2,
+    judul: "Iqro Anak (Jilid 1-6)",
+    deskripsi:
+      "Belajar membaca Al-Qur'an dari mengenal huruf hijaiyah, lengkap dengan suara pelafalan tiap contoh.",
+  },
+  {
+    href: "/hadits",
+    nomor: 3,
     judul: "Hadits 9 Imam",
     deskripsi:
       "62.169 hadits dari sembilan kitab induk, teks Arab dan terjemahan Indonesia, tersimpan langsung di situs ini.",
@@ -183,7 +190,7 @@ export default async function Home() {
                 style={{ animationDelay: `${0.4 + i * 0.07}s` }}
               >
                 <Roundel
-                  number={m.nomor}
+                  number={i + 1}
                   variant="teal"
                   className="mb-4 transition-transform duration-500 group-hover:rotate-[18deg]"
                 />

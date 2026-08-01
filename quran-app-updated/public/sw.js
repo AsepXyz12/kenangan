@@ -24,6 +24,13 @@ const APP_SHELL = [
   "/icons/icon-192.png",
   "/icons/icon-512.png",
   "/quran",
+  "/iqro",
+  "/iqro/1",
+  "/iqro/2",
+  "/iqro/3",
+  "/iqro/4",
+  "/iqro/5",
+  "/iqro/6",
   "/hadits",
   "/thaharah",
   "/panduan-sholat",
@@ -174,12 +181,26 @@ self.addEventListener("fetch", (event) => {
         for (let attempt = 0; attempt < 2; attempt++) {
           try {
             const response = await fetch(request.clone());
-            try {
-              const cache = await caches.open(PAGE_CACHE);
-              cache.put(request, response.clone());
-            } catch (err) {
-              console.error("[sw] gagal simpan cache halaman", err);
+            // PENTING: hanya simpan response yang BENAR-BENAR OK (status 200-299).
+            // Sebelumnya semua response disimpan tanpa dicek -> kalau server sempat
+            // membalas error (404/500, mis. race condition saat deploy baru lagi
+            // berjalan), error itu ikut kesimpan permanen di cache dengan key URL
+            // itu. Akibatnya: begitu user balik ke halaman itu (mis. klik "Mushaf"
+            // atau kembali ke dashboard) lalu request berikutnya kena kondisi apa
+            // pun yang bikin fallback ke cache, yang muncul ya halaman rusak itu
+            // lagi dan lagi, walau situsnya sendiri sebenarnya sudah normal.
+            if (response.ok) {
+              try {
+                const cache = await caches.open(PAGE_CACHE);
+                cache.put(request, response.clone());
+              } catch (err) {
+                console.error("[sw] gagal simpan cache halaman", err);
+              }
+              return response;
             }
+            // Response gagal (4xx/5xx) tapi bukan karena network putus -> jangan
+            // simpan ke cache, langsung balikin apa adanya (biar Next.js error.tsx
+            // / not-found.tsx yang nangani, bukan disamarkan jadi masalah offline).
             return response;
           } catch {
             // lanjut ke percobaan berikutnya, atau ke fallback di bawah
