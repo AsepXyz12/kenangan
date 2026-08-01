@@ -228,9 +228,25 @@ self.addEventListener("fetch", (event) => {
           if (response.ok) cache.put(request, response.clone());
           return response;
         } catch (err) {
+          // Sebelumnya: kalau nggak ada di cache, kita throw err lagi ->
+          // respondWith() REJECT -> di koneksi lemot/putus-nyambung ini
+          // sering kejadian, dan Next.js router lalu fallback ke reload
+          // penuh, yang kadang malah nyangkut jadi layar bawaan Chrome
+          // "This page couldn't load". Sekarang: cache dulu (kalau ada,
+          // walau URL persis beda-beda tiap request karena token _rsc),
+          // dan kalau tetap nggak ada, coba SEKALI LAGI ke network alih-alih
+          // langsung nyerah -> jauh lebih tahan koneksi jelek.
           const cached = await cache.match(request);
           if (cached) return cached;
-          throw err;
+          try {
+            return await fetch(request);
+          } catch {
+            // Terakhir: balikin response gagal yang RAPI (bukan throw),
+            // supaya Next.js router nangkepnya sebagai fetch gagal biasa
+            // dan bisa retry sendiri, bukan meledak jadi network error
+            // mentah di level browser.
+            return new Response(null, { status: 503, statusText: "Offline" });
+          }
         }
       })
     );
@@ -255,11 +271,11 @@ self.addEventListener("fetch", (event) => {
         } catch (err) {
           const cached = await cache.match(request);
           if (cached) return cached;
-          // Nggak ada di cache & network gagal -> biarin error asli dari fetch
-          // yang naik ke browser (browser lebih tahu cara nampilin & retry
-          // request gambar/font/script yang gagal), jangan bikin error baru
-          // pakai Response.error() yang malah numbulin "This page couldn't load".
-          throw err;
+          // Nggak ada di cache & network gagal -> dulu di-throw lagi, yang di
+          // koneksi super lemot bisa berujung "This page couldn't load".
+          // Sekarang balikin Response gagal yang rapi supaya browser/Next.js
+          // yang nangani (retry/placeholder), bukan rejection mentah.
+          return new Response(null, { status: 503, statusText: "Offline" });
         }
       })
     );
