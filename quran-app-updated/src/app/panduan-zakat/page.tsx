@@ -91,7 +91,7 @@ export default function PanduanZakatPage() {
       <Navbar />
       <main className="flex-1 max-w-3xl mx-auto px-5 md:px-8 py-10 md:py-14 w-full">
         <span className="text-xs tracking-widest uppercase text-[var(--ink-soft)]">Fiqih Ibadah</span>
-        <h1 className="font-display text-3xl md:text-4xl text-[var(--teal-deep)] mt-1 mb-3">
+        <h1 className="font-display text-3xl md:text-4xl text-[var(--heading)] mt-1 mb-3">
           Panduan Zakat
         </h1>
         <p className="text-[var(--ink-soft)] mb-10 leading-relaxed">
@@ -100,12 +100,12 @@ export default function PanduanZakatPage() {
         </p>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-3">Zakat Fitrah</h2>
+          <h2 className="font-display text-2xl text-[var(--heading)] mb-3">Zakat Fitrah</h2>
           <Kartu>
             <ul className="space-y-2">
               {KETENTUAN_ZAKAT_FITRAH.map((k) => (
                 <li key={k} className="text-sm text-[var(--ink-soft)] flex gap-2">
-                  <span className="text-[var(--teal-deep)]">•</span>
+                  <span className="text-[var(--heading)]">•</span>
                   <span>{k}</span>
                 </li>
               ))}
@@ -120,7 +120,7 @@ export default function PanduanZakatPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-3">
+          <h2 className="font-display text-2xl text-[var(--heading)] mb-3">
             Zakat Mal — Nisab & Kadar per Jenis Harta
           </h2>
           <div className="space-y-3">
@@ -134,7 +134,7 @@ export default function PanduanZakatPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-3">
+          <h2 className="font-display text-2xl text-[var(--heading)] mb-3">
             8 Golongan Penerima Zakat (Asnaf)
           </h2>
           <p className="text-sm text-[var(--ink-soft)] mb-4">
@@ -144,7 +144,7 @@ export default function PanduanZakatPage() {
             {DELAPAN_ASNAF.map((a, i) => (
               <Kartu key={a.nama}>
                 <div className="flex items-baseline gap-3">
-                  <span className="text-[var(--teal-deep)] font-display text-lg">{i + 1}.</span>
+                  <span className="text-[var(--heading)] font-display text-lg">{i + 1}.</span>
                   <div>
                     <h4 className="font-medium text-[var(--ink)]">{a.nama}</h4>
                     <p className="text-sm text-[var(--ink-soft)] leading-relaxed mt-1">{a.keterangan}</p>

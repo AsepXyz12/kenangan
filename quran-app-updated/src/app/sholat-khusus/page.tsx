@@ -57,7 +57,7 @@ function DaftarKartu({ items }: { items: string[] }) {
       <ul className="space-y-2">
         {items.map((s) => (
           <li key={s} className="text-sm text-[var(--ink-soft)] flex gap-2">
-            <span className="text-[var(--teal-deep)]">•</span>
+            <span className="text-[var(--heading)]">•</span>
             <span>{s}</span>
           </li>
         ))}
@@ -72,7 +72,7 @@ function OrderedKartu({ items }: { items: string[] }) {
       <ol className="space-y-2">
         {items.map((s, i) => (
           <li key={s} className="text-sm text-[var(--ink-soft)] flex gap-2">
-            <span className="text-[var(--teal-deep)] shrink-0">{i + 1}.</span>
+            <span className="text-[var(--heading)] shrink-0">{i + 1}.</span>
             <span>{s}</span>
           </li>
         ))}
@@ -244,7 +244,7 @@ const DOA_ISTISQA = {
 function Seksi({ title, desc, children }: { title: string; desc?: string; children: React.ReactNode }) {
   return (
     <section className="mb-12">
-      <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-2">{title}</h2>
+      <h2 className="font-display text-2xl text-[var(--heading)] mb-2">{title}</h2>
       {desc && <p className="text-sm text-[var(--ink-soft)] mb-4">{desc}</p>}
       {children}
     </section>
@@ -257,7 +257,7 @@ export default function SholatKhususPage() {
       <Navbar />
       <main className="flex-1 max-w-3xl mx-auto px-5 md:px-8 py-10 md:py-14 w-full">
         <span className="text-xs tracking-widest uppercase text-[var(--ink-soft)]">Fiqih Ibadah</span>
-        <h1 className="font-display text-3xl md:text-4xl text-[var(--teal-deep)] mt-1 mb-3">
+        <h1 className="font-display text-3xl md:text-4xl text-[var(--heading)] mt-1 mb-3">
           Sholat-Sholat Khusus
         </h1>
         <p className="text-[var(--ink-soft)] mb-10 leading-relaxed">

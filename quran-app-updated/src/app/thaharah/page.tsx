@@ -135,7 +135,7 @@ export default function ThaharahPage() {
         <div className="flex items-center gap-3 mb-2">
           <span className="text-xs tracking-widest uppercase text-[var(--ink-soft)]">Fiqih Ibadah</span>
         </div>
-        <h1 className="font-display text-3xl md:text-4xl text-[var(--teal-deep)] mb-3">
+        <h1 className="font-display text-3xl md:text-4xl text-[var(--heading)] mb-3">
           Thaharah — Panduan Bersuci
         </h1>
         <p className="text-[var(--ink-soft)] mb-10 leading-relaxed">
@@ -146,7 +146,7 @@ export default function ThaharahPage() {
         </p>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-4">Macam-Macam Air</h2>
+          <h2 className="font-display text-2xl text-[var(--heading)] mb-4">Macam-Macam Air</h2>
           <div className="space-y-3">
             {AIR_SUCI.map((a) => (
               <Kartu key={a.kategori}>
@@ -158,7 +158,7 @@ export default function ThaharahPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-2">Wudhu</h2>
+          <h2 className="font-display text-2xl text-[var(--heading)] mb-2">Wudhu</h2>
           <p className="text-sm text-[var(--ink-soft)] mb-4">
             Bersuci dari hadas kecil, wajib sebelum sholat jika belum dalam keadaan berwudhu.
           </p>
@@ -171,7 +171,7 @@ export default function ThaharahPage() {
             {RUKUN_WUDHU.map((r) => (
               <Kartu key={r.nomor}>
                 <div className="flex items-baseline gap-3">
-                  <span className="text-[var(--teal-deep)] font-display text-lg">{r.nomor}.</span>
+                  <span className="text-[var(--heading)] font-display text-lg">{r.nomor}.</span>
                   <div>
                     <h4 className="font-medium text-[var(--ink)]">{r.judul}</h4>
                     <p className="text-sm text-[var(--ink-soft)] leading-relaxed mt-1">{r.penjelasan}</p>
@@ -189,7 +189,7 @@ export default function ThaharahPage() {
             <ul className="space-y-2">
               {SUNNAH_WUDHU.map((s) => (
                 <li key={s} className="text-sm text-[var(--ink-soft)] flex gap-2">
-                  <span className="text-[var(--teal-deep)]">•</span>
+                  <span className="text-[var(--heading)]">•</span>
                   <span>{s}</span>
                 </li>
               ))}
@@ -201,7 +201,7 @@ export default function ThaharahPage() {
             <ul className="space-y-2">
               {PEMBATAL_WUDHU.map((s) => (
                 <li key={s} className="text-sm text-[var(--ink-soft)] flex gap-2">
-                  <span className="text-[var(--teal-deep)]">•</span>
+                  <span className="text-[var(--heading)]">•</span>
                   <span>{s}</span>
                 </li>
               ))}
@@ -210,7 +210,7 @@ export default function ThaharahPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-2">Mandi Wajib (Ghusl)</h2>
+          <h2 className="font-display text-2xl text-[var(--heading)] mb-2">Mandi Wajib (Ghusl)</h2>
           <p className="text-sm text-[var(--ink-soft)] mb-4">
             Bersuci dari hadas besar. Wajib dilakukan sebelum sholat bila mengalami salah satu sebab berikut.
           </p>
@@ -233,7 +233,7 @@ export default function ThaharahPage() {
             {RUKUN_MANDI_WAJIB.map((r) => (
               <Kartu key={r.nomor}>
                 <div className="flex items-baseline gap-3">
-                  <span className="text-[var(--teal-deep)] font-display text-lg">{r.nomor}.</span>
+                  <span className="text-[var(--heading)] font-display text-lg">{r.nomor}.</span>
                   <div>
                     <h4 className="font-medium text-[var(--ink)]">{r.judul}</h4>
                     <p className="text-sm text-[var(--ink-soft)] leading-relaxed mt-1">{r.penjelasan}</p>
@@ -248,7 +248,7 @@ export default function ThaharahPage() {
             <ol className="space-y-2">
               {TATA_CARA_MANDI_WAJIB.map((s, i) => (
                 <li key={s} className="text-sm text-[var(--ink-soft)] flex gap-2">
-                  <span className="text-[var(--teal-deep)] shrink-0">{i + 1}.</span>
+                  <span className="text-[var(--heading)] shrink-0">{i + 1}.</span>
                   <span>{s}</span>
                 </li>
               ))}
@@ -257,7 +257,7 @@ export default function ThaharahPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-2">Tayamum</h2>
+          <h2 className="font-display text-2xl text-[var(--heading)] mb-2">Tayamum</h2>
           <p className="text-sm text-[var(--ink-soft)] mb-4">
             Pengganti wudhu atau mandi wajib menggunakan debu suci, dilakukan pada kondisi tertentu
             saat air tidak dapat digunakan.
@@ -268,7 +268,7 @@ export default function ThaharahPage() {
             <ul className="space-y-2">
               {SEBAB_TAYAMUM.map((s) => (
                 <li key={s} className="text-sm text-[var(--ink-soft)] flex gap-2">
-                  <span className="text-[var(--teal-deep)]">•</span>
+                  <span className="text-[var(--heading)]">•</span>
                   <span>{s}</span>
                 </li>
               ))}
@@ -283,7 +283,7 @@ export default function ThaharahPage() {
             <ol className="space-y-2">
               {TATA_CARA_TAYAMUM.map((s, i) => (
                 <li key={s} className="text-sm text-[var(--ink-soft)] flex gap-2">
-                  <span className="text-[var(--teal-deep)] shrink-0">{i + 1}.</span>
+                  <span className="text-[var(--heading)] shrink-0">{i + 1}.</span>
                   <span>{s}</span>
                 </li>
               ))}

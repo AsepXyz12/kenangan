@@ -25,6 +25,72 @@ export default function TentangPage() {
 
         <section className="mb-10">
           <h2 className="font-display text-xl text-[var(--ink)] mb-4">
+            Source Code Terbuka
+          </h2>
+          <div className="rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment-deep)]/40 p-6 md:p-7">
+            <p className="text-sm text-[var(--ink-soft)] leading-relaxed">
+              Source code website ini bebas diambil, dipelajari, dan
+              dikembangkan lebih lanjut oleh siapa saja. Tujuan awal
+              dibangunnya Mushaf memang untuk mencari pahala jariyah, jadi
+              silakan dimanfaatkan untuk kebaikan — baik untuk belajar,
+              dipakai sendiri, maupun disebarluaskan kembali. Semoga menjadi
+              amal yang terus mengalir manfaatnya bagi siapa pun yang
+              menggunakan maupun melanjutkannya.
+            </p>
+          </div>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="font-display text-xl text-[var(--ink)] mb-4">
+            Dibuat oleh
+          </h2>
+          <div className="rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment-deep)]/40 p-6 md:p-7">
+            <p className="font-display text-lg text-[var(--heading)] mb-2">Ramzz</p>
+            <p className="text-sm text-[var(--ink-soft)] leading-relaxed">
+              Mushaf dibangun dan dirawat oleh Ramzz, dengan niat sederhana:
+              menyediakan satu tempat yang mudah diakses siapa saja untuk
+              membaca Al-Qur&apos;an, belajar hadits, dan memahami ajaran
+              Islam dari berbagai sisi. Semoga apa yang tersusun di sini
+              menjadi ladang pahala yang terus mengalir, dan bermanfaat bagi
+              siapa pun yang membacanya — sekarang maupun di masa depan.
+            </p>
+          </div>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="font-display text-xl text-[var(--ink)] mb-4">
+            Metode Iqro
+          </h2>
+          <div className="rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment-deep)]/40 p-6 md:p-7">
+            <p className="font-display text-lg text-[var(--heading)] mb-2">
+              KH As&apos;ad Humam (1933–1996)
+            </p>
+            <p className="text-sm text-[var(--ink-soft)] leading-relaxed mb-4">
+              Materi belajar membaca Al-Qur&apos;an untuk anak di halaman Iqro
+              pada Mushaf disusun ulang mengikuti alur metode Iqro yang
+              dirintis oleh KH As&apos;ad Humam bersama Team Tadarus
+              &laquo;AMM&raquo; Yogyakarta. Metode ini telah membantu jutaan
+              anak di Indonesia belajar membaca Al-Qur&apos;an secara cepat
+              dan mudah sejak akhir tahun 1980-an. Semoga amal beliau menjadi
+              ilmu yang terus mengalir manfaatnya.
+            </p>
+            <p className="text-sm text-[var(--ink-soft)] leading-relaxed">
+              <span className="font-medium text-[var(--ink)]">
+                Buku yang direkomendasikan:
+              </span>{" "}
+              &laquo;Iqro&rsquo; — Cara Cepat Belajar Membaca Al-Qur&apos;an&raquo;
+              (Jilid 1–6), karya KH As&apos;ad Humam, terbitan Balai Litbang
+              LPTQ Nasional Team Tadarus &laquo;AMM&raquo; Yogyakarta. Untuk
+              hasil belajar yang lebih maksimal, buku fisik/aplikasi resminya
+              tetap dianjurkan sebagai pendamping, didampingi
+              orang tua/ustadz untuk koreksi makhraj dan tajwid secara
+              langsung.
+            </p>
+          </div>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="font-display text-xl text-[var(--ink)] mb-4">
             Sumber Data
           </h2>
           <div className="space-y-4 text-sm text-[var(--ink-soft)] leading-relaxed">

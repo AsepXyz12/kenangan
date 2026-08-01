@@ -34,7 +34,7 @@ export default function HaditsJumpBox({
       />
       <button
         type="submit"
-        className="px-4 py-2.5 rounded-sm bg-[var(--teal)] text-[var(--parchment)] hover:bg-[var(--teal-deep)] transition-colors text-sm shrink-0"
+        className="px-4 py-2.5 rounded-sm bg-[var(--teal)] text-[var(--text-on-dark)] hover:bg-[var(--teal-deep)] transition-colors text-sm shrink-0"
       >
         Buka
       </button>

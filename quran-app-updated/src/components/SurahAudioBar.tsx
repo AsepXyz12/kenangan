@@ -53,7 +53,7 @@ export default function SurahAudioBar({
         <button
           onClick={handleToggle}
           aria-label={sedangMemutarSurahIni ? "Jeda murottal" : `Putar murottal ${namaLatin}`}
-          className="flex items-center justify-center w-9 h-9 rounded-full bg-[var(--teal)] text-[var(--parchment)] hover:bg-[var(--teal-deep)] transition-colors shrink-0"
+          className="flex items-center justify-center w-9 h-9 rounded-full bg-[var(--teal)] text-[var(--text-on-dark)] hover:bg-[var(--teal-deep)] transition-colors shrink-0"
         >
           {sedangMemutarSurahIni ? (
             <Pause size={16} fill="currentColor" />

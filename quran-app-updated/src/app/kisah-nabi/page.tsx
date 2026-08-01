@@ -13,6 +13,8 @@ type Nabi = {
   kisah: string;
   hikmah: string;
   dalil?: string;
+  hadits?: string;
+  haditsSumber?: string;
 };
 
 const NABI: Nabi[] = [
@@ -26,6 +28,9 @@ const NABI: Nabi[] = [
     hikmah:
       "Kesalahan yang diikuti dengan penyesalan dan tobat yang sungguh-sungguh akan diampuni Allah; kesombongan Iblis mengajarkan bahaya merasa lebih baik dari sesama makhluk, dan kisah Qabil-Habil mengingatkan bahaya iri hati yang dibiarkan menguasai diri.",
     dalil: "QS. Al-Baqarah: 30–37",
+    hadits:
+      "Rasulullah ﷺ bersabda bahwa sebaik-baik hari adalah hari Jumat, karena pada hari itu Adam diciptakan dan dimasukkan ke surga. Beliau ﷺ juga mengisahkan pertemuannya dengan Adam di langit pertama saat peristiwa Isra Mikraj, di mana Adam menyambutnya dan mengakui kenabiannya.",
+    haditsSumber: "HR. Muslim no. 854 (keutamaan hari Jumat); HR. Bukhari no. 3887 & Muslim no. 164 (hadits Isra Mikraj)",
   },
   {
     nomor: 2,
@@ -35,6 +40,9 @@ const NABI: Nabi[] = [
       "Idris hidup beberapa generasi setelah Nabi Adam dan Nabi Syits, pada masa manusia mulai banyak berselisih dan menyimpang. Ia dikenal sebagai orang pertama yang diberi kepandaian menulis dengan pena serta memiliki wawasan luas tentang perbintangan dan perhitungan, sehingga sebagian ulama menyebutnya guru bagi banyak ilmu di zamannya. Al-Qur'an menegaskan Idris sebagai sosok yang sangat jujur (shiddiq) dan sabar dalam berdakwah menyeru kaumnya kepada tauhid serta mengingatkan mereka agar menghentikan kezaliman dan kemaksiatan yang merajalela. Karena keteguhan ibadah dan ketaatannya, Allah menceritakannya sebagai hamba yang diangkat ke kedudukan yang tinggi dan mulia — sebuah kemuliaan istimewa yang disebutkan langsung dalam Al-Qur'an.",
     hikmah: "Ketekunan dalam menuntut ilmu, kejujuran yang konsisten, dan kesabaran dalam berdakwah dapat mengangkat derajat seorang hamba ke kedudukan yang sangat mulia di sisi Allah.",
     dalil: "QS. Maryam: 56–57",
+    hadits:
+      "Dalam hadits Isra Mikraj, Rasulullah ﷺ mengisahkan bahwa beliau bertemu Idris di langit keempat, saling mengucap salam, dan Idris menyambutnya sebagai saudara sekaligus nabi yang saleh.",
+    haditsSumber: "HR. Bukhari no. 3887 & Muslim no. 164",
   },
   {
     nomor: 3,
@@ -47,6 +55,9 @@ const NABI: Nabi[] = [
     hikmah:
       "Dakwah membutuhkan kesabaran luar biasa meski hasilnya sedikit; pertolongan Allah datang bagi siapa yang teguh di jalan kebenaran, sekalipun harus berpisah dari keluarga yang ingkar — sebab ikatan keimanan lebih utama daripada ikatan darah.",
     dalil: "QS. Hud: 25–49, QS. Nuh: 1–28",
+    hadits:
+      "Dalam hadits panjang tentang syafaat di hari kiamat, Rasulullah ﷺ mengisahkan bahwa manusia akan mendatangi Nuh sebagai rasul pertama yang diutus ke bumi untuk memohon syafaat, namun Nuh enggan dan merasa tidak berhak karena pernah berdoa meminta sesuatu yang tidak seharusnya ia minta kepada Allah, lalu mengarahkan mereka kepada Ibrahim.",
+    haditsSumber: "HR. Bukhari no. 4712 & Muslim no. 194 (hadits syafaat)",
   },
   {
     nomor: 4,
@@ -78,6 +89,9 @@ const NABI: Nabi[] = [
       "Sejak muda, Ibrahim mempertanyakan kepercayaan ayahnya, Azar, yang seorang pembuat dan penyembah berhala. Ia merenungkan bintang, bulan, dan matahari sebagai kemungkinan Tuhan, namun menyadari semuanya terbenam dan lenyap, sehingga ia yakin bahwa hanya Allah, Pencipta langit dan bumi, yang layak disembah. Untuk membuktikan kepada kaumnya bahwa berhala tidak berdaya, Ibrahim menghancurkan seluruh berhala di kuil kecuali yang paling besar, lalu mengalungkan kapak ke leher berhala besar itu. Ketika kaumnya menuduhnya, ia menjawab dengan sindiran agar mereka bertanya kepada berhala besar itu sendiri — jawaban yang membungkam mereka namun membuat mereka murka dan memutuskan membakarnya hidup-hidup. Ibrahim dilemparkan ke dalam kobaran api besar, namun Allah memerintahkan api itu menjadi dingin dan penuh keselamatan baginya, sehingga ia keluar tanpa cedera sedikit pun. Ibrahim kemudian berhijrah, menikahi Sarah, dan kemudian memiliki putra dari Hajar bernama Ismail. Atas perintah Allah, ia membawa Hajar dan Ismail yang masih bayi ke lembah tandus Makkah dan meninggalkan mereka di sana; dari kepanikan Hajar mencari air muncul mata air Zamzam yang mengalir hingga kini. Ujian terbesar Ibrahim datang lewat mimpi berulang yang memerintahkannya menyembelih Ismail; ketika keduanya pasrah dan bersiap melaksanakan perintah itu, Allah menggantinya dengan seekor domba sembelihan — peristiwa yang diperingati umat Islam setiap Iduladha. Bersama Ismail yang telah dewasa, Ibrahim membangun kembali Ka'bah sebagai rumah ibadah pertama untuk menyembah Allah semata, sekaligus mendoakan agar keturunannya kelak diutus seorang rasul dari kalangan mereka sendiri.",
     hikmah: "Keyakinan tauhid yang kokoh dan ketaatan penuh kepada Allah akan mendatangkan pertolongan-Nya, sekalipun ujiannya sangat berat; kepasrahan Ibrahim dan Ismail mengajarkan bahwa cinta kepada Allah harus melampaui cinta kepada apa pun, termasuk anak yang paling disayangi.",
     dalil: "QS. Al-Anbiya: 51–70, QS. As-Saffat: 100–107",
+    hadits:
+      "Dalam hadits syafaat, Rasulullah ﷺ mengabarkan bahwa Ibrahim, yang disebut sebagai kekasih Allah, juga enggan memberi syafaat karena merasa pernah mengucapkan tiga kalimat yang terkesan tidak sepenuhnya benar meski sejatinya beralasan (di antaranya mengatakan dirinya sedang sakit untuk menghindar dari kaumnya yang menyembah berhala). Dalam hadits Isra Mikraj, Rasulullah ﷺ juga bertemu Ibrahim di langit ketujuh, tingkatan tertinggi yang dilewati sebelum Sidratul Muntaha.",
+    haditsSumber: "HR. Bukhari no. 3357 & Muslim no. 2371 (kisah tiga dusta Ibrahim); HR. Bukhari no. 3887 & Muslim no. 164 (Isra Mikraj)",
   },
   {
     nomor: 7,
@@ -88,6 +102,9 @@ const NABI: Nabi[] = [
       "Luth, keponakan Nabi Ibrahim, diutus kepada kaum Sadum yang melakukan perbuatan keji yang belum pernah dilakukan umat sebelumnya. Setelah mereka terus menolak dakwahnya, Allah membinasakan negeri itu dengan membalikkan tanahnya dan menghujani mereka dengan batu, sementara Luth dan keluarganya yang beriman—kecuali istrinya yang ingkar—diselamatkan.",
     hikmah: "Perbuatan keji yang dilakukan terang-terangan dan tanpa rasa malu mengundang murka Allah; iman seseorang tidak menjamin keselamatan pasangannya jika ia sendiri memilih ingkar.",
     dalil: "QS. Al-A'raf: 80–84, QS. Hud: 77–83",
+    hadits:
+      "Rasulullah ﷺ bersabda, \"Semoga Allah merahmati Luth, sungguh ia pernah berlindung kepada penopang yang kokoh (yakni Allah), dan seandainya aku tinggal di penjara selama Yusuf tinggal, niscaya aku akan segera memenuhi seruan itu.\" Sabda ini memuji keteguhan Luth berpegang pada Allah di tengah kaumnya yang menolaknya.",
+    haditsSumber: "HR. Bukhari no. 3387 & Muslim no. 151",
   },
   {
     nomor: 8,
@@ -97,6 +114,9 @@ const NABI: Nabi[] = [
       "Ismail adalah putra Nabi Ibrahim dari Siti Hajar. Semasa bayi, ia dan ibunya ditinggalkan di lembah tandus Makkah atas perintah Allah, hingga munculnya mata air Zamzam dari hentakan kakinya. Ismail tumbuh menjadi anak yang taat, rela disembelih demi menjalankan perintah Allah kepada ayahnya, dan bersama Ibrahim membangun kembali Ka'bah.",
     hikmah: "Ketaatan dan kesabaran seorang anak kepada perintah Allah, sebagaimana ditunjukkan Ismail, menjadi teladan keikhlasan tertinggi.",
     dalil: "QS. As-Saffat: 102, QS. Maryam: 54–55",
+    hadits:
+      "Rasulullah ﷺ pernah melewati sekelompok orang yang sedang berlatih memanah, lalu bersabda, \"Memanahlah wahai Bani Ismail, karena sungguh nenek moyang kalian adalah seorang pemanah,\" mengaitkan keahlian memanah dengan garis keturunan Nabi Ismail.",
+    haditsSumber: "HR. Bukhari no. 3373",
   },
   {
     nomor: 9,
@@ -106,6 +126,9 @@ const NABI: Nabi[] = [
       "Ishaq adalah putra Nabi Ibrahim dari Sarah, lahir sebagai kabar gembira yang disampaikan oleh para malaikat yang singgah bertamu kepada Ibrahim dalam perjalanan menuju kaum Luth. Sarah yang mendengar kabar itu awalnya tertawa keheranan karena ia dan Ibrahim sudah lanjut usia dan selama ini tidak dikaruniai anak, namun para malaikat menegaskan bahwa hal itu tidaklah sulit bagi Allah. Ishaq lahir dan tumbuh menjadi nabi yang saleh, mewarisi dakwah tauhid ayahnya di tanah Kan'an (Syam), menikah, dan dikaruniai putra kembar bernama Ya'qub dan Ishaw. Melalui Ya'qub, keturunan Ishaq kelak menurunkan Bani Israil serta banyak nabi setelahnya, menjadikannya mata rantai penting dalam silsilah kenabian.",
     hikmah: "Kabar gembira dan karunia dari Allah bisa datang di saat yang tidak terduga bagi hamba yang sabar dan terus berharap kepada-Nya, sekalipun akal manusia memandangnya mustahil.",
     dalil: "QS. Hud: 71–73",
+    hadits:
+      "Rasulullah ﷺ bersabda, \"Orang yang mulia anak dari yang mulia, anak dari yang mulia, anak dari yang mulia adalah Yusuf bin Ya'qub bin Ishaq bin Ibrahim,\" menegaskan kedudukan mulia Ishaq dalam rangkaian empat generasi nabi tersebut.",
+    haditsSumber: "HR. Bukhari no. 3390",
   },
   {
     nomor: 10,
@@ -115,6 +138,9 @@ const NABI: Nabi[] = [
       "Ya'qub, putra Nabi Ishaq, juga dikenal dengan nama Israil, dan memiliki dua belas putra yang kelak menurunkan dua belas suku Bani Israil. Ia sangat mencintai Yusuf, putra kesayangannya, melebihi saudara-saudaranya yang lain, sehingga menimbulkan kecemburuan di antara mereka hingga akhirnya Yusuf disingkirkan dan dikabarkan mati dimakan serigala. Ya'qub tidak sepenuhnya percaya kabar itu dan memilih bersabar dengan kesabaran yang indah (sabar jamil), meski kesedihannya begitu mendalam hingga matanya memutih karena terus-menerus menangis memikirkan Yusuf selama puluhan tahun. Ia tetap yakin dan berharap kepada rahmat Allah, bahkan mencium aroma Yusuf dari gamisnya yang dibawa dari Mesir jauh sebelum kabar itu sampai kepadanya secara resmi. Pada akhirnya Allah mempertemukan kembali Ya'qub dengan Yusuf di Mesir, dan seluruh keluarganya pun bersujud memberi hormat kepada Yusuf, sesuai dengan mimpi yang pernah diceritakan Yusuf semasa kecil.",
     hikmah: "Kesabaran yang indah (sabar jamil) mengajarkan untuk terus berbaik sangka kepada Allah dalam ujian yang panjang sekalipun.",
     dalil: "QS. Yusuf: 84–87",
+    hadits:
+      "Rasulullah ﷺ menyebut Ya'qub dalam sabda yang sama tentang silsilah mulia empat nabi: \"Orang yang mulia anak dari yang mulia, anak dari yang mulia, anak dari yang mulia adalah Yusuf bin Ya'qub bin Ishaq bin Ibrahim.\"",
+    haditsSumber: "HR. Bukhari no. 3390",
   },
   {
     nomor: 11,
@@ -124,6 +150,9 @@ const NABI: Nabi[] = [
       "Sejak kecil, Yusuf bermimpi melihat sebelas bintang, matahari, dan bulan bersujud kepadanya — mimpi yang oleh ayahnya, Nabi Ya'qub, dipesankan agar tidak diceritakan kepada saudara-saudaranya karena dikhawatirkan menimbulkan iri hati. Kekhawatiran itu terbukti: saudara-saudaranya yang cemburu karena Yusuf lebih disayang ayahnya membujuknya ikut bermain, lalu melemparkannya ke dalam sumur tua dan pulang berbohong bahwa ia dimakan serigala. Yusuf ditemukan oleh sebuah kafilah dan dijual sebagai budak di Mesir kepada seorang pembesar istana (Al-Aziz). Ia tumbuh menjadi pemuda yang tampan dan berakhlak mulia, hingga istri Al-Aziz berusaha menggodanya; Yusuf menolak tegas demi menjaga kesuciannya, meski akibatnya ia difitnah dan dipenjarakan selama bertahun-tahun meski terbukti tidak bersalah. Di dalam penjara, Yusuf menakwilkan mimpi dua tahanan lain dengan tepat, dan kemudian menakwilkan mimpi Raja Mesir tentang tujuh sapi gemuk dan kurus — sebuah pertanda tujuh tahun subur diikuti tujuh tahun paceklik. Berkat ketepatan takwilnya serta strategi yang ia usulkan, Yusuf dibebaskan dan diangkat menjadi pejabat tinggi yang mengurus lumbung pangan Mesir. Ketika masa paceklik tiba, saudara-saudaranya datang ke Mesir mencari bahan makanan tanpa mengenali Yusuf, hingga akhirnya ia mengungkapkan jati dirinya, memaafkan seluruh perbuatan mereka di masa lalu, dan mengundang ayah serta seluruh keluarganya untuk tinggal bersamanya di Mesir — mewujudkan mimpi masa kecilnya ketika seluruh keluarganya bersujud memberi hormat kepadanya.",
     hikmah: "Kesabaran atas kezaliman, menjaga kehormatan diri dari godaan, dan memaafkan kesalahan orang lain—bahkan saudara sendiri yang pernah mencelakai—akan berbuah kemuliaan dan pertemuan indah di kemudian hari.",
     dalil: "Surat Yusuf (seluruh surat)",
+    hadits:
+      "Rasulullah ﷺ menyebut Yusuf sebagai \"orang yang mulia anak dari yang mulia\" dalam silsilah empat nabi. Dalam hadits lain tentang Luth, Rasulullah ﷺ turut menyinggung kesabaran Yusuf yang bertahun-tahun berada di penjara meski tak bersalah. Dalam hadits Isra Mikraj, Rasulullah ﷺ juga bertemu Yusuf di langit ketiga dan disambut sebagai saudara.",
+    haditsSumber: "HR. Bukhari no. 3390 & no. 3387; Muslim no. 151 & no. 164",
   },
   {
     nomor: 12,
@@ -133,6 +162,9 @@ const NABI: Nabi[] = [
       "Ayyub adalah hamba Allah yang kaya raya, memiliki banyak ternak dan lahan yang subur, tetapi tetap rendah hati, dermawan, dan sangat taat beribadah. Untuk mengangkat derajatnya, Allah mengujinya secara bertahap dan bertubi-tubi: seluruh hartanya musnah, anak-anaknya meninggal dunia, dan tubuhnya diserang penyakit kulit yang parah hingga bertahun-tahun lamanya, sampai orang-orang di sekitarnya menjauhinya kecuali istrinya yang setia merawatnya. Meski demikian, Ayyub tidak pernah mengeluh kepada manusia maupun berburuk sangka kepada Allah; ia tetap bersabar dan terus berzikir dalam kondisi paling berat sekalipun. Ketika kesabarannya telah mencapai puncaknya, ia memanjatkan doa dengan penuh kerendahan hati, mengadukan penderitaannya hanya kepada Allah semata. Allah pun mengabulkan doanya dengan memerintahkannya menghentakkan kaki hingga memancar mata air untuk mandi dan minum, yang menyembuhkan penyakitnya secara total, serta mengembalikan keluarga dan hartanya dengan jumlah yang berlipat ganda dari sebelumnya sebagai balasan atas kesabarannya.",
     hikmah: "Kesabaran dalam menghadapi ujian yang bertubi-tubi, disertai doa yang tulus, akan berbuah kelapangan dari Allah.",
     dalil: "QS. Al-Anbiya: 83–84, QS. Sad: 41–44",
+    hadits:
+      "Rasulullah ﷺ bersabda bahwa ketika Ayyub sedang mandi tanpa busana, tiba-tiba berjatuhan segerombolan belalang dari emas di hadapannya. Ayyub pun segera mengumpulkannya ke dalam pakaiannya. Allah bertanya, \"Wahai Ayyub, bukankah Aku telah mencukupkanmu dari apa yang engkau lihat?\" Ayyub menjawab, \"Benar, ya Rabb, namun aku tidak pernah merasa cukup dari limpahan berkah-Mu.\"",
+    haditsSumber: "HR. Bukhari no. 279 & no. 3391",
   },
   {
     nomor: 13,
@@ -154,6 +186,9 @@ const NABI: Nabi[] = [
       "Musa lahir pada masa Fir'aun memerintahkan pembantaian setiap bayi laki-laki Bani Israil karena mimpi buruk tentang kekuasaannya yang akan direbut. Ibunya, atas ilham dari Allah, menghanyutkan Musa dalam sebuah peti di Sungai Nil, yang kemudian ditemukan dan dipungut oleh keluarga Fir'aun sendiri, sehingga Musa tumbuh besar di istana orang yang kelak menjadi musuh utamanya — sementara ibunya diam-diam tetap menyusuinya sebagai pengasuh yang direkomendasikan oleh saudara perempuan Musa. Setelah dewasa, Musa tanpa sengaja menyebabkan kematian seorang warga Mesir saat melerai perkelahian, sehingga ia melarikan diri ke Madyan, bekerja pada Nabi Syu'aib, dan menikahi salah satu putrinya. Dalam perjalanan pulang ke Mesir bersama keluarganya, Musa melihat api di lereng Bukit Tur (Sinai) dan di sanalah Allah berbicara langsung kepadanya, mengangkatnya menjadi rasul serta memberinya dua mukjizat: tongkat yang berubah menjadi ular, dan tangan yang bersinar terang ketika dimasukkan ke saku bajunya. Musa diutus kembali ke Mesir bersama saudaranya, Harun, untuk menyeru Fir'aun agar beriman kepada Allah dan membebaskan Bani Israil, namun Fir'aun yang mengaku sebagai tuhan menolak dengan sombong dan mengumpulkan para penyihir untuk mengalahkan Musa — yang justru berbalik menjadi keimanan para penyihir tersebut setelah melihat mukjizat tongkat Musa mengalahkan sihir mereka. Setelah serangkaian azab seperti banjir, belalang, dan wabah tidak juga meluluhkan hati Fir'aun, Musa diperintahkan membawa Bani Israil keluar dari Mesir pada malam hari. Fir'aun beserta bala tentaranya mengejar hingga ke tepi Laut Merah; atas perintah Allah, Musa memukulkan tongkatnya dan laut pun terbelah menjadi jalan kering bagi Bani Israil, lalu kembali menyatu dan menenggelamkan Fir'aun beserta pasukannya ketika mereka mencoba mengejar. Di Bukit Tur, Musa menerima kitab Taurat sebagai pedoman bagi Bani Israil, meski dalam perjalanan dakwahnya ia juga harus menghadapi berbagai pembangkangan kaumnya sendiri, termasuk penyembahan anak sapi emas saat ia sedang munajat kepada Allah.",
     hikmah: "Allah mampu menyelamatkan hamba-Nya bahkan dari tengah kekuasaan yang paling zalim; kekuasaan yang sombong seperti Fir'aun pada akhirnya ditenggelamkan Allah, dan pertolongan-Nya sering datang lewat jalan yang tidak terduga—termasuk lewat tangan musuh sekalipun.",
     dalil: "QS. Al-Qasas: 1–43, QS. Ta-Ha: 9–98",
+    hadits:
+      "Dalam hadits syafaat, Rasulullah ﷺ mengabarkan bahwa Musa juga enggan memberi syafaat karena pernah membunuh seseorang tanpa perintah Allah, lalu mengarahkan manusia kepada Isa. Dalam hadits Isra Mikraj, Rasulullah ﷺ bertemu Musa di langit keenam; Musa menangis karena umat Muhammad ﷺ yang masuk surga lebih banyak daripada umatnya sendiri, dan beliau pula yang mengingatkan Rasulullah ﷺ agar meminta keringanan jumlah shalat kepada Allah.",
+    haditsSumber: "HR. Bukhari no. 4712 & Muslim no. 194 (syafaat); HR. Bukhari no. 3887 & Muslim no. 164 (Isra Mikraj)",
   },
   {
     nomor: 15,
@@ -163,6 +198,9 @@ const NABI: Nabi[] = [
       "Harun adalah saudara kandung Nabi Musa, diangkat menjadi nabi atas permohonan Musa sendiri kepada Allah agar diberi pendamping yang dapat menguatkan dakwahnya, karena Harun dikenal lebih fasih berbicara. Bersama-sama, keduanya diutus menghadap Fir'aun yang mengaku sebagai tuhan, menyampaikan seruan tauhid dengan lemah lembut meski penuh risiko, hingga akhirnya berhasil membawa Bani Israil keluar dari perbudakan Mesir. Ketika Musa naik ke Bukit Tur untuk bermunajat kepada Allah selama empat puluh malam, Harun ditinggalkan sebagai pemimpin dan penjaga Bani Israil. Namun dalam masa kepergian Musa itu, sebagian besar kaumnya tergoda oleh Samiri yang membuat patung anak sapi dari emas dan menyembahnya. Harun telah memperingatkan dan melarang mereka dengan tegas, tetapi kaumnya tetap bersikeras menyembah patung tersebut hingga Musa kembali dan sangat marah menyaksikan penyimpangan itu.",
     hikmah: "Kerja sama dan saling membantu antar-saudara dalam kebaikan dan dakwah adalah teladan penting dari kisah Musa dan Harun.",
     dalil: "QS. Ta-Ha: 29–36",
+    hadits:
+      "Dalam hadits Isra Mikraj, Rasulullah ﷺ bertemu Harun di langit kelima; Harun menyambutnya sebagai saudara dan nabi yang saleh.",
+    haditsSumber: "HR. Bukhari no. 3887 & Muslim no. 164",
   },
   {
     nomor: 16,
@@ -182,6 +220,9 @@ const NABI: Nabi[] = [
       "Daud, semasa muda, bergabung dalam pasukan Bani Israil yang dipimpin Thalut untuk melawan pasukan Jalut (Goliath) yang gagah perkasa dan ditakuti. Ketika para prajurit lain gentar, Daud yang masih belia maju dengan gagah berani menggunakan umban (ketapel batu) dan berhasil membunuh Jalut dengan izin Allah, sebuah kemenangan yang mengangkat namanya di tengah kaumnya. Setelahnya, Allah menganugerahkan kepadanya kerajaan sekaligus kenabian, kitab Zabur sebagai pedoman, serta suara yang sangat merdu ketika melantunkan tasbih sehingga gunung-gunung dan burung-burung ikut bertasbih bersamanya. Ia juga dianugerahi kemampuan istimewa melunakkan besi tanpa perlu ditempa dengan api, yang ia gunakan untuk membuat baju besi rantai — teknologi yang bermanfaat besar bagi kaumnya. Sebagai raja dan hakim, Daud dikenal sangat adil dan senantiasa berhati-hati dalam memutuskan setiap perkara, serta banyak beribadah termasuk berpuasa selang-seling sehari puasa sehari tidak, sebuah amalan puasa yang kelak disebut sebagai yang paling dicintai Allah.",
     hikmah: "Kekuasaan dan karunia besar hendaknya digunakan untuk terus bertasbih dan berbuat adil, bukan untuk kesombongan.",
     dalil: "QS. Sad: 17–26, QS. Al-Anbiya: 79–80",
+    hadits:
+      "Rasulullah ﷺ bersabda, \"Puasa yang paling dicintai Allah adalah puasa Daud: sehari berpuasa, sehari tidak. Dan shalat yang paling dicintai Allah adalah shalat Daud: ia tidur di pertengahan malam, bangun pada sepertiganya, lalu tidur lagi pada seperenamnya.\" Dalam hadits lain, Rasulullah ﷺ juga menyebut Daud sebagai nabi yang tidak makan kecuali dari hasil kerja tangannya sendiri, karena keahliannya membuat baju besi.",
+    haditsSumber: "HR. Bukhari no. 1131 & no. 3420; hadits tentang kerja tangan HR. Bukhari no. 3417",
   },
   {
     nomor: 18,
@@ -192,6 +233,9 @@ const NABI: Nabi[] = [
       "Sulaiman, putra Nabi Daud, mewarisi kenabian dan kerajaan ayahnya, lalu berdoa memohon kepada Allah agar dianugerahi kerajaan yang tidak dimiliki siapa pun setelahnya. Allah mengabulkan doanya dengan menundukkan angin agar berhembus sesuai perintahnya, mengizinkannya memahami bahasa burung dan hewan-hewan lain, serta menundukkan bangsa jin untuk bekerja di bawah kekuasaannya, termasuk membangun bangunan-bangunan megah dan menyelam mencari mutiara. Suatu hari, burung Hud-hud dalam pasukannya melaporkan keberadaan sebuah negeri bernama Saba yang dipimpin seorang ratu bernama Balqis, namun rakyatnya menyembah matahari alih-alih Allah. Sulaiman mengirimkan surat ajakan kepada Balqis untuk bertauhid, dan setelah pertukaran hadiah yang ditolaknya, ia memerintahkan salah seorang pembantunya yang memiliki ilmu untuk memindahkan singgasana Balqis ke istananya dalam sekejap mata sebagai bukti mukjizat. Ketika Balqis tiba dan menyaksikan kebesaran kerajaan Sulaiman serta istana berlantai kaca yang disangkanya genangan air, hatinya pun luluh dan ia menyatakan keislamannya kepada Allah, Tuhan semesta alam, tanpa terjadi peperangan sedikit pun.",
     hikmah: "Kekuasaan besar yang dianugerahkan Allah kepada Sulaiman tidak membuatnya lupa diri, melainkan selalu disyukuri dan digunakan di jalan dakwah.",
     dalil: "QS. An-Naml: 15–44, QS. Sad: 30–40",
+    hadits:
+      "Rasulullah ﷺ mengisahkan bahwa Sulaiman pernah bertekad menggilir seratus istrinya dalam semalam agar masing-masing melahirkan anak yang kelak berjihad di jalan Allah, namun ia lupa mengucapkan \"insyaAllah\". Akibatnya, hampir tidak ada seorang pun istrinya yang melahirkan sebagaimana diharapkan. Rasulullah ﷺ bersabda, seandainya Sulaiman mengucapkan insyaAllah, niscaya seluruh keinginannya akan terkabul.",
+    haditsSumber: "HR. Bukhari no. 2819 & no. 5242, Muslim no. 1654",
   },
   {
     nomor: 19,
@@ -222,6 +266,9 @@ const NABI: Nabi[] = [
       "Yunus meninggalkan kaumnya di Ninawa karena putus asa saat dakwahnya tidak kunjung diterima, lalu naik kapal yang kemudian dilemparkan ke laut. Ia ditelan ikan besar dan berdoa memohon ampun dalam kegelapan perut ikan hingga Allah menyelamatkannya. Sepeninggalnya, kaum Ninawa ternyata beriman seluruhnya dan diselamatkan dari azab.",
     hikmah: "Doa Nabi Yunus dalam kesulitan mengajarkan pentingnya kesabaran menghadapi dakwah yang berat dan tidak tergesa-gesa berputus asa.",
     dalil: "QS. As-Saffat: 139–148, QS. Al-Anbiya: 87–88",
+    hadits:
+      "Rasulullah ﷺ bersabda, \"Tidak pantas bagi seorang hamba mengatakan bahwa aku lebih baik daripada Yunus bin Matta,\" sebagai teguran agar umatnya tidak merendahkan kedudukan nabi mana pun, termasuk Yunus yang pernah ditelan ikan besar akibat kesalahannya meninggalkan kaumnya tanpa izin Allah.",
+    haditsSumber: "HR. Bukhari no. 3416 & Muslim no. 2376",
   },
   {
     nomor: 22,
@@ -231,6 +278,9 @@ const NABI: Nabi[] = [
       "Zakariya adalah nabi yang diberi amanah mengasuh dan menjaga Maryam sejak kecil di Baitul Maqdis, setelah ibunya menazarkan Maryam untuk berkhidmat di tempat suci itu. Setiap kali Zakariya masuk ke mihrab tempat Maryam beribadah, ia mendapati makanan di sisinya, padahal bukan musimnya, dan ketika ditanya dari mana asalnya, Maryam menjawab bahwa itu adalah rezeki langsung dari Allah. Peristiwa itu menggugah hati Zakariya, sehingga ia pun berdoa memohon keturunan yang saleh kepada Allah, meski usianya sudah sangat lanjut, tulangnya lemah, rambutnya telah memutih, dan istrinya dikenal mandul sepanjang usia pernikahan mereka. Allah mengabulkan doanya dengan memberi kabar gembira melalui malaikat bahwa ia akan dikaruniai seorang putra bernama Yahya, sebuah nama yang belum pernah disandang siapa pun sebelumnya, sebagai tanda kekuasaan Allah yang tidak terbatas oleh sebab-sebab lahiriah.",
     hikmah: "Tidak ada yang mustahil bagi Allah; doa yang tulus di usia dan keadaan apa pun tetap layak dipanjatkan dengan penuh harap.",
     dalil: "QS. Maryam: 2–11, QS. Ali 'Imran: 37–41",
+    hadits:
+      "Rasulullah ﷺ bersabda, \"Dahulu Zakariya bekerja sebagai tukang kayu,\" menunjukkan bahwa seorang nabi pun mencari nafkah dengan bekerja menggunakan tangannya sendiri.",
+    haditsSumber: "HR. Muslim no. 2379",
   },
   {
     nomor: 23,
@@ -240,6 +290,9 @@ const NABI: Nabi[] = [
       "Yahya adalah putra Nabi Zakariya yang lahir sebagai jawaban atas doa ayahnya di usia senja, dan Allah menganugerahkannya hikmah serta pemahaman agama sejak ia masih kanak-kanak. Ia diperintahkan untuk berpegang teguh pada kitab (Taurat) dengan sungguh-sungguh, dan Allah melimpahkan kepadanya kasih sayang serta kesucian jiwa yang luar biasa sehingga ia dikenal sangat menjaga diri dari dosa dan syahwat dunia. Yahya tumbuh menjadi sosok yang penuh kelembutan, sangat berbakti kepada kedua orang tuanya, dan tidak pernah bersikap sombong maupun durhaka. Al-Qur'an secara khusus mengabadikan salam sejahtera baginya pada tiga momen penting dalam hidup seorang manusia: hari kelahirannya, hari kematiannya, dan hari ia dibangkitkan kembali kelak.",
     hikmah: "Kesungguhan beribadah sejak usia muda dan berbakti kepada orang tua adalah sifat mulia yang dipuji Allah.",
     dalil: "QS. Maryam: 12–15",
+    hadits:
+      "Dalam hadits Isra Mikraj, Rasulullah ﷺ bertemu Yahya bersama Isa bin Maryam di langit kedua; keduanya menyambut Rasulullah ﷺ sebagai saudara dan nabi yang saleh.",
+    haditsSumber: "HR. Bukhari no. 3887 & Muslim no. 164",
   },
   {
     nomor: 24,
@@ -251,6 +304,9 @@ const NABI: Nabi[] = [
       "Isa dilahirkan secara mukjizat oleh Maryam tanpa perantaraan ayah, semata-mata atas kehendak dan kalimat 'Kun' (Jadilah) dari Allah, sebagaimana Allah menciptakan Adam dari tanah tanpa ayah maupun ibu. Ketika Maryam pulang membawa bayinya dan dituduh kaumnya berbuat serong, ia hanya menunjuk kepada sang bayi, dan atas izin Allah, Isa yang masih dalam buaian berbicara membela kesucian ibunya serta menjelaskan bahwa dirinya adalah hamba Allah yang akan diberi kitab dan diangkat menjadi nabi. Setelah dewasa, Isa diutus kepada Bani Israil dengan membawa kitab Injil dan berbagai mukjizat luar biasa atas izin Allah: menyembuhkan orang buta sejak lahir dan penderita kusta, menghidupkan orang mati, serta membentuk burung dari tanah liat lalu meniupnya hingga menjadi burung sungguhan yang hidup. Ketika sebagian Bani Israil justru berencana membunuhnya karena menolak dakwahnya, Allah menyelamatkan Isa dengan mengangkatnya ke langit, sementara orang yang menyerupainyalah yang tertangkap dan disalib. Al-Qur'an menegaskan dengan jelas bahwa Isa tidak dibunuh dan tidak pula disalib, melainkan diangkat Allah ke sisi-Nya, dan kelak ia akan turun kembali ke bumi menjelang akhir zaman.",
     hikmah: "Kelahiran dan mukjizat Isa menunjukkan kekuasaan mutlak Allah atas segala hukum sebab-akibat di alam semesta.",
     dalil: "QS. Maryam: 16–34, QS. An-Nisa: 157–158",
+    hadits:
+      "Dalam hadits Isra Mikraj, Rasulullah ﷺ bertemu Isa bersama Yahya di langit kedua. Dalam hadits syafaat, Isa adalah nabi terakhir yang didatangi manusia sebelum Muhammad ﷺ; ia tidak menyebut kesalahan pribadi seperti nabi-nabi sebelumnya, namun tetap mengarahkan manusia untuk mendatangi Rasulullah ﷺ sebagai penutup para nabi yang dosanya telah diampuni Allah.",
+    haditsSumber: "HR. Bukhari no. 3887 & Muslim no. 164 (Isra Mikraj); HR. Bukhari no. 4712 & Muslim no. 194 (syafaat)",
   },
   {
     nomor: 25,
@@ -262,6 +318,9 @@ const NABI: Nabi[] = [
       "Muhammad ﷺ lahir di Makkah dan diangkat menjadi rasul pada usia 40 tahun melalui wahyu pertama di Gua Hira. Beliau berdakwah tauhid di tengah masyarakat Arab jahiliah yang menyembah berhala, menghadapi penolakan dan penyiksaan berat hingga hijrah ke Madinah. Di sana beliau membangun masyarakat Islam yang berkeadilan, hingga akhirnya Makkah ditaklukkan tanpa pertumpahan darah dan Islam tersebar ke seluruh Jazirah Arab. Beliau adalah penutup seluruh nabi dan rasul, dengan Al-Qur'an sebagai mukjizat abadi yang terjaga hingga akhir zaman.",
     hikmah: "Muhammad ﷺ adalah teladan sempurna (uswah hasanah) dalam seluruh aspek kehidupan: ibadah, akhlak, kepemimpinan, dan kesabaran dalam dakwah.",
     dalil: "QS. Al-Ahzab: 21, 40",
+    hadits:
+      "Rasulullah ﷺ bersabda, \"Perumpamaanku dan perumpamaan para nabi sebelumku adalah seperti seseorang yang membangun sebuah rumah dengan indah dan sempurna, kecuali tempat satu batu bata di salah satu sudutnya. Orang-orang mengelilinginya dan mengaguminya, sambil berkata, 'Alangkah baiknya jika batu bata itu diletakkan.' Maka akulah batu bata itu, dan aku adalah penutup para nabi.\"",
+    haditsSumber: "HR. Bukhari no. 3535 & Muslim no. 2286",
   },
 ];
 
@@ -281,6 +340,17 @@ export default function KisahNabiPage() {
             Dua puluh lima nabi dan rasul yang wajib diketahui umat Islam,
             disebutkan namanya secara jelas di dalam Al-Qur&apos;an, lengkap
             dengan ringkasan kisah, hikmah, dan rujukan ayat.
+          </p>
+          <p className="text-xs text-[var(--ink-soft)] leading-relaxed mt-3 opacity-80">
+            Catatan: istilah &ldquo;hadits&rdquo; secara baku hanya merujuk pada
+            sabda, perbuatan, dan ketetapan Nabi Muhammad ﷺ. Nabi-nabi
+            sebelumnya tidak memiliki hadits tersendiri, sehingga kotak
+            &ldquo;Hadits&rdquo; di bawah menampilkan sabda shahih Nabi Muhammad ﷺ
+            yang menyebut atau berkaitan dengan nabi tersebut &mdash; bukan
+            ucapan dari nabi yang bersangkutan. Beberapa nabi (Hud, Shalih,
+            Syu&apos;aib, Dzulkifli, Ilyas, dan Ilyasa) tidak memiliki kotak
+            ini karena tidak ditemukan hadits shahih yang menyebut nama
+            mereka secara spesifik; kisah mereka bersumber dari Al-Qur&apos;an.
           </p>
         </div>
 
@@ -303,7 +373,7 @@ export default function KisahNabiPage() {
                     </span>
                   </div>
                   {n.gelar && (
-                    <p className="text-xs text-[var(--teal-deep)] mt-1">Gelar: {n.gelar}</p>
+                    <p className="text-xs text-[var(--heading)] mt-1">Gelar: {n.gelar}</p>
                   )}
                   {n.kaum && (
                     <p className="text-xs text-[var(--ink-soft)] mt-0.5">Diutus kepada: {n.kaum}</p>
@@ -317,6 +387,20 @@ export default function KisahNabiPage() {
                 <p className="text-xs uppercase tracking-wide text-[var(--gold)] mb-1">Hikmah</p>
                 <p className="text-sm text-[var(--ink-soft)] leading-relaxed">{n.hikmah}</p>
               </div>
+
+              {n.hadits && (
+                <div className="rounded-sm bg-[var(--teal)]/10 border border-[var(--teal)]/25 px-4 py-3 mt-3">
+                  <p className="text-xs uppercase tracking-wide text-[var(--heading)] mb-1">
+                    Hadits Nabi Muhammad ﷺ tentang beliau
+                  </p>
+                  <p className="text-sm text-[var(--ink-soft)] leading-relaxed">{n.hadits}</p>
+                  {n.haditsSumber && (
+                    <p className="text-xs text-[var(--ink-soft)] italic mt-1.5 opacity-80">
+                      {n.haditsSumber}
+                    </p>
+                  )}
+                </div>
+              )}
 
               {n.dalil && (
                 <p className="text-xs text-[var(--ink-soft)] italic mt-3">Rujukan: {n.dalil}</p>

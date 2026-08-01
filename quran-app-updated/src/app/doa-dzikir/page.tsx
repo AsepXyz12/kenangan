@@ -156,6 +156,17 @@ const DZIKIR_SETELAH_SHOLAT: Doa[] = [
     arti: "Allah, tiada Tuhan selain Dia, Yang Maha Hidup, Yang terus-menerus mengurus makhluk-Nya, tidak mengantuk dan tidak tidur... (QS. Al-Baqarah: 255, dibaca lengkap satu ayat).",
     keterangan: "Dibaca lengkap satu ayat penuh setelah sholat fardu, salah satu dzikir paling utama.",
   },
+  {
+    judul: "Doa Memohon Keselamatan",
+    arab:
+      "اللَّهُمَّ إِنِّي أَسْأَلُكَ سَلَامَةً فِي الدِّينِ، وَعَافِيَةً فِي الْجَسَدِ، وَزِيَادَةً فِي الْعِلْمِ، وَبَرَكَةً فِي الرِّزْقِ، وَتَوْبَةً قَبْلَ الْمَوْتِ، وَرَحْمَةً عِنْدَ الْمَوْتِ، وَمَغْفِرَةً بَعْدَ الْمَوْتِ، اللَّهُمَّ هَوِّنْ عَلَيْنَا فِي سَكَرَاتِ الْمَوْتِ، وَالنَّجَاةَ مِنَ النَّارِ، وَالْعَفْوَ عِنْدَ الْحِسَابِ",
+    latin:
+      "Allaahumma innii as-aluka salaamatan fid-diin, wa 'aafiyatan fil jasad, wa ziyaadatan fil 'ilmi, wa barakatan fir rizqi, wa taubatan qablal maut, wa rahmatan 'indal maut, wa maghfiratan ba'dal maut. Allaahumma hawwin 'alainaa fii sakaraatil maut, wan najaata minan naar, wal 'afwa 'indal hisaab",
+    arti:
+      "Ya Allah, sesungguhnya aku memohon kepada-Mu keselamatan dalam agama, kesehatan pada jasad, bertambahnya ilmu, keberkahan rezeki, taubat sebelum mati, rahmat ketika mati, dan ampunan setelah mati. Ya Allah, mudahkanlah bagi kami sakaratul maut, keselamatan dari api neraka, dan ampunan saat hisab.",
+    keterangan:
+      "Doa yang populer dibaca setelah dzikir sholat maupun di majelis-majelis. Sanadnya dinilai lemah (da'if) oleh sebagian ahli hadits, namun kandungan maknanya — memohon keselamatan agama, kesehatan, ilmu, rezeki, dan husnul khatimah — sejalan dengan doa-doa yang shahih, sehingga tetap banyak diamalkan.",
+  },
 ];
 
 const DZIKIR_PAGI: Doa[] = [
@@ -179,6 +190,58 @@ const DZIKIR_PAGI: Doa[] = [
     latin: "A'uudzu bikalimaatillaahit taammaati min syarri maa khalaq",
     arti: "Aku berlindung dengan kalimat-kalimat Allah yang sempurna dari kejahatan makhluk yang Dia ciptakan.",
   },
+  {
+    judul: "Yaa Hayyu Yaa Qayyum (pagi)",
+    arab: "يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شَأْنِي كُلَّهُ وَلَا تَكِلْنِي إِلَىٰ نَفْسِي طَرْفَةَ عَيْنٍ",
+    latin: "Yaa hayyu yaa qayyuumu birahmatika astaghiits, ashlih lii sya'nii kullahu wa laa takilnii ilaa nafsii tharfata 'ain",
+    arti: "Wahai Zat Yang Maha Hidup, wahai Zat Yang terus-menerus mengurus makhluk-Nya, dengan rahmat-Mu aku memohon pertolongan. Perbaikilah seluruh urusanku dan jangan Engkau serahkan urusanku kepada diriku sendiri walau sekejap mata.",
+  },
+  {
+    judul: "Hasbunallahu wa Ni'mal Wakiil (7x pagi)",
+    arab: "حَسْبِيَ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ",
+    latin: "Hasbiyallaahu laa ilaaha illaa huwa 'alaihi tawakkaltu wa huwa rabbul 'arsyil 'azhiim",
+    arti: "Cukuplah Allah bagiku, tiada Tuhan selain Dia, hanya kepada-Nya aku bertawakal, dan Dia adalah Tuhan pemilik Arsy yang agung.",
+    keterangan: "Dibaca 7x, siapa yang membacanya Allah akan mencukupkan urusannya (HR. Abu Dawud).",
+  },
+];
+
+const DZIKIR_HASBUNALLAH: Doa = {
+  judul: "Hasbunallahu wa Ni'mal Wakiil (7x pagi & petang)",
+  arab: "حَسْبِيَ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ وَهُوَ رَبُّ الْعَرْشِ الْعَظِيمِ",
+  latin: "Hasbiyallaahu laa ilaaha illaa huwa 'alaihi tawakkaltu wa huwa rabbul 'arsyil 'azhiim",
+  arti: "Cukuplah Allah bagiku, tiada Tuhan selain Dia, hanya kepada-Nya aku bertawakal, dan Dia adalah Tuhan pemilik Arsy yang agung.",
+  keterangan: "Dibaca 7x pada pagi dan petang, siapa yang membacanya Allah akan mencukupkan urusannya (HR. Abu Dawud).",
+};
+
+const DZIKIR_YA_HAYYU: Doa = {
+  judul: "Yaa Hayyu Yaa Qayyum",
+  arab: "يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ أَسْتَغِيثُ أَصْلِحْ لِي شَأْنِي كُلَّهُ وَلَا تَكِلْنِي إِلَىٰ نَفْسِي طَرْفَةَ عَيْنٍ",
+  latin: "Yaa hayyu yaa qayyuumu birahmatika astaghiits, ashlih lii sya'nii kullahu wa laa takilnii ilaa nafsii tharfata 'ain",
+  arti: "Wahai Zat Yang Maha Hidup, wahai Zat Yang terus-menerus mengurus makhluk-Nya, dengan rahmat-Mu aku memohon pertolongan. Perbaikilah seluruh urusanku dan jangan Engkau serahkan urusanku kepada diriku sendiri walau sekejap mata.",
+};
+
+const DZIKIR_PETANG: Doa[] = [
+  {
+    judul: "Sayyidul Istighfar (petang)",
+    arab: "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَٰهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ وَأَنَا عَلَىٰ عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ",
+    latin: "Allaahumma anta rabbii laa ilaaha illaa anta khalaqtanii wa ana 'abduka wa ana 'alaa 'ahdika wa wa'dika mastatha'tu, a'uudzu bika min syarri maa shana'tu, abuu-u laka bini'matika 'alayya wa abuu-u bidzanbii faghfirlii fa-innahu laa yaghfirudz dzunuuba illaa anta",
+    arti: "Ya Allah, Engkau adalah Tuhanku, tiada Tuhan selain Engkau. Engkau menciptakanku dan aku adalah hamba-Mu. Aku akan setia pada perjanjian dan janjiku pada-Mu semampuku. Aku berlindung kepada-Mu dari keburukan yang aku perbuat. Aku mengakui nikmat-Mu padaku dan aku mengakui dosaku, maka ampunilah aku, sesungguhnya tiada yang mengampuni dosa selain Engkau.",
+    keterangan: "Dibaca sekali di petang hari, penghulu segala istighfar.",
+  },
+  {
+    judul: "Dzikir Petang (Perlindungan Harian)",
+    arab: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ",
+    latin: "Amsainaa wa amsal mulku lillaah, walhamdu lillaah, laa ilaaha illallaahu wahdahu laa syariika lah",
+    arti: "Kami memasuki waktu petang dan kerajaan hanya milik Allah, segala puji bagi Allah, tiada Tuhan selain Allah Yang Maha Esa, tiada sekutu bagi-Nya.",
+  },
+  {
+    judul: "Ta'awwudz Perlindungan (3x petang)",
+    arab: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",
+    latin: "A'uudzu bikalimaatillaahit taammaati min syarri maa khalaq",
+    arti: "Aku berlindung dengan kalimat-kalimat Allah yang sempurna dari kejahatan makhluk yang Dia ciptakan.",
+  },
+  DZIKIR_YA_HAYYU,
+  DZIKIR_HASBUNALLAH,
 ];
 
 const TIGA_QUL = {
@@ -226,7 +289,7 @@ const DOA_ZIARAH_KUBUR: Doa = {
 function Seksi({ title, desc, items }: { title: string; desc?: string; items: Doa[] }) {
   return (
     <section className="mb-12">
-      <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-2">{title}</h2>
+      <h2 className="font-display text-2xl text-[var(--heading)] mb-2">{title}</h2>
       {desc && <p className="text-sm text-[var(--ink-soft)] mb-4">{desc}</p>}
       <div className="space-y-3">
         {items.map((d) => (
@@ -243,7 +306,7 @@ export default function DoaDzikirPage() {
       <Navbar />
       <main className="flex-1 max-w-3xl mx-auto px-5 md:px-8 py-10 md:py-14 w-full">
         <span className="text-xs tracking-widest uppercase text-[var(--ink-soft)]">Amalan Harian</span>
-        <h1 className="font-display text-3xl md:text-4xl text-[var(--teal-deep)] mt-1 mb-3">
+        <h1 className="font-display text-3xl md:text-4xl text-[var(--heading)] mt-1 mb-3">
           Doa & Dzikir Harian
         </h1>
         <p className="text-[var(--ink-soft)] mb-10 leading-relaxed">
@@ -266,7 +329,7 @@ export default function DoaDzikirPage() {
         />
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-2">Dzikir Setelah Sholat Fardu</h2>
+          <h2 className="font-display text-2xl text-[var(--heading)] mb-2">Dzikir Setelah Sholat Fardu</h2>
           <p className="text-sm text-[var(--ink-soft)] mb-4">
             Rangkaian dzikir yang dianjurkan dibaca setelah salam pada setiap sholat wajib.
           </p>
@@ -278,7 +341,7 @@ export default function DoaDzikirPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="font-display text-2xl text-[var(--teal-deep)] mb-2">Dzikir Pagi & Petang</h2>
+          <h2 className="font-display text-2xl text-[var(--heading)] mb-2">Dzikir Pagi & Petang</h2>
           <p className="text-sm text-[var(--ink-soft)] mb-4">
             Dzikir pagi dibaca setelah Subuh hingga terbit matahari, dzikir petang dibaca setelah
             Ashar hingga Maghrib.
@@ -291,6 +354,19 @@ export default function DoaDzikirPage() {
               <h3 className="font-medium text-[var(--ink)] mb-2">{TIGA_QUL.judul}</h3>
               <p className="text-sm text-[var(--ink-soft)]">{TIGA_QUL.keterangan}</p>
             </Kartu>
+          </div>
+        </section>
+
+        <section className="mb-12">
+          <h2 className="font-display text-2xl text-[var(--heading)] mb-2">Dzikir Petang (Lengkap)</h2>
+          <p className="text-sm text-[var(--ink-soft)] mb-4">
+            Dibaca setelah Ashar hingga Maghrib. Susunannya sama dengan dzikir pagi,
+            hanya redaksi &quot;pagi&quot; diganti &quot;petang&quot;.
+          </p>
+          <div className="space-y-3">
+            {DZIKIR_PETANG.map((d) => (
+              <DoaCard key={d.judul} d={d} />
+            ))}
           </div>
         </section>
       </main>

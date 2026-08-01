@@ -7,7 +7,7 @@ type RoundelProps = {
 
 const VARIANT_COLORS: Record<string, { ring: string; fill: string; text: string }> = {
   gold: { ring: "var(--gold)", fill: "var(--parchment)", text: "var(--ink)" },
-  teal: { ring: "var(--teal)", fill: "var(--parchment)", text: "var(--teal-deep)" },
+  teal: { ring: "var(--teal)", fill: "var(--parchment)", text: "var(--heading)" },
   maroon: { ring: "var(--maroon)", fill: "var(--parchment)", text: "var(--maroon)" },
 };
 

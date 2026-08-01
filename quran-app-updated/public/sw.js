@@ -24,6 +24,13 @@ const APP_SHELL = [
   "/icons/icon-192.png",
   "/icons/icon-512.png",
   "/quran",
+  "/iqro",
+  "/iqro/1",
+  "/iqro/2",
+  "/iqro/3",
+  "/iqro/4",
+  "/iqro/5",
+  "/iqro/6",
   "/hadits",
   "/thaharah",
   "/panduan-sholat",
@@ -39,12 +46,14 @@ const APP_SHELL = [
   "/rukun-iman",
   "/aqidah",
   "/fiqih-madzhab",
+  "/hukum-islam",
   "/akhlak-adab",
   "/ilmu-tajwid",
   "/sirah-sahabat",
   "/wanita-dalam-islam",
   "/sejarah-islam",
   "/malam-jumat",
+  "/tahlil-yasin",
 ];
 
 // Halaman fallback paling terakhir kalau semuanya gagal (network mati & cache
@@ -157,23 +166,69 @@ self.addEventListener("fetch", (event) => {
   // percobaan ulang (WiFi lemah sering cuma "kedip" sebentar, bukan mati total),
   // fallback ke cache, lalu ke beranda dari cache, dan kalau semua gagal
   // baru tampilkan halaman offline yang jelas (bukan network error mentah).
+  //
+  // PENTING: request.clone() dipakai di SETIAP pemanggilan fetch(). Request
+  // yang sama tidak boleh dipakai fetch() dua kali (misalnya untuk retry) —
+  // browser akan throw error "already used" yang tidak ketangkep .catch()
+  // biasa, dan itu bikin respondWith() reject mentah-mentah sehingga browser
+  // nampilin halaman error bawaannya sendiri ("This page couldn't load"),
+  // BUKAN halaman offline custom kita. Makanya seluruh langkah di bawah ini
+  // dibungkus try/catch berlapis supaya respondWith() dijamin selalu resolve
+  // ke sebuah Response, apa pun yang terjadi.
   if (isNavigationRequest(request)) {
     event.respondWith(
-      fetch(request)
-        .catch(() => fetch(request)) // retry sekali
-        .then((response) => {
-          const clone = response.clone();
-          caches.open(PAGE_CACHE).then((cache) => cache.put(request, clone));
-          return response;
-        })
-        .catch(async () => {
+      (async () => {
+        // Percobaan 1 & 2 (retry sekali kalau gagal)
+        for (let attempt = 0; attempt < 2; attempt++) {
+          try {
+            const response = await fetch(request.clone());
+            // PENTING: hanya simpan response yang BENAR-BENAR OK (status 200-299).
+            // Sebelumnya semua response disimpan tanpa dicek -> kalau server sempat
+            // membalas error (404/500, mis. race condition saat deploy baru lagi
+            // berjalan), error itu ikut kesimpan permanen di cache dengan key URL
+            // itu. Akibatnya: begitu user balik ke halaman itu (mis. klik "Mushaf"
+            // atau kembali ke dashboard) lalu request berikutnya kena kondisi apa
+            // pun yang bikin fallback ke cache, yang muncul ya halaman rusak itu
+            // lagi dan lagi, walau situsnya sendiri sebenarnya sudah normal.
+            if (response.ok) {
+              try {
+                const cache = await caches.open(PAGE_CACHE);
+                cache.put(request, response.clone());
+              } catch (err) {
+                console.error("[sw] gagal simpan cache halaman", err);
+              }
+              return response;
+            }
+            // Response gagal (4xx/5xx) tapi bukan karena network putus -> jangan
+            // simpan ke cache, langsung balikin apa adanya (biar Next.js error.tsx
+            // / not-found.tsx yang nangani, bukan disamarkan jadi masalah offline).
+            return response;
+          } catch {
+            // lanjut ke percobaan berikutnya, atau ke fallback di bawah
+          }
+        }
+
+        // Network gagal 2x -> cari di cache halaman yang pernah dibuka
+        try {
           const cache = await caches.open(PAGE_CACHE);
           const cached = await cache.match(request);
           if (cached) return cached;
+        } catch (err) {
+          console.error("[sw] gagal baca cache halaman", err);
+        }
+
+        // Tidak ada di cache -> fallback ke beranda dari precache
+        try {
           const shellCache = await caches.open(SHELL_CACHE);
           const fallback = await shellCache.match("/");
-          return fallback || offlineResponse();
-        })
+          if (fallback) return fallback;
+        } catch (err) {
+          console.error("[sw] gagal baca shell cache", err);
+        }
+
+        // Semua gagal -> halaman offline custom (bukan error bawaan browser)
+        return offlineResponse();
+      })()
     );
     return;
   }
@@ -195,9 +250,33 @@ self.addEventListener("fetch", (event) => {
           if (response.ok) cache.put(request, response.clone());
           return response;
         } catch (err) {
+          // Nggak ada di network -> coba cache dulu (kalau ada, walau URL
+          // persis beda-beda tiap request karena token _rsc), lalu coba
+          // SEKALI LAGI ke network alih-alih langsung nyerah -> lebih tahan
+          // koneksi jelek.
           const cached = await cache.match(request);
           if (cached) return cached;
-          throw err;
+          try {
+            return await fetch(request);
+          } catch (err2) {
+            // PENTING: dulu di titik ini kita balikin Response 503 buatan
+            // sendiri (bukan throw). Niatnya baik (biar Next.js router
+            // "nangkep" sebagai fetch gagal biasa), tapi efeknya JUSTRU
+            // sebaliknya: fetch() dari sisi Next.js jadi RESOLVE (bukan
+            // reject) dengan status gagal, jadi router mengira itu response
+            // beneran lalu render error.tsx segment TUJUAN. Karena error.tsx
+            // waktu itu tidak punya Navbar sama sekali (lihat ErrorState.tsx),
+            // pengguna kejebak di halaman "Terjadi kesalahan" tanpa jalan
+            // keluar begitu pindah dari "Ayat pilihan hari ini" ke
+            // Mushaf/Beranda saat koneksi sempat kedip.
+            //
+            // Fix: throw lagi (reject promise-nya). Next.js router memang
+            // sudah didesain untuk fallback ke HARD NAVIGATION (reload
+            // penuh) kalau fetch RSC-nya reject, bukan resolve dengan
+            // status error -- itu jauh lebih tangguh daripada kita akali
+            // sendiri di sini.
+            throw err2;
+          }
         }
       })
     );
@@ -222,11 +301,11 @@ self.addEventListener("fetch", (event) => {
         } catch (err) {
           const cached = await cache.match(request);
           if (cached) return cached;
-          // Nggak ada di cache & network gagal -> biarin error asli dari fetch
-          // yang naik ke browser (browser lebih tahu cara nampilin & retry
-          // request gambar/font/script yang gagal), jangan bikin error baru
-          // pakai Response.error() yang malah numbulin "This page couldn't load".
-          throw err;
+          // Nggak ada di cache & network gagal -> dulu di-throw lagi, yang di
+          // koneksi super lemot bisa berujung "This page couldn't load".
+          // Sekarang balikin Response gagal yang rapi supaya browser/Next.js
+          // yang nangani (retry/placeholder), bukan rejection mentah.
+          return new Response(null, { status: 503, statusText: "Offline" });
         }
       })
     );

@@ -190,7 +190,7 @@ export default function AkhlakAdabPage() {
 
         <div className="grid sm:grid-cols-2 gap-6 mb-6">
           <div>
-            <h2 className="font-display text-xl text-[var(--teal-deep)] mb-3">
+            <h2 className="font-display text-xl text-[var(--heading)] mb-3">
               Akhlak Terpuji (Mahmudah)
             </h2>
             <div className="space-y-3">
