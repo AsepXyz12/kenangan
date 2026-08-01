@@ -25,6 +25,23 @@ export default function TentangPage() {
 
         <section className="mb-10">
           <h2 className="font-display text-xl text-[var(--ink)] mb-4">
+            Dibuat oleh
+          </h2>
+          <div className="rounded-sm border border-[var(--parchment-line)] bg-[var(--parchment-deep)]/40 p-6 md:p-7">
+            <p className="font-display text-lg text-[var(--teal-deep)] mb-2">Ramzz</p>
+            <p className="text-sm text-[var(--ink-soft)] leading-relaxed">
+              Mushaf dibangun dan dirawat oleh Ramzz, dengan niat sederhana:
+              menyediakan satu tempat yang mudah diakses siapa saja untuk
+              membaca Al-Qur&apos;an, belajar hadits, dan memahami ajaran
+              Islam dari berbagai sisi. Semoga apa yang tersusun di sini
+              menjadi ladang pahala yang terus mengalir, dan bermanfaat bagi
+              siapa pun yang membacanya — sekarang maupun di masa depan.
+            </p>
+          </div>
+        </section>
+
+        <section className="mb-10">
+          <h2 className="font-display text-xl text-[var(--ink)] mb-4">
             Sumber Data
           </h2>
           <div className="space-y-4 text-sm text-[var(--ink-soft)] leading-relaxed">

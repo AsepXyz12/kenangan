@@ -9,6 +9,9 @@ export default function Footer() {
             dalam satu tempat. Semoga bermanfaat dan menjadi ladang pahala
             bagi siapa saja yang membangunnya.
           </p>
+          <p className="text-xs text-[var(--ink-soft)] mt-3 opacity-80">
+            Dibuat oleh <span className="font-medium text-[var(--teal-deep)]">Ramzz</span>
+          </p>
         </div>
         <a
           href="/tentang"
