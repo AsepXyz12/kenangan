@@ -249,24 +249,32 @@ self.addEventListener("fetch", (event) => {
           if (response.ok) cache.put(request, response.clone());
           return response;
         } catch (err) {
-          // Sebelumnya: kalau nggak ada di cache, kita throw err lagi ->
-          // respondWith() REJECT -> di koneksi lemot/putus-nyambung ini
-          // sering kejadian, dan Next.js router lalu fallback ke reload
-          // penuh, yang kadang malah nyangkut jadi layar bawaan Chrome
-          // "This page couldn't load". Sekarang: cache dulu (kalau ada,
-          // walau URL persis beda-beda tiap request karena token _rsc),
-          // dan kalau tetap nggak ada, coba SEKALI LAGI ke network alih-alih
-          // langsung nyerah -> jauh lebih tahan koneksi jelek.
+          // Nggak ada di network -> coba cache dulu (kalau ada, walau URL
+          // persis beda-beda tiap request karena token _rsc), lalu coba
+          // SEKALI LAGI ke network alih-alih langsung nyerah -> lebih tahan
+          // koneksi jelek.
           const cached = await cache.match(request);
           if (cached) return cached;
           try {
             return await fetch(request);
-          } catch {
-            // Terakhir: balikin response gagal yang RAPI (bukan throw),
-            // supaya Next.js router nangkepnya sebagai fetch gagal biasa
-            // dan bisa retry sendiri, bukan meledak jadi network error
-            // mentah di level browser.
-            return new Response(null, { status: 503, statusText: "Offline" });
+          } catch (err2) {
+            // PENTING: dulu di titik ini kita balikin Response 503 buatan
+            // sendiri (bukan throw). Niatnya baik (biar Next.js router
+            // "nangkep" sebagai fetch gagal biasa), tapi efeknya JUSTRU
+            // sebaliknya: fetch() dari sisi Next.js jadi RESOLVE (bukan
+            // reject) dengan status gagal, jadi router mengira itu response
+            // beneran lalu render error.tsx segment TUJUAN. Karena error.tsx
+            // waktu itu tidak punya Navbar sama sekali (lihat ErrorState.tsx),
+            // pengguna kejebak di halaman "Terjadi kesalahan" tanpa jalan
+            // keluar begitu pindah dari "Ayat pilihan hari ini" ke
+            // Mushaf/Beranda saat koneksi sempat kedip.
+            //
+            // Fix: throw lagi (reject promise-nya). Next.js router memang
+            // sudah didesain untuk fallback ke HARD NAVIGATION (reload
+            // penuh) kalau fetch RSC-nya reject, bukan resolve dengan
+            // status error -- itu jauh lebih tangguh daripada kita akali
+            // sendiri di sini.
+            throw err2;
           }
         }
       })

@@ -2,6 +2,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Roundel from "@/components/Roundel";
+import IqroCredit from "@/components/IqroCredit";
 import { IQRO_DATA } from "@/lib/iqro-data";
 
 export const metadata = {
@@ -27,6 +28,10 @@ export default function IqroIndexPage() {
             Setiap contoh bisa didengarkan pelafalannya — cocok dipakai anak sambil didampingi
             orang tua atau ustadz/ustadzah.
           </p>
+        </div>
+
+        <div className="mb-8">
+          <IqroCredit />
         </div>
 
         <div className="grid sm:grid-cols-2 gap-5">

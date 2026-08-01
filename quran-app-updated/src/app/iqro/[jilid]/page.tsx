@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import IqroReader from "@/components/IqroReader";
+import IqroCredit from "@/components/IqroCredit";
 import { IQRO_DATA, getIqroJilid } from "@/lib/iqro-data";
 import { notFound } from "next/navigation";
 
@@ -48,6 +49,9 @@ export default async function IqroJilidPage({
             <li key={t}>{t}</li>
           ))}
         </ul>
+        <div className="mb-8">
+          <IqroCredit compact />
+        </div>
         <IqroReader jilid={data} />
       </main>
       <Footer />

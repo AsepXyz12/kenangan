@@ -46,6 +46,11 @@ body {
   color: var(--ink);
   font-family: var(--font-body), serif;
   background-image:
+    /* Motif geometris 8 sudut khas ornamen mushaf, sangat samar (opacity
+       rendah) -> nambah "kedalaman" & kesan berkelas tanpa ganggu keterbacaan
+       teks. Sebelumnya cuma ada dot-grid polos, sekarang ada pola berulang
+       yang lebih terasa "karya", bukan cuma warna rata. */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='84' viewBox='0 0 84 84'%3E%3Cg fill='none' stroke='%231a140b' stroke-width='0.6' stroke-opacity='0.055'%3E%3Cpath d='M42 4 L58 14 L58 28 L74 38 L74 46 L58 56 L58 70 L42 80 L26 70 L26 56 L10 46 L10 38 L26 28 L26 14 Z'/%3E%3Ccircle cx='42' cy='42' r='16'/%3E%3C/g%3E%3C/svg%3E"),
     radial-gradient(circle at 1px 1px, rgba(26, 20, 11, 0.1) 1px, transparent 0),
     radial-gradient(ellipse 900px 500px at 50% -10%, rgba(29, 60, 52, 0.14), transparent 60%),
     radial-gradient(ellipse 1000px 600px at 100% 0%, rgba(169, 126, 47, 0.12), transparent 55%),
@@ -53,9 +58,9 @@ body {
     /* Vignette halus di tepi layar -> pusat perhatian ke tengah, dan
        "putih"-nya nggak polos rata sampai ke pinggir. */
     radial-gradient(ellipse 1400px 1000px at 50% 40%, transparent 55%, rgba(26, 20, 11, 0.09) 100%);
-  background-size: 22px 22px, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
-  background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat;
-  background-attachment: fixed, scroll, scroll, scroll, fixed;
+  background-size: 84px 84px, 22px 22px, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+  background-repeat: repeat, repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  background-attachment: fixed, fixed, scroll, scroll, scroll, fixed;
 }
 
 /* Kedalaman "elevation" untuk semua kartu/kotak berbingkai di seluruh situs.
@@ -64,11 +69,23 @@ body {
    ini menyasar SEMUA elemen yang classname-nya mengandung kombinasi
    "rounded-*" + border parchment-line, tanpa perlu ubah tiap file halaman. */
 [class*="rounded"][class*="border-[var(--parchment-line)]"] {
+  position: relative;
+  /* Gradasi tipis dari terang ke sedikit lebih gelap + garis emas transparan
+     di puncak, biar permukaan kartu berasa "berlapis kertas mahal", bukan
+     satu warna rata seperti sebelumnya. Dipasang lewat background-image
+     supaya tidak menimpa warna/opacity latar yang sudah didefinisikan tiap
+     komponen (mis. bg-[var(--parchment-deep)]/60). */
+  background-image: linear-gradient(
+    165deg,
+    rgba(255, 250, 235, 0.5) 0%,
+    rgba(255, 250, 235, 0) 30%,
+    rgba(15, 10, 4, 0.05) 100%
+  );
   box-shadow:
     0 1px 2px rgba(20, 14, 6, 0.08),
     0 20px 40px -22px rgba(15, 10, 4, 0.55),
     inset 0 1px 0 rgba(255, 250, 235, 0.35);
-  transition: box-shadow 0.35s ease, transform 0.35s ease;
+  transition: box-shadow 0.35s ease, transform 0.35s ease, border-color 0.35s ease;
 }
 
 [class*="rounded"][class*="border-[var(--parchment-line)]"]:hover {
@@ -187,6 +204,50 @@ footer {
 .bismillah {
   font-family: var(--font-arabic), serif;
   direction: rtl;
+}
+
+/* Teks "foil emas" untuk judul-judul penting -> terasa lebih mewah/"canggih"
+   daripada teks satu warna polos. Dipakai selektif (bukan semua heading)
+   supaya tetap enak dibaca & tidak berlebihan. */
+.text-gold-foil {
+  background: linear-gradient(
+    100deg,
+    var(--gold) 0%,
+    var(--gold-bright) 35%,
+    #fff3d6 50%,
+    var(--gold-bright) 65%,
+    var(--gold) 100%
+  );
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Tombol utama gaya "foil emas" dengan kedalaman -> dipakai untuk aksi
+   paling penting di halaman (CTA), supaya kontras jelas dari tombol biasa
+   yang cuma outline/flat, dan situs kerasa lebih "hidup". */
+.btn-gold {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(155deg, var(--gold-bright) 0%, var(--gold) 65%, #8a6320 100%);
+  color: var(--teal-deep);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.5) inset,
+    0 10px 24px -10px rgba(169, 126, 47, 0.65),
+    0 2px 6px rgba(20, 14, 6, 0.25);
+  transition: box-shadow 0.3s ease, transform 0.3s ease, filter 0.3s ease;
+}
+
+.btn-gold:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.55) inset,
+    0 14px 30px -10px rgba(169, 126, 47, 0.75),
+    0 3px 8px rgba(20, 14, 6, 0.3);
 }
 
 ::selection {

@@ -162,6 +162,150 @@ export const IQRO_DATA: IqroJilid[] = [
           "j1h6"
         ),
       },
+      {
+        id: "1-7",
+        judul: "Latihan huruf yang bentuknya mirip",
+        penjelasan:
+          "Kelompok huruf ini sering tertukar kalau tidak teliti. Bandingkan titiknya: di atas, di bawah, atau tanpa titik.",
+        contoh: buatContoh(
+          [
+            ["بَ", "ba"],
+            ["تَ", "ta"],
+            ["ثَ", "tsa"],
+            ["جَ", "ja"],
+            ["حَ", "ha"],
+            ["خَ", "kha"],
+            ["دَ", "da"],
+            ["ذَ", "dza"],
+            ["رَ", "ra"],
+            ["زَ", "za"],
+            ["سَ", "sa"],
+            ["شَ", "sya"],
+          ],
+          "j1h7"
+        ),
+      },
+      {
+        id: "1-8",
+        judul: "Evaluasi akhir jilid 1 — semua huruf diacak",
+        penjelasan:
+          "Halaman penutup jilid 1. Semua 28 huruf hijaiyah berharakat fathah diacak total. Kalau lancar dibaca tanpa berpikir lama, lanjut ke Jilid 2.",
+        contoh: buatContoh(
+          [
+            ["حَ", "ha"],
+            ["ذَ", "dza"],
+            ["فَ", "fa"],
+            ["يَ", "ya"],
+            ["صَ", "sha"],
+            ["لَ", "la"],
+            ["أَ", "a"],
+            ["ظَ", "zha"],
+            ["مَ", "ma"],
+            ["شَ", "sya"],
+            ["وَ", "wa"],
+            ["ثَ", "tsa"],
+            ["كَ", "ka"],
+            ["ضَ", "dha"],
+          ],
+          "j1h8"
+        ),
+      },
+      {
+        id: "1-9",
+        judul: "Latihan huruf tunggal — urutan terbalik",
+        penjelasan:
+          "Baca huruf dari ي mundur ke ا. Kalau anak sudah lancar walau urutannya dibalik, artinya bukan hafalan urutan, tapi memang sudah kenal bentuknya.",
+        contoh: buatContoh(
+          [
+            ["يَ", "ya"],
+            ["وَ", "wa"],
+            ["هَ", "ha"],
+            ["نَ", "na"],
+            ["مَ", "ma"],
+            ["لَ", "la"],
+            ["كَ", "ka"],
+            ["قَ", "qa"],
+            ["فَ", "fa"],
+            ["غَ", "gha"],
+            ["عَ", "'a"],
+          ],
+          "j1h9"
+        ),
+      },
+      {
+        id: "1-10",
+        judul: "Latihan rangkai 2 huruf — kelompok baru",
+        penjelasan: "Gabungan 2 huruf berharakat fathah, kelompok huruf yang belum dipakai di halaman rangkai sebelumnya.",
+        contoh: buatContoh(
+          [
+            ["حَلَ", "hala"],
+            ["خَرَ", "khara"],
+            ["ذَهَ", "dzaha"],
+            ["رَقَ", "raqa"],
+            ["سَطَ", "satha"],
+            ["شَغَ", "syagha"],
+            ["صَفَ", "shafa"],
+            ["ضَقَ", "dhaqa"],
+          ],
+          "j1h10"
+        ),
+      },
+      {
+        id: "1-11",
+        judul: "Latihan rangkai 3 huruf — kelompok baru",
+        penjelasan: "Kata 3 huruf berharakat fathah lanjutan, kata-kata baru yang belum muncul di halaman 1-5.",
+        contoh: buatContoh(
+          [
+            ["سَكَنَ", "sakana"],
+            ["وَقَفَ", "waqafa"],
+            ["ذَكَرَ", "dzakara"],
+            ["نَصَحَ", "nashaha"],
+            ["قَصَدَ", "qashada"],
+            ["رَفَعَ", "rafa'a"],
+            ["مَنَعَ", "mana'a"],
+          ],
+          "j1h11"
+        ),
+      },
+      {
+        id: "1-12",
+        judul: "Evaluasi akhir — 28 huruf hijaiyah urut satu baris",
+        penjelasan:
+          "Halaman penutup jilid 1. Semua 28 huruf hijaiyah berurutan dari ا sampai ي dalam satu tarikan bacaan, sebagai tolok ukur akhir sebelum naik ke Jilid 2.",
+        contoh: buatContoh(
+          [
+            ["أَ", "a"],
+            ["بَ", "ba"],
+            ["تَ", "ta"],
+            ["ثَ", "tsa"],
+            ["جَ", "ja"],
+            ["حَ", "ha"],
+            ["خَ", "kha"],
+            ["دَ", "da"],
+            ["ذَ", "dza"],
+            ["رَ", "ra"],
+            ["زَ", "za"],
+            ["سَ", "sa"],
+            ["شَ", "sya"],
+            ["صَ", "sha"],
+            ["ضَ", "dha"],
+            ["طَ", "tha"],
+            ["ظَ", "zha"],
+            ["عَ", "'a"],
+            ["غَ", "gha"],
+            ["فَ", "fa"],
+            ["قَ", "qa"],
+            ["كَ", "ka"],
+            ["لَ", "la"],
+            ["مَ", "ma"],
+            ["نَ", "na"],
+            ["وَ", "wa"],
+            ["هَ", "ha"],
+            ["يَ", "ya"],
+          ],
+          "j1h12"
+        ),
+      },
     ],
   },
   {
@@ -261,6 +405,88 @@ export const IQRO_DATA: IqroJilid[] = [
             ["سَافَرَ حَاتِمٌ وَ نَاصِرٌ", "saafara haatimun wa naashirun"],
           ],
           "j2h6"
+        ),
+      },
+      {
+        id: "2-7",
+        judul: "Bedakan huruf sambung vs huruf berdiri sendiri",
+        penjelasan:
+          "Beberapa huruf (ا د ذ ر ز و) tidak bisa disambung ke huruf sesudahnya — perhatikan bentuknya tetap sama walau ada di tengah kata.",
+        contoh: buatContoh(
+          [
+            ["دَارَ", "daara"],
+            ["زَارَ", "zaara"],
+            ["وَرَدَ", "warada"],
+            ["أَرَادَ", "araada"],
+            ["وَجَدَ", "wajada"],
+          ],
+          "j2h7"
+        ),
+      },
+      {
+        id: "2-8",
+        judul: "Evaluasi akhir jilid 2",
+        penjelasan:
+          "Gabungan huruf sambung dan mad thobii alif dalam kalimat penutup jilid 2. Baca lancar tanpa terputus-putus sebelum lanjut ke Jilid 3.",
+        contoh: buatContoh(
+          [
+            ["جَاءَ حَامِدٌ وَ سَافَرَ خَالِدٌ", "jaa-a haamidun wa saafara khaalidun"],
+            ["قَامَتْ هَادِيَةُ وَ قَالَتْ نَادِيَةُ", "qaamat haadiyatu wa qaalat naadiyatu"],
+          ],
+          "j2h8"
+        ),
+      },
+      {
+        id: "2-9",
+        judul: "Huruf sambung — posisi awal, tengah, akhir",
+        penjelasan: "Perhatikan huruf yang sama bisa berubah bentuk tergantung posisinya di kata: awal, tengah, atau akhir.",
+        contoh: buatContoh(
+          [
+            ["كَتَبَ", "kataba"],
+            ["سَمِعَ", "sami'a"],
+            ["جَلَسَا", "jalasaa"],
+            ["ذَهَبَا", "dzahabaa"],
+            ["تَبَادَلَا", "tabaadalaa"],
+          ],
+          "j2h9"
+        ),
+      },
+      {
+        id: "2-10",
+        judul: "Mad Thobii alif lanjutan — kata baru",
+        penjelasan: "Perbanyak lagi kata dengan mad thobii alif, kelompok kata yang belum dipakai sebelumnya.",
+        contoh: buatContoh(
+          [
+            ["زَارَ", "zaara"],
+            ["فَازَ", "faaza"],
+            ["دَعَاهَا", "da'aahaa"],
+            ["تَابَ", "taaba"],
+            ["أَرَادَ", "araada"],
+          ],
+          "j2h10"
+        ),
+      },
+      {
+        id: "2-11",
+        judul: "Latihan kalimat pendek lanjutan",
+        penjelasan: "Rangkaian 2-3 kata bersambung dengan mad thobii, dibaca menyatu tanpa jeda di tengah kata.",
+        contoh: buatContoh(
+          [
+            ["زَارَ خَالِدٌ وَ حَامِدٌ", "zaara khaalidun wa haamidun"],
+            ["قَامَ نَاصِرٌ وَ سَافَرَ هَادِي", "qaama naashirun wa saafara haadii"],
+          ],
+          "j2h11"
+        ),
+      },
+      {
+        id: "2-12",
+        judul: "Evaluasi akhir jilid 2 — bacaan lebih panjang",
+        penjelasan: "Kalimat penutup jilid 2, gabungan seluruh huruf sambung dan mad thobii alif. Pastikan lancar sebelum lanjut ke Jilid 3.",
+        contoh: buatContoh(
+          [
+            ["جَاءَ حَامِدٌ وَ سَافَرَ خَالِدٌ وَ نَاصِرٌ", "jaa-a haamidun wa saafara khaalidun wa naashirun"],
+          ],
+          "j2h12"
         ),
       },
     ],
@@ -364,6 +590,94 @@ export const IQRO_DATA: IqroJilid[] = [
             ["هُوَ عَلِيمٌ حَكِيمٌ", "huwa 'aliimun hakiimun"],
           ],
           "j3h6"
+        ),
+      },
+      {
+        id: "3-7",
+        judul: "Mad Thobii ya & wau lanjutan",
+        penjelasan: "Perbanyak latihan supaya panjang 'ii' dan 'uu' konsisten 2 harakat, tidak kurang tidak lebih.",
+        contoh: buatContoh(
+          [
+            ["طَوِيلٌ", "thawiilun"],
+            ["جَدِيدٌ", "jadiidun"],
+            ["مَشْكُورٌ", "masykuurun"],
+            ["مَوْجُودٌ", "mawjuudun"],
+            ["صَغِيرٌ", "shaghiirun"],
+            ["كَبِيرٌ", "kabiirun"],
+          ],
+          "j3h7"
+        ),
+      },
+      {
+        id: "3-8",
+        judul: "Evaluasi akhir jilid 3",
+        penjelasan:
+          "Kalimat penutup jilid 3, gabungan fathah, kasroh, dhommah, dan mad thobii. Baca dengan tenang, tidak perlu terburu-buru.",
+        contoh: buatContoh(
+          [
+            ["رَبُّنَا رَحِيمٌ وَ غَفُورٌ", "rabbunaa rahiimun wa ghafuurun"],
+            ["هَذَا كِتَابٌ مُفِيدٌ", "haadzaa kitaabun mufiidun"],
+          ],
+          "j3h8"
+        ),
+      },
+      {
+        id: "3-9",
+        judul: "Kasroh & dhommah — kelompok huruf baru",
+        penjelasan: "Lanjutan latihan bunyi 'i' dan 'u' pendek pada huruf-huruf yang belum banyak dipakai di halaman sebelumnya.",
+        contoh: buatContoh(
+          [
+            ["دِ", "di"],
+            ["ذِ", "dzi"],
+            ["رِ", "ri"],
+            ["زِ", "zi"],
+            ["دُ", "du"],
+            ["ذُ", "dzu"],
+            ["رُ", "ru"],
+            ["زُ", "zu"],
+          ],
+          "j3h9"
+        ),
+      },
+      {
+        id: "3-10",
+        judul: "Mad Thobii ya & wau — kata baru",
+        penjelasan: "Perbanyak lagi kosakata dengan mad thobii ya (kasroh + ي) dan mad thobii wau (dhommah + و).",
+        contoh: buatContoh(
+          [
+            ["سَعِيدٌ", "sa'iidun"],
+            ["حَكِيمٌ", "hakiimun"],
+            ["قُلُوبٌ", "quluubun"],
+            ["عُيُونٌ", "'uyuunun"],
+            ["جُنُودٌ", "junuudun"],
+          ],
+          "j3h10"
+        ),
+      },
+      {
+        id: "3-11",
+        judul: "Latihan campuran tiga harakat — kata baru",
+        penjelasan: "Kata dengan fathah, kasroh, dan dhommah bercampur dalam satu kata, kelompok kata baru.",
+        contoh: buatContoh(
+          [
+            ["سَلِيمٌ", "saliimun"],
+            ["كَثِيرٌ", "katsiirun"],
+            ["قَرِيبٌ", "qariibun"],
+            ["شَكُورٌ", "syakuurun"],
+            ["وَدُودٌ", "waduudun"],
+          ],
+          "j3h11"
+        ),
+      },
+      {
+        id: "3-12",
+        judul: "Evaluasi akhir jilid 3 — kalimat lebih panjang",
+        penjelasan: "Kalimat penutup jilid 3, gabungan fathah, kasroh, dhommah, dan mad thobii ya/wau. Pastikan lancar sebelum lanjut ke Jilid 4.",
+        contoh: buatContoh(
+          [
+            ["رَبُّنَا سَمِيعٌ قَرِيبٌ وَدُودٌ", "rabbunaa samii'un qariibun waduudun"],
+          ],
+          "j3h12"
         ),
       },
     ],
@@ -475,6 +789,75 @@ export const IQRO_DATA: IqroJilid[] = [
           "j4h7"
         ),
       },
+      {
+        id: "4-8",
+        judul: "Latihan tambahan sebelum lanjut ke jilid 5",
+        penjelasan: "Kalimat gabungan tanwin, sukun, dan qalqalah yang lebih panjang. Pastikan lancar sebelum pindah jilid.",
+        contoh: buatContoh(
+          [
+            ["إِنَّا أَعْطَيْنَاكَ الْكَوْثَرْ", "innaa a'thainaakal kautsar"],
+            ["مِنْ خَيْرٍ وَ بَرَكَاتٍ", "min khairin wa barakaatin"],
+          ],
+          "j4h8"
+        ),
+      },
+      {
+        id: "4-9",
+        judul: "Tanwin lanjutan — kata baru",
+        penjelasan: "Tiga jenis tanwin (fathatain, kasrotain, dhommatain) pada kata-kata yang belum dipakai di halaman sebelumnya.",
+        contoh: buatContoh(
+          [
+            ["كَبِيرًا", "kabiiran"],
+            ["كَبِيرٍ", "kabiirin"],
+            ["كَبِيرٌ", "kabiirun"],
+            ["جَمِيلًا", "jamiilan"],
+            ["جَمِيلٍ", "jamiilin"],
+            ["جَمِيلٌ", "jamiilun"],
+          ],
+          "j4h9"
+        ),
+      },
+      {
+        id: "4-10",
+        judul: "Sukun lanjutan — kata baru",
+        penjelasan: "Huruf sukun (mati) pada kata-kata baru, dibaca pendek langsung tanpa dipanjangkan.",
+        contoh: buatContoh(
+          [
+            ["يَشْرَبُ", "yasyrabu"],
+            ["يَذْهَبُ", "yadzhabu"],
+            ["عِنْدَ", "'inda"],
+            ["بَعْدَ", "ba'da"],
+            ["قَبْلَ", "qabla"],
+          ],
+          "j4h10"
+        ),
+      },
+      {
+        id: "4-11",
+        judul: "Qalqalah lanjutan — kata baru",
+        penjelasan: "Lima huruf qalqalah (ق ط ب ج د) pada kata baru, dipantulkan ringan saat sukun/berhenti.",
+        contoh: buatContoh(
+          [
+            ["يَطْبَعُ", "yathba'u"],
+            ["أَبْدَعَ", "abda'a"],
+            ["يَجْتَهِدُ", "yajtahidu"],
+            ["مَجْدٌ", "majdun"],
+            ["قُلْ هُوَ اللَّهُ أَحَدْ", "qul huwallaahu ahad"],
+          ],
+          "j4h11"
+        ),
+      },
+      {
+        id: "4-12",
+        judul: "Evaluasi akhir jilid 4 — bacaan lebih panjang",
+        penjelasan: "Kalimat penutup jilid 4, gabungan tanwin, sukun, dan qalqalah dalam satu bacaan. Pastikan lancar sebelum lanjut ke Jilid 5.",
+        contoh: buatContoh(
+          [
+            ["وَبَشِّرِ الصَّابِرِينَ", "wa basysyiris shaabiriin"],
+          ],
+          "j4h12"
+        ),
+      },
     ],
   },
   {
@@ -582,6 +965,72 @@ export const IQRO_DATA: IqroJilid[] = [
             ["إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ", "iyyaaka na'budu wa iyyaaka nasta'iin"],
           ],
           "j5h7"
+        ),
+      },
+      {
+        id: "5-8",
+        judul: "Latihan lanjutan alif lam dalam ayat pendek",
+        penjelasan: "Terapkan qamariyah & syamsiyah langsung dalam potongan ayat pendek yang sudah dikenal.",
+        contoh: buatContoh(
+          [
+            ["اَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ", "alam tara kaifa fa'ala rabbuka"],
+            ["قُلْ أَعُوذُ بِرَبِّ النَّاسِ", "qul a'uudzu birabbin naas"],
+          ],
+          "j5h8"
+        ),
+      },
+      {
+        id: "5-9",
+        judul: "Alif Lam Qamariyah — kata baru",
+        penjelasan: "Lanjutan latihan alif lam qamariyah (lam dibaca jelas) dengan kata-kata yang belum dipakai sebelumnya.",
+        contoh: buatContoh(
+          [
+            ["اَلْعَلِيمُ", "al-'aliimu"],
+            ["اَلْخَبِيرُ", "al-khabiiru"],
+            ["اَلْوَاحِدُ", "al-waahidu"],
+            ["اَلْيَوْمُ", "al-yawmu"],
+            ["اَلْهُدَى", "al-hudaa"],
+          ],
+          "j5h9"
+        ),
+      },
+      {
+        id: "5-10",
+        judul: "Alif Lam Syamsiyah — kata baru",
+        penjelasan: "Lanjutan latihan alif lam syamsiyah (lam melebur) dengan kata-kata yang belum dipakai sebelumnya.",
+        contoh: buatContoh(
+          [
+            ["اَلطَّرِيقُ", "ath-thariiqu"],
+            ["اَلدُّنْيَا", "ad-dunyaa"],
+            ["اَلظَّالِمُونَ", "azh-zhaalimuun"],
+            ["اَلتَّوْبَةُ", "at-taubatu"],
+            ["اَلضُّحَى", "adh-dhuhaa"],
+          ],
+          "j5h10"
+        ),
+      },
+      {
+        id: "5-11",
+        judul: "Nun mati / tanwin bertemu huruf lain — lanjutan",
+        penjelasan: "Masih pengenalan awal, contoh tambahan supaya lebih terbiasa mendengar perubahan bunyinya.",
+        contoh: buatContoh(
+          [
+            ["مِنْ وَلِيٍّ", "miw waliyyin"],
+            ["خَيْرٌ لَكُمْ", "khairul lakum"],
+            ["مِنْ مَالِ اللَّهِ", "mim maalillaah"],
+          ],
+          "j5h11"
+        ),
+      },
+      {
+        id: "5-12",
+        judul: "Evaluasi akhir jilid 5 — bacaan lebih panjang",
+        penjelasan: "Kalimat penutup jilid 5, gabungan alif lam qamariyah/syamsiyah dan nun mati/tanwin. Pastikan lancar sebelum lanjut ke Jilid 6.",
+        contoh: buatContoh(
+          [
+            ["اَلْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ الرَّحْمَنِ الرَّحِيمِ", "alhamdu lillaahi rabbil 'aalamiinar rahmaanir rahiim"],
+          ],
+          "j5h12"
         ),
       },
     ],
@@ -705,6 +1154,61 @@ export const IQRO_DATA: IqroJilid[] = [
             ["وَاللَّهُ أَعْلَمُ بِالصَّوَابِ", "wallaahu a'lamu bish shawaab"],
           ],
           "j6h8"
+        ),
+      },
+      {
+        id: "6-9",
+        judul: "Ghunnah lanjutan — kata baru",
+        penjelasan: "Latihan tambahan dengung pada نّ dan مّ dengan kata-kata yang belum dipakai sebelumnya.",
+        contoh: buatContoh(
+          [
+            ["إِنَّمَا", "innamaa"],
+            ["أَنَّهُ", "annahu"],
+            ["ثَمَّةَ", "tsammata"],
+            ["عَمَّنْ", "'amman"],
+            ["مِمَّا", "mimmaa"],
+          ],
+          "j6h9"
+        ),
+      },
+      {
+        id: "6-10",
+        judul: "Mad far'i lanjutan — kata baru",
+        penjelasan: "Latihan tambahan mad far'i (lebih dari 2 harakat) karena bertemu hamzah atau sukun.",
+        contoh: buatContoh(
+          [
+            ["أُولَئِكَ", "ulaa-ika"],
+            ["السَّمَاوَاتِ", "as-samaawaati"],
+            ["يَشَاءُونَ", "yasyaa-uun"],
+            ["الْمُؤْمِنُونَ", "al-mu'minuun"],
+          ],
+          "j6h10"
+        ),
+      },
+      {
+        id: "6-11",
+        judul: "Tanda waqaf lanjutan",
+        penjelasan: "Latihan tambahan mengenali tanda waqaf: صلي (lebih baik lanjut), ص (boleh berhenti), ق (lebih baik berhenti).",
+        contoh: buatContoh(
+          [
+            ["... وَاللَّهُ بِكُلِّ شَيْءٍ عَلِيمٌ ۝", "... wallaahu bikulli syai-in 'aliim (berhenti)"],
+            ["... إِنَّهُ هُوَ التَّوَّابُ الرَّحِيمُ ۝", "... innahu huwat tawwaabur rahiim (berhenti)"],
+          ],
+          "j6h11"
+        ),
+      },
+      {
+        id: "6-12",
+        judul: "Evaluasi akhir jilid 6 — siap khatam ke Al-Qur'an 30 Juz",
+        penjelasan:
+          "Halaman penutup seluruh metode Iqro 1-6. Kalau bacaan berikut sudah lancar dengan tajwid dasar yang benar, artinya sudah siap melanjutkan ke Al-Qur'an 30 juz didampingi guru mengaji.",
+        contoh: buatContoh(
+          [
+            ["قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ", "qul a'uudzu birabbil falaq"],
+            ["مِنْ شَرِّ مَا خَلَقَ", "min syarri maa khalaq"],
+            ["وَاللَّهُ الْمُسْتَعَانُ", "wallaahul musta'aan"],
+          ],
+          "j6h12"
         ),
       },
     ],

@@ -122,7 +122,7 @@ export default async function Home() {
             <span className="h-px w-10 bg-[var(--gold)] animate-glow" />
           </div>
           <h1
-            className="font-arabic text-5xl md:text-6xl text-[var(--ink)] mb-5 animate-fade-up"
+            className="font-arabic text-gold-foil text-5xl md:text-6xl mb-5 animate-fade-up animate-glow"
             style={{ animationDelay: "0.08s" }}
             dir="rtl"
           >
