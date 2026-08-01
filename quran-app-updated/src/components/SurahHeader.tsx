@@ -1,4 +1,4 @@
-import { TIDAK_ADA_BASMALAH } from "@/lib/quran-api";
+import { TIDAK_ADA_BASMALAH } from "@/lib/quran-constants";
 
 type SurahHeaderProps = {
   nomor: number;

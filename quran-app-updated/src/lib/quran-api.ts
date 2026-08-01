@@ -88,7 +88,7 @@ export async function getSurahDetail(nomor: number): Promise<SurahDetail> {
   };
 }
 
-export const TIDAK_ADA_BASMALAH = new Set([1, 9]);
+export { TIDAK_ADA_BASMALAH } from "./quran-constants";
 
 export type AyatHarian = {
   ayat: Ayat;
