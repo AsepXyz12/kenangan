@@ -1,15 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --parchment: #f4eeda;
-  --parchment-deep: #e8dcb8;
-  --parchment-line: #d8c79a;
-  --ink: #211a10;
-  --ink-soft: #5a4e37;
-  --teal: #24463d;
-  --teal-deep: #16302a;
+  /* Ditarik agak lebih gelap & hangat dari sebelumnya (f4eeda -> ecd) supaya
+     nggak keliatan "putih polos", lebih berasa mushaf kertas tua yang kaya. */
+  --parchment: #ede2c4;
+  --parchment-deep: #ddc99a;
+  --parchment-line: #c7b077;
+  --ink: #1a140b;
+  --ink-soft: #4d4128;
+  --teal: #1d3c34;
+  --teal-deep: #112620;
   --gold: #a97e2f;
-  --gold-bright: #c99a3f;
+  --gold-bright: #e0b84f;
+  --gold-glow: rgba(224, 184, 79, 0.35);
   --maroon: #7c3232;
 }
 
@@ -23,6 +26,7 @@
   --color-teal-deep: var(--teal-deep);
   --color-gold: var(--gold);
   --color-gold-bright: var(--gold-bright);
+  --color-gold-glow: var(--gold-glow);
   --color-maroon: var(--maroon);
   --font-arabic: var(--font-arabic);
   --font-display: var(--font-display);
@@ -42,12 +46,16 @@ body {
   color: var(--ink);
   font-family: var(--font-body), serif;
   background-image:
-    radial-gradient(circle at 1px 1px, rgba(33, 26, 16, 0.07) 1px, transparent 0),
-    radial-gradient(ellipse 900px 500px at 50% -10%, rgba(36, 70, 61, 0.08), transparent 60%),
-    radial-gradient(ellipse 1000px 600px at 100% 0%, rgba(169, 126, 47, 0.06), transparent 55%),
-    radial-gradient(ellipse 1200px 900px at 0% 100%, rgba(33, 26, 16, 0.05), transparent 60%);
-  background-size: 22px 22px, 100% 100%, 100% 100%, 100% 100%;
-  background-repeat: repeat, no-repeat, no-repeat, no-repeat;
+    radial-gradient(circle at 1px 1px, rgba(26, 20, 11, 0.1) 1px, transparent 0),
+    radial-gradient(ellipse 900px 500px at 50% -10%, rgba(29, 60, 52, 0.14), transparent 60%),
+    radial-gradient(ellipse 1000px 600px at 100% 0%, rgba(169, 126, 47, 0.12), transparent 55%),
+    radial-gradient(ellipse 1200px 900px at 0% 100%, rgba(26, 20, 11, 0.1), transparent 60%),
+    /* Vignette halus di tepi layar -> pusat perhatian ke tengah, dan
+       "putih"-nya nggak polos rata sampai ke pinggir. */
+    radial-gradient(ellipse 1400px 1000px at 50% 40%, transparent 55%, rgba(26, 20, 11, 0.09) 100%);
+  background-size: 22px 22px, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+  background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  background-attachment: fixed, scroll, scroll, scroll, fixed;
 }
 
 /* Kedalaman "elevation" untuk semua kartu/kotak berbingkai di seluruh situs.
@@ -57,17 +65,28 @@ body {
    "rounded-*" + border parchment-line, tanpa perlu ubah tiap file halaman. */
 [class*="rounded"][class*="border-[var(--parchment-line)]"] {
   box-shadow:
-    0 1px 2px rgba(33, 20, 8, 0.05),
-    0 16px 32px -22px rgba(20, 14, 6, 0.45);
+    0 1px 2px rgba(20, 14, 6, 0.08),
+    0 20px 40px -22px rgba(15, 10, 4, 0.55),
+    inset 0 1px 0 rgba(255, 250, 235, 0.35);
+  transition: box-shadow 0.35s ease, transform 0.35s ease;
 }
 
-/* Navbar & Footer: bayangan halus supaya nggak nempel rata sama konten */
+[class*="rounded"][class*="border-[var(--parchment-line)]"]:hover {
+  box-shadow:
+    0 1px 2px rgba(20, 14, 6, 0.08),
+    0 24px 48px -20px rgba(15, 10, 4, 0.6),
+    0 0 0 1px var(--gold-glow),
+    inset 0 1px 0 rgba(255, 250, 235, 0.4);
+}
+
+/* Navbar & Footer: bayangan halus + kaca gelap tipis supaya nggak nempel rata
+   sama konten dan kelihatan lebih "melayang" di atas halaman. */
 header.sticky {
-  box-shadow: 0 8px 24px -18px rgba(20, 14, 6, 0.5);
+  box-shadow: 0 8px 28px -16px rgba(15, 10, 4, 0.6);
 }
 
 footer {
-  box-shadow: 0 -8px 24px -20px rgba(20, 14, 6, 0.35);
+  box-shadow: 0 -8px 28px -18px rgba(15, 10, 4, 0.45);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -106,7 +125,8 @@ footer {
   box-shadow:
     0 0 0 3px var(--parchment),
     0 0 0 4px var(--parchment-line),
-    0 20px 40px -24px rgba(20, 14, 6, 0.5);
+    0 0 32px -6px var(--gold-glow),
+    0 24px 48px -24px rgba(15, 10, 4, 0.6);
 }
 
 .ornament-corner::before,
