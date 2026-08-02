@@ -20,6 +20,7 @@ const PAGE_CACHE = `${VERSION}-pages`;
 // offline — nggak perlu nunggu user buka satu-satu dulu baru ke-cache.
 const APP_SHELL = [
   "/",
+  "/perbaiki",
   "/manifest.webmanifest",
   "/icons/icon-192.png",
   "/icons/icon-512.png",

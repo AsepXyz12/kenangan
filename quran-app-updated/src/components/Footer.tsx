@@ -13,12 +13,20 @@ export default function Footer() {
             Dibuat oleh <span className="font-medium text-[var(--heading)]">Ramzz</span>
           </p>
         </div>
-        <a
-          href="/tentang"
-          className="text-xs text-[var(--ink-soft)] underline decoration-[var(--parchment-line)] underline-offset-4 hover:text-[var(--heading)] transition-colors"
-        >
-          Tentang &amp; sumber data
-        </a>
+        <div className="flex flex-col items-start md:items-end gap-2">
+          <a
+            href="/tentang"
+            className="text-xs text-[var(--ink-soft)] underline decoration-[var(--parchment-line)] underline-offset-4 hover:text-[var(--heading)] transition-colors"
+          >
+            Tentang &amp; sumber data
+          </a>
+          <a
+            href="/perbaiki"
+            className="text-xs text-[var(--ink-soft)] underline decoration-[var(--parchment-line)] underline-offset-4 hover:text-[var(--heading)] transition-colors"
+          >
+            Ada masalah teknis / halaman error?
+          </a>
+        </div>
       </div>
     </footer>
   );
