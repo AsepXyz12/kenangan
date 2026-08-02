@@ -6,6 +6,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { Home, BookOpenText, RotateCw, Wrench } from "lucide-react";
 import { resetTotal } from "@/lib/reset-total";
+import ChatPemilikWidget from "./ChatPemilikWidget";
 
 // Komponen error bersama untuk semua route segment (quran, iqro, hadits, dll).
 //
@@ -91,6 +92,10 @@ export default function ErrorState({
               <BookOpenText size={13} />
               Buka Mushaf
             </Link>
+          </div>
+
+          <div className="mt-5 pt-5 border-t border-[var(--parchment-line)] flex justify-center">
+            <ChatPemilikWidget />
           </div>
         </div>
       </main>

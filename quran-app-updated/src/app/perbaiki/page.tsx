@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Wrench, Home } from "lucide-react";
 import { resetTotal } from "@/lib/reset-total";
+import ChatPemilikWidget from "@/components/ChatPemilikWidget";
 
 // Halaman bantuan mandiri satu tombol.
 //
@@ -58,6 +59,19 @@ export default function PerbaikiPage() {
             Aman dipencet berkali-kali. Tidak menghapus hafalan bacaan
             terakhir kamu.
           </p>
+
+          <div className="flex items-center gap-3 mb-6">
+            <span className="flex-1 h-px bg-[var(--parchment-line)]" />
+            <span className="text-[11px] text-[var(--ink-soft)] uppercase tracking-wider">
+              masih bermasalah?
+            </span>
+            <span className="flex-1 h-px bg-[var(--parchment-line)]" />
+          </div>
+
+          <div className="flex justify-center mb-6">
+            <ChatPemilikWidget />
+          </div>
+
           <Link
             href="/"
             className="inline-flex items-center gap-2 text-xs text-[var(--ink-soft)] hover:text-[var(--heading)] underline underline-offset-4"
