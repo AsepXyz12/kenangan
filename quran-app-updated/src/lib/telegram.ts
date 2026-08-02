@@ -20,7 +20,10 @@ const API_BASE = process.env.TELEGRAM_BOT_TOKEN
 
 // Kirim pesan ke owner. Mengembalikan message_id dari Telegram (dipakai
 // sebagai kunci buat mencocokkan balasan owner nanti lewat reply-to-message).
-export async function sendToOwner(text: string): Promise<number | null> {
+export async function sendToOwner(
+  text: string,
+  replyToMessageId?: number
+): Promise<number | null> {
   if (!API_BASE || !process.env.TELEGRAM_OWNER_CHAT_ID) return null;
 
   try {
@@ -31,6 +34,7 @@ export async function sendToOwner(text: string): Promise<number | null> {
         chat_id: process.env.TELEGRAM_OWNER_CHAT_ID,
         text,
         parse_mode: "HTML",
+        ...(replyToMessageId ? { reply_to_message_id: replyToMessageId } : {}),
       }),
     });
     const data = await res.json();

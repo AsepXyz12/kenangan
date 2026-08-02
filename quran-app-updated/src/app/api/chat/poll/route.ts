@@ -31,7 +31,13 @@ export async function GET(request: Request) {
     })
     .filter((m): m is ChatMessage => m !== null);
 
-  const unread = (await redis.get<string>(`chat:unread:${sessionId}`)) === "1";
+  // PENTING: jangan bandingin hasil redis.get() dengan string "1" -- client
+  // @upstash/redis otomatis JSON.parse() value yang keliatan valid JSON,
+  // jadi "1" balik sebagai number 1, bukan string "1", dan perbandingan
+  // === "1" selalu false (ini penyebab notif "unread" nggak pernah nyala
+  // walau flag-nya udah ke-set di Redis). Pakai exists() -- cuma peduli
+  // key-nya ada atau nggak, gak peduli tipe value-nya.
+  const unread = (await redis.exists(`chat:unread:${sessionId}`)) === 1;
 
   if (markRead && unread) {
     await redis.del(`chat:unread:${sessionId}`);

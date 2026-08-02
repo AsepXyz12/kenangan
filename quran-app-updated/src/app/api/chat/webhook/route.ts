@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { redis, redisConfigured } from "@/lib/redis";
+import { sendToOwner } from "@/lib/telegram";
 
 export const dynamic = "force-dynamic";
 
@@ -59,6 +60,16 @@ export async function POST(request: Request) {
       await redis.set(`chat:unread:${sessionId}`, "1", {
         ex: MESSAGES_TTL_SECONDS,
       });
+      // Kasih tau owner kalau balasannya udah kekirim ke pengunjung.
+      await sendToOwner("✅ <b>Sukses terkirim</b>", replyTo);
+    } else {
+      // Sesi udah expired (>14 hari) atau message_id-nya bukan notifikasi
+      // pesan pengunjung -- kasih tau owner biar gak nunggu-nunggu padahal
+      // balasannya nggak kekirim kemana-mana.
+      await sendToOwner(
+        "⚠️ Gagal terkirim — sesi pengunjung ini sudah kedaluwarsa atau pesan yang di-reply bukan notifikasi chat.",
+        replyTo
+      );
     }
   }
 
