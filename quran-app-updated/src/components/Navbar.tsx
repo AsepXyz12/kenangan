@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, BookOpenText, Sun, Moon } from "lucide-react";
 import { useTheme } from "@/components/ThemeContext";
+import SearchOverlay from "@/components/SearchOverlay";
 
 // Catatan: daftar href di sini juga di-precache untuk offline di public/sw.js
 // (APP_SHELL). Kalau nambah/hapus menu di sini, update juga di sw.js.
@@ -12,6 +13,7 @@ const NAV_GROUPS: { label: string; items: { href: string; label: string }[] }[] 
   {
     label: "Bacaan Utama",
     items: [
+      { href: "/cari", label: "Cari" },
       { href: "/quran", label: "Al-Qur'an" },
       { href: "/iqro", label: "Iqro Anak (Jilid 1-6)" },
       { href: "/hadits", label: "Hadits" },
@@ -103,6 +105,8 @@ export default function Navbar() {
           </Link>
 
           <div className="flex items-center gap-2">
+            <SearchOverlay />
+
             <button
               type="button"
               onClick={toggleTheme}
