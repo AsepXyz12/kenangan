@@ -22,12 +22,19 @@ export default function AyatBlock({
   teksIndonesia,
   tampilkanLatin,
 }: AyatBlockProps) {
-  const { isActiveAyat, isPlaying, isLoading, playAyat, pause } = useAudioPlayer();
+  const { isActiveAyat, isPlaying, isLoading, playAyat, pause, currentTime, duration } =
+    useAudioPlayer();
   const { classes } = useFontSize();
 
   const aktif = isActiveAyat(surahNomor, nomorAyat);
   const sedangMuat = aktif && isLoading;
   const sedangPutar = aktif && isPlaying;
+
+  // Progress "nyapu" teks Arab ala karaoke, mengikuti posisi audio ayat ini
+  // (berbasis waktu, bukan per-kata persis -- karena sumber audionya per-ayat
+  // utuh, bukan per-kata). Nyapu dari kanan ke kiri sesuai arah baca Arab.
+  const progresBaca = aktif && duration > 0 ? Math.min(1, currentTime / duration) : 0;
+  const tampilkanSapuan = aktif && (isPlaying || progresBaca > 0);
 
   const handleTogglePlay = () => {
     if (aktif && isPlaying) {
@@ -65,7 +72,25 @@ export default function AyatBlock({
           )}
         </button>
       </div>
-      <p className={`ayat-arabic ${classes.arabic} text-[var(--ink)]`}>{teksArab}</p>
+      <p
+        className={`ayat-arabic ${classes.arabic} transition-[background-position] duration-150 ${
+          tampilkanSapuan ? "" : "text-[var(--ink)]"
+        }`}
+        style={
+          tampilkanSapuan
+            ? {
+                backgroundImage: `linear-gradient(to left, var(--teal) 0%, var(--teal) ${
+                  progresBaca * 100
+                }%, var(--ink) ${progresBaca * 100}%, var(--ink) 100%)`,
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                color: "transparent",
+              }
+            : undefined
+        }
+      >
+        {teksArab}
+      </p>
       {tampilkanLatin && (
         <p className={`font-body italic text-[var(--ink-soft)] ${classes.latin} mt-4 leading-relaxed`}>
           {teksLatin}
