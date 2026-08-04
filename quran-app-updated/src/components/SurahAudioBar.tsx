@@ -40,7 +40,6 @@ function SeekBar({
 
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     e.currentTarget.setPointerCapture(e.pointerId);
-    wasPlayingRef.current = isPlaying;
     setDragging(true);
     onSeekStart();
     const ratio = ratioFromEvent(e.clientX);
