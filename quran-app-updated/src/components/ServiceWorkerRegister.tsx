@@ -47,7 +47,14 @@ export default function ServiceWorkerRegister() {
 
     const register = () => {
       navigator.serviceWorker
-        .register("/sw.js")
+        // PENTING: updateViaCache "none" wajib di-set eksplisit. Defaultnya
+        // ("imports") bikin browser boleh ambil FILE sw.js itu sendiri dari
+        // HTTP cache biasa alih-alih selalu cek ke network -- kalau itu
+        // kejadian, BUILD_ID baru di server nggak pernah kedeteksi sampai
+        // entah kapan HTTP cache-nya basi sendiri. "none" memaksa setiap
+        // registration.update() (termasuk pengecekan tiap tab fokus di bawah)
+        // benar-benar nanya ke server, bukan ke cache lokal.
+        .register("/sw.js", { updateViaCache: "none" })
         .then((registration) => {
           // Kalau ada worker baru yang lagi nunggu (sudah kedetect sebelum listener
           // ini terpasang), langsung suruh dia ambil alih.

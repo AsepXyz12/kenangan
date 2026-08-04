@@ -32,6 +32,53 @@ export async function resetTotal() {
     // Sama, jangan sampai kegagalan di sini menghalangi reload.
   }
 
+  // PENTING (akar masalah kenapa dulu tombol ini kadang "keliatan jalan"
+  // tapi masalahnya balik lagi): unregister() + caches.delete() di atas
+  // cuma bersihin Cache Storage. Tapi browser register("/sw.js") secara
+  // default (updateViaCache: "imports") tetap boleh ambil FILE sw.js itu
+  // sendiri dari HTTP cache biasa kalau server pernah kasih header cache
+  // yang mengizinkan itu. Akibatnya: abis "dibersihkan", begitu halaman baru
+  // reload dan ServiceWorkerRegister daftar ulang, ia bisa dapet sw.js versi
+  // BASI lagi dari HTTP cache -> BUILD_ID lama nyala lagi -> sampah balik.
+  // Fix: paksa fetch sw.js langsung dari network (cache: "reload") supaya
+  // HTTP cache-nya ikut ke-refresh sebelum halaman reload & registrasi ulang.
+  try {
+    if (typeof fetch !== "undefined") {
+      await fetch("/sw.js", { cache: "reload" });
+    }
+  } catch {
+    // Abaikan -- ini cuma usaha ekstra, bukan syarat wajib.
+  }
+
+  // Bersihin juga IndexedDB (kalau ada dipakai fitur apa pun sekarang/nanti)
+  // supaya benar-benar "sampe akar-akarnya", bukan cuma Cache Storage.
+  // localStorage SENGAJA TIDAK disentuh di sini -- itu tempat bacaan
+  // terakhir & surat favorit kamu tersimpan (lihat src/lib/bookmark.ts).
+  try {
+    if (
+      typeof indexedDB !== "undefined" &&
+      "databases" in indexedDB &&
+      typeof indexedDB.databases === "function"
+    ) {
+      const dbs = await indexedDB.databases();
+      await Promise.all(
+        dbs
+          .filter((db) => !!db.name)
+          .map(
+            (db) =>
+              new Promise<void>((resolve) => {
+                const req = indexedDB.deleteDatabase(db.name as string);
+                req.onsuccess = () => resolve();
+                req.onerror = () => resolve();
+                req.onblocked = () => resolve();
+              })
+          )
+      );
+    }
+  } catch {
+    // Abaikan, sama seperti di atas.
+  }
+
   if (typeof window !== "undefined") {
     // Cache-bust lewat query param + reload penuh (bukan router.refresh)
     // supaya browser benar-benar minta ulang dokumen HTML dari server, tidak

@@ -1,42 +1,10 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BackButton from "@/components/BackButton";
+import { Kartu, DoaCard, type Doa } from "@/components/DoaCard";
+import DoaSearchBox, { type DoaEntry } from "@/components/DoaSearchBox";
 
 export const metadata = { title: "Doa & Dzikir Harian — Mushaf" };
-
-type Doa = {
-  judul: string;
-  arab: string;
-  latin: string;
-  arti: string;
-  keterangan?: string;
-};
-
-function Kartu({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="rounded-2xl border border-[var(--parchment-line)] bg-[var(--parchment)] p-5 md:p-6">
-      {children}
-    </div>
-  );
-}
-
-function DoaCard({ d }: { d: Doa }) {
-  return (
-    <Kartu>
-      <h3 className="font-medium text-[var(--ink)] mb-2">{d.judul}</h3>
-      <p dir="rtl" className="font-arabic text-xl md:text-2xl leading-loose text-[var(--ink)]">
-        {d.arab}
-      </p>
-      <p className="text-sm italic text-[var(--ink-soft)] mt-2">{d.latin}</p>
-      <p className="text-sm text-[var(--ink-soft)] mt-1">&ldquo;{d.arti}&rdquo;</p>
-      {d.keterangan && (
-        <p className="text-xs text-[var(--ink-soft)] mt-2 border-t border-[var(--parchment-line)] pt-2">
-          {d.keterangan}
-        </p>
-      )}
-    </Kartu>
-  );
-}
 
 const DOA_BANGUN_TIDUR: Doa = {
   judul: "Doa Bangun Tidur",
@@ -287,6 +255,33 @@ const DOA_ZIARAH_KUBUR: Doa = {
   arti: "Semoga keselamatan tercurah kepada kalian wahai penghuni kubur dari kalangan mukmin dan muslim. Sesungguhnya kami insyaallah akan menyusul kalian. Aku memohon kepada Allah keselamatan untuk kami dan kalian.",
 };
 
+// Daftar datar semua doa/dzikir di halaman ini + kategorinya, khusus buat
+// DoaSearchBox (fitur cari). Disusun manual biar labelnya sama persis
+// dengan judul <Seksi>/<section> di bawah.
+const SEMUA_ITEM: DoaEntry[] = [
+  { kategori: "Doa Bangun & Tidur", d: DOA_BANGUN_TIDUR },
+  { kategori: "Doa Bangun & Tidur", d: DOA_SEBELUM_TIDUR },
+  { kategori: "Doa Kamar Mandi", d: DOA_MASUK_KAMAR_MANDI },
+  { kategori: "Doa Kamar Mandi", d: DOA_KELUAR_KAMAR_MANDI },
+  { kategori: "Doa Makan", d: DOA_SEBELUM_MAKAN },
+  { kategori: "Doa Makan", d: DOA_SETELAH_MAKAN },
+  { kategori: "Doa Rumah & Bepergian", d: DOA_KELUAR_RUMAH },
+  { kategori: "Doa Rumah & Bepergian", d: DOA_MASUK_RUMAH },
+  { kategori: "Doa Rumah & Bepergian", d: DOA_BEPERGIAN },
+  { kategori: "Doa Masjid", d: DOA_MASUK_MASJID },
+  { kategori: "Doa Masjid", d: DOA_KELUAR_MASJID },
+  { kategori: "Doa Lainnya", d: DOA_UNTUK_ORANG_TUA },
+  { kategori: "Doa Lainnya", d: DOA_PENUTUP_MAJELIS },
+  { kategori: "Doa dalam Berbagai Keadaan", d: DOA_BERSIN },
+  { kategori: "Doa dalam Berbagai Keadaan", d: DOA_HUJAN_TURUN },
+  { kategori: "Doa dalam Berbagai Keadaan", d: DOA_MUSIBAH },
+  { kategori: "Doa dalam Berbagai Keadaan", d: DOA_PAKAIAN_BARU },
+  { kategori: "Doa dalam Berbagai Keadaan", d: DOA_ZIARAH_KUBUR },
+  ...DZIKIR_SETELAH_SHOLAT.map((d) => ({ kategori: "Dzikir Setelah Sholat Fardu", d })),
+  ...DZIKIR_PAGI.map((d) => ({ kategori: "Dzikir Pagi & Petang", d })),
+  ...DZIKIR_PETANG.map((d) => ({ kategori: "Dzikir Petang (Lengkap)", d })),
+];
+
 function Seksi({ title, desc, items }: { title: string; desc?: string; items: Doa[] }) {
   return (
     <section className="mb-12">
@@ -316,6 +311,7 @@ export default function DoaDzikirPage() {
           aktivitas sehari-hari, sebagai bentuk mengingat Allah dalam setiap keadaan.
         </p>
 
+        <DoaSearchBox items={SEMUA_ITEM}>
         <Seksi title="Doa Bangun & Tidur" items={[DOA_BANGUN_TIDUR, DOA_SEBELUM_TIDUR]} />
         <Seksi title="Doa Kamar Mandi" items={[DOA_MASUK_KAMAR_MANDI, DOA_KELUAR_KAMAR_MANDI]} />
         <Seksi title="Doa Makan" items={[DOA_SEBELUM_MAKAN, DOA_SETELAH_MAKAN]} />
@@ -371,6 +367,7 @@ export default function DoaDzikirPage() {
             ))}
           </div>
         </section>
+        </DoaSearchBox>
       </main>
       <Footer />
     </div>

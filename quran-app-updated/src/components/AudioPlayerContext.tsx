@@ -24,10 +24,18 @@ type AudioPlayerState = {
   current: PlaybackTarget | null;
   isPlaying: boolean;
   isLoading: boolean;
+  // Progress player (buat progress bar geser kek YouTube di SurahAudioBar).
+  // currentTime/duration dalam detik, progress 0-1 (0 kalau durasi belum
+  // kebaca / metadata belum ke-load).
+  currentTime: number;
+  duration: number;
+  progress: number;
   playAyat: (surahNomor: number, ayatNomor: number) => void;
   playSurah: (surahNomor: number, ayatNomors: number[]) => void;
   pause: () => void;
+  resume: () => void;
   stop: () => void;
+  seekTo: (ratio: number) => void;
   isActiveAyat: (surahNomor: number, ayatNomor: number) => boolean;
 };
 
@@ -42,6 +50,8 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
   const [current, setCurrent] = useState<PlaybackTarget | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
 
   // playInternal ditaruh di ref supaya handler "ended" (didaftarkan sekali di
   // effect setup) selalu memanggil versi terbaru tanpa perlu re-attach listener.
@@ -51,6 +61,8 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
     const audio = audioRef.current;
     if (!audio) return;
     setIsLoading(true);
+    setCurrentTime(0);
+    setDuration(0);
     audio.src = getAyatAudioUrl(surahNomor, ayatNomor);
     currentRef.current = { surahNomor, ayatNomor };
     setCurrent({ surahNomor, ayatNomor });
@@ -73,6 +85,12 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
     const onPause = () => setIsPlaying(false);
     const onWaiting = () => setIsLoading(true);
     const onPlaying = () => setIsLoading(false);
+    // Progress bar geser (kek YouTube) di SurahAudioBar butuh currentTime &
+    // duration yang selalu update. loadedmetadata -> durasi kebaca pertama
+    // kali, timeupdate -> posisi berjalan tiap ~250ms bawaan browser.
+    const onLoadedMetadata = () => setDuration(audio.duration || 0);
+    const onDurationChange = () => setDuration(audio.duration || 0);
+    const onTimeUpdate = () => setCurrentTime(audio.currentTime || 0);
     const onEnded = () => {
       const queue = queueRef.current;
       const cur = currentRef.current;
@@ -88,12 +106,17 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
       setCurrent(null);
       currentRef.current = null;
       queueRef.current = null;
+      setCurrentTime(0);
+      setDuration(0);
     };
 
     audio.addEventListener("play", onPlay);
     audio.addEventListener("pause", onPause);
     audio.addEventListener("waiting", onWaiting);
     audio.addEventListener("playing", onPlaying);
+    audio.addEventListener("loadedmetadata", onLoadedMetadata);
+    audio.addEventListener("durationchange", onDurationChange);
+    audio.addEventListener("timeupdate", onTimeUpdate);
     audio.addEventListener("ended", onEnded);
 
     return () => {
@@ -101,6 +124,9 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
       audio.removeEventListener("pause", onPause);
       audio.removeEventListener("waiting", onWaiting);
       audio.removeEventListener("playing", onPlaying);
+      audio.removeEventListener("loadedmetadata", onLoadedMetadata);
+      audio.removeEventListener("durationchange", onDurationChange);
+      audio.removeEventListener("timeupdate", onTimeUpdate);
       audio.removeEventListener("ended", onEnded);
       audio.pause();
     };
@@ -127,6 +153,10 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
     audioRef.current?.pause();
   }, []);
 
+  const resume = useCallback(() => {
+    audioRef.current?.play().catch(() => {});
+  }, []);
+
   const stop = useCallback(() => {
     const audio = audioRef.current;
     if (audio) {
@@ -139,6 +169,19 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
     setCurrent(null);
     setIsPlaying(false);
     setIsLoading(false);
+    setCurrentTime(0);
+    setDuration(0);
+  }, []);
+
+  // Dipanggil pas user geser/tap progress bar. ratio 0-1 relatif terhadap
+  // durasi. Diklem ke rentang valid supaya nggak error kalau metadata
+  // durasi belum sempat kebaca (duration masih 0).
+  const seekTo = useCallback((ratio: number) => {
+    const audio = audioRef.current;
+    if (!audio || !Number.isFinite(audio.duration) || audio.duration <= 0) return;
+    const clamped = Math.min(1, Math.max(0, ratio));
+    audio.currentTime = clamped * audio.duration;
+    setCurrentTime(audio.currentTime);
   }, []);
 
   const isActiveAyat = useCallback(
@@ -147,9 +190,25 @@ export function AudioPlayerProvider({ children }: { children: React.ReactNode })
     [current]
   );
 
+  const progress = duration > 0 ? Math.min(1, currentTime / duration) : 0;
+
   return (
     <AudioPlayerCtx.Provider
-      value={{ current, isPlaying, isLoading, playAyat, playSurah, pause, stop, isActiveAyat }}
+      value={{
+        current,
+        isPlaying,
+        isLoading,
+        currentTime,
+        duration,
+        progress,
+        playAyat,
+        playSurah,
+        pause,
+        resume,
+        stop,
+        seekTo,
+        isActiveAyat,
+      }}
     >
       {children}
     </AudioPlayerCtx.Provider>

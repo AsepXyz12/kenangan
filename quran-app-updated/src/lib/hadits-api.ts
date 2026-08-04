@@ -52,6 +52,62 @@ export type HaditsListResult = {
   totalPages: number;
 };
 
+// Cache seluruh isi 1 kitab (semua chunk digabung) di memory, dipakai khusus
+// buat fitur cari teks (searchHaditsInKitab di bawah). Di-load MALAS (baru
+// dibaca dari disk pas pertama kali ada yang cari di kitab itu), bukan pas
+// module ini pertama di-import, biar startup app tetap ringan.
+const fullKitabCache = new Map<string, HaditsItem[]>();
+
+function getFullKitab(slug: string): HaditsItem[] {
+  const cached = fullKitabCache.get(slug);
+  if (cached) return cached;
+
+  const meta = getKitabMeta(slug);
+  if (!meta) return [];
+
+  let all: HaditsItem[] = [];
+  for (let ci = 0; ci < meta.totalChunks; ci++) {
+    all = all.concat(readChunk(slug, ci));
+  }
+  fullKitabCache.set(slug, all);
+  return all;
+}
+
+export type HaditsSearchResult = { nomor: number; cuplikan: string };
+
+// Cari teks di DALAM SATU KITAB SAJA (bukan lintas kitab / lintas halaman
+// lain di situs) -- persis kayak search di daftar Surat yang cuma nyaring
+// data yang memang ada di halaman itu. cuplikan dipotong di sekitar kata
+// yang cocok biar user lihat konteksnya, bukan cuma nomor hadits doang.
+export function searchHaditsInKitab(
+  slug: string,
+  query: string,
+  limit = 40
+): HaditsSearchResult[] {
+  const q = query.trim().toLowerCase();
+  if (!q) return [];
+
+  const all = getFullKitab(slug);
+  const hasil: HaditsSearchResult[] = [];
+
+  for (const h of all) {
+    const lower = h.terjemah.toLowerCase();
+    const idx = lower.indexOf(q);
+    if (idx === -1) continue;
+
+    const mulai = Math.max(0, idx - 60);
+    const akhir = Math.min(h.terjemah.length, idx + q.length + 60);
+    let cuplikan = h.terjemah.slice(mulai, akhir).trim();
+    if (mulai > 0) cuplikan = "…" + cuplikan;
+    if (akhir < h.terjemah.length) cuplikan = cuplikan + "…";
+
+    hasil.push({ nomor: h.nomor, cuplikan });
+    if (hasil.length >= limit) break;
+  }
+
+  return hasil;
+}
+
 export function getHaditsList(
   slug: string,
   page: number,

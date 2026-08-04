@@ -2,7 +2,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Roundel from "@/components/Roundel";
-import HaditsJumpBox from "@/components/HaditsJumpBox";
+import HaditsSearchBox from "@/components/HaditsSearchBox";
 import BackButton from "@/components/BackButton";
 import { getHaditsList, getKitabList } from "@/lib/hadits-api";
 import { notFound } from "next/navigation";
@@ -54,7 +54,7 @@ export default async function HaditsKitabPage({
           </p>
         </div>
 
-        <HaditsJumpBox slug={meta.slug} totalHadits={meta.totalHadits} />
+        <HaditsSearchBox slug={meta.slug} totalHadits={meta.totalHadits} />
 
         <div className="divide-y divide-[var(--parchment-line)] border-t border-b border-[var(--parchment-line)] mb-8">
           {items.map((h) => (
