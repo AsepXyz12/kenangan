@@ -336,7 +336,7 @@ function AddUserModal({
           minLength={8}
           required
         />
-        <Select label="Role" value={role} onChange={(e) => setRole(e.target.value)}>
+        <Select label="Role" value={role} onChange={(e) => setRole(e.target.value as RoleName)}>
           {assignableRoles.map((r) => (
             <option key={r} value={r}>
               {ROLE_LABEL[r]}
