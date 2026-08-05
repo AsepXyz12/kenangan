@@ -1,0 +1,95 @@
+// AsepXyz Number Database Manager — Prisma Schema
+// Run `npx prisma db push` after setting DATABASE_URL to sync this to your Postgres DB.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Role hierarchy (highest to lowest):
+// OWNER_UTAMA  -> singleton, seeded account. Can create/manage everyone below.
+// OWNER_KEDUA  -> "second owner". Can create/manage OWNER, MANAGER, STAFF (not other OWNER_KEDUA).
+// OWNER        -> "regular owner". Can create/manage MANAGER, STAFF only.
+// MANAGER      -> operational access, no user management.
+// STAFF        -> base access.
+enum Role {
+  OWNER_UTAMA
+  OWNER_KEDUA
+  OWNER
+  MANAGER
+  STAFF
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum NumberStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model User {
+  id            String    @id @default(cuid())
+  username      String    @unique
+  passwordHash  String
+  displayName   String
+  role          Role      @default(STAFF)
+  status        UserStatus @default(ACTIVE)
+  avatarSeed    String    @default("asepxyz")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastLoginAt   DateTime?
+
+  numbersAdded  WhatsAppNumber[] @relation("AddedBy")
+  logs          AuditLog[]
+
+  @@index([role])
+  @@index([status])
+}
+
+model WhatsAppNumber {
+  id          String       @id @default(cuid())
+  number      String       @unique
+  name        String
+  note        String?
+  status      NumberStatus @default(ACTIVE)
+  addedById   String
+  addedBy     User         @relation("AddedBy", fields: [addedById], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([status])
+  @@index([addedById])
+  @@index([createdAt])
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  username    String
+  action      String
+  targetType  String?
+  targetId    String?
+  detail      String?
+  ipAddress   String?
+  userAgent   String?
+  sessionId   String?
+  status      String   @default("SUCCESS")
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+model Setting {
+  key   String @id
+  value String
+}
